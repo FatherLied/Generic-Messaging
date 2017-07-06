@@ -1,0 +1,24 @@
+{% extends "dashboard/base.html" %}
+
+{% block content %}
+    <div class = "row">
+        <div class="col-md-3">
+            <p class="lead"> Threads</p>
+            <div class="list-group">
+                {% for thread in threads %}
+                    <a href="{% url 'details' pk=thread.pk %}"class="list-group-item">{{thread.subject}}</a>
+                {% endfor %}
+            </div>
+            <p class="lead"> Users</p>
+            <div class="list-group">
+                {% for user in users %}
+                    <a href="{% url 'home' %}" class="list-group-item">{{user.owner}}</a>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-9">
+            {% block details %}
+            {% endblock%}
+        </div>
+    </div>
+{% endblock %}
