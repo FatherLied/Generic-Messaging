@@ -1,0 +1,17 @@
+{% extends "dashboard/home.html" %}
+
+{% block details %}
+<div class = "container">
+	<textarea readonly rows = "15" cols = "80%">
+		{% for message in messages %}
+		{{message.sender}} : {{message.content}}   				({{ message.when_created}}) 
+		{% endfor %}
+	</textarea>
+<br><br><br>
+	<form>
+		<textarea rows = "3" cols = "80%"></textarea>
+		<button>Send</button>
+	</form>
+</div>
+
+{% endblock %}

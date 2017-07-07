@@ -1,12 +1,18 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate
 from dashboard.forms import SignUpForm
 from django.contrib.auth.decorators import login_required
+from messenger.models import MessageThread, Message,Profile
 
 # Create your views here.
 @login_required
 def home(request):
-	return render(request, 'dashboard/home.html')
+	context = {
+		'threads': MessageThread.objects.all().order_by('-when_created'),
+		'users' : Profile.objects.all()
+	}
+	print(context)
+	return render(request, 'dashboard/home.html',context = context)
 
 def signup(request):
 	if request.method == 'POST':
@@ -22,3 +28,13 @@ def signup(request):
 	else:
 		form = SignUpForm()
 	return render(request, 'dashboard/signup.html', {'form': form})
+
+def thread_details(request, pk):
+	thisthreads = get_object_or_404(MessageThread, pk = pk)
+	context = {
+		'threads': MessageThread.objects.all().order_by('-when_created'),
+		'users' : Profile.objects.all(),
+		'thisthreads':thisthreads,
+		'messages': Message.objects.filter(thread = thisthreads).order_by('when_created')
+	}
+	return render(request, 'dashboard/details.html', context = context)
