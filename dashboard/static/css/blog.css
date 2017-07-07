@@ -1,5 +1,5 @@
 .page-header {
-    background-color: #ff9400;
+    background-color: #b30000;
     margin-top: 0;
     padding: 20px 20px 20px 40px;
 }
@@ -14,9 +14,47 @@
     margin-left: 40px;
 }
 
+body{
+    background-color: #d6d6d6;
+}
+
 h1, h2, h3, h4 {
     font-family: 'Lobster', cursive;
+    font-size: 30pt;
 }
+
+.upperlogin {
+    border: 4px #b30000;
+    border-style: dashed none none;
+    position: relative;
+    height: 350px;
+    line-height: 200px;
+    text-align: center;
+    margin-bottom: 200px;
+    margin-top: 20px;
+    margin-left: -20px;
+    margin-right:-20px;
+}
+
+.innerlogin {
+    position: relative
+    top: 50%;
+    height: 100px;
+    margin-top: -50px;
+
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+}
+
+.loginform{
+    font-size: 16pt;
+}
+
+.loginform a{
+    font-size: 14pt;
+}
+
 
 .date {
     color: #828282;
@@ -38,7 +76,7 @@ h1, h2, h3, h4 {
 }
 
 .post {
-    margin-bottom: 70px;
+    margin-bottom: 20px;
 }
 
 .post h1 a, .post h1 a:visited {
