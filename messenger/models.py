@@ -6,18 +6,27 @@ from django.dispatch import receiver
 
 # Create your models here.
 
+class ThreadManager(models.Manager):
+	def add_user(self, user):
+		self.participants.add(user)
+		return user
+
 class MessageManager(models.Manager):
 	
-	def add_message(self,sender, thread, content):
+	def add_message(self, sender, thread, content):
 		return self.create(sender=sender, thread=thread, content=content)
 	
-	def getMessagebyThread(self,thread):
+	def getMessagebyThread(self, thread):
 		return self.filter(thread=thread)
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 class MessageThread(models.Model):
     subject = models.CharField(max_length=255, blank=True)
     participants = models.ManyToManyField(User, related_name='message_threads')
     when_created = models.DateTimeField(auto_now_add=True)
+
+    objects = ThreadManager()
 
     def __str__(self):
     	return (' {} '.format(self.subject))
