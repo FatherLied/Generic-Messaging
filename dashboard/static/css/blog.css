@@ -47,6 +47,40 @@ h1, h2, h3, h4 {
     line-height: normal;
 }
 
+.uppersignup {
+    border: 4px #b30000;
+    border-style: dashed none none;
+    position: relative;
+    height: 350px;
+    line-height: 200px;
+    text-align: center;
+    margin-bottom: 200px;
+    margin-top: 20px;
+    margin-left: -20px;
+    margin-right:-20px;
+}
+
+.innersignup h2{
+    margin-top: 40px;
+}
+
+.helptext {
+    color: black;
+    margin-bottom: 10px;
+}
+
+.innersignup {
+    position: relative
+    top: 50%;
+    height: 100px;
+    margin-top: -50px;
+    margin-bottom: 100px;
+
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+}
+
 .loginform{
     font-size: 16pt;
 }
