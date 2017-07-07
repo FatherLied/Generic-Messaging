@@ -118,3 +118,5 @@ tests/coverage_html/
 tests/.coverage
 build/
 tests/report/
+
+general/local_settings.py
