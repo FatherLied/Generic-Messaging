@@ -8,10 +8,10 @@ from messenger.models import MessageThread, Message,Profile
 @login_required
 def home(request):
 	context = {
-		'threads': MessageThread.objects.all().order_by('-when_created'),
-		'users' : Profile.objects.all()
+		'threads': MessageThread.objects.filter(participants=request.user).order_by('-when_created'),
+		'users' : Profile.objects.all(),
+		'allthreads':MessageThread.objects.all().order_by('-when_created')
 	}
-	print(context)
 	return render(request, 'dashboard/home.html',context = context)
 
 def signup(request):
@@ -32,9 +32,20 @@ def signup(request):
 def thread_details(request, pk):
 	thisthreads = get_object_or_404(MessageThread, pk = pk)
 	context = {
-		'threads': MessageThread.objects.all().order_by('-when_created'),
+		'threads': MessageThread.objects.filter(participants=request.user).order_by('-when_created'),
 		'users' : Profile.objects.all(),
-		'thisthreads':thisthreads,
 		'messages': Message.objects.filter(thread = thisthreads).order_by('when_created')
 	}
 	return render(request, 'dashboard/details.html', context = context)
+
+def addnewthread(request):
+	if request.method == 'POST':
+		subject = request.POST.get('t_subject')
+		exists = MessageThread.objects.filter(subject=subject)
+		print ('thread:' )
+		print (exists)
+		if exists:
+			return redirect('/')
+		thread = MessageThread.objects.create(subject=subject)
+		thread.participants.add(request.user)
+	return redirect('/')
