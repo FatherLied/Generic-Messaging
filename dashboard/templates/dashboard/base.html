@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load static %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -20,6 +21,13 @@
   <body>
     <div class="page-header">
       <h1><a href="/">Oh, Chat App!</a></h1>
+        {% if user.is_authenticated %}
+        <p>hello, {{request.user}}</p>
+          <a href="{% url 'logout' %}">Logout</a>
+        {% else %}
+          <a href="{% url 'login' %}">Login</a> / <a href="{% url 'signup' %}">Signup</a>
+        {% endif %}
+      <hr>
     </div>
 
     {% block content %}
@@ -28,5 +36,25 @@
           {% endblock %}
       </div>
     {% endblock %}
+    <script src= "{% static 'js/jquery.js'%}"></script>
+    <script type="text/javascript">
+    
+    $(document).on('submit', '#jointhreads',function(e){
+      e.preventDefault()
+      $.ajax({
+        type:'POST',
+        url:'jointhreads/',
+        data:{
+          subject:$('#subject').val(),
+          csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+        },
+        success:function(){
+          alert('Successfully joined threads')
+        }
+
+      })
+    });
+  </script>
   </body>
+
 </html>

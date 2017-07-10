@@ -3,22 +3,46 @@
 {% block content %}
   <div class = "row">
         <div class="col-md-3">
-            <p class="lead"> Threads</p>
+            <h3> Threads</h3>
             <div class="list-group">
                 {% for thread in threads %}
                     <a href="{% url 'details' pk=thread.pk %}"class="list-group-item">{{thread.subject}}</a>
                 {% endfor %}
             </div>
-            <p class="lead"> Users</p>
+            <h3> Users</h3>
             <div class="list-group">
                 {% for user in users %}
                     <a href="{% url 'home' %}" class="list-group-item">{{user.owner}}</a>
                 {% endfor %}
             </div>
         </div>
-        <div class="col-md-9">
+        <div class="col-md-6">
             {% block details %}
+                <form action ="{% url 'addnewthread' %}" method ='POST'>
+                    {% csrf_token %}
+                    subject: <input type="text" name="t_subject">
+                    <button>create</button>
+                </form>
+                <br>
+                <br>
+                <form id="jointhreads">
+                    {% csrf_token %}
+                    thread: <input type="text" name="t_subject" id="subject">
+                    <button>join</button>
+                </form>
+
             {% endblock%}
+        </div>
+        <div class="col-md-3">
+            <h3>All threads</h3>
+            <ul>
+                {% for thread in allthreads %}
+                    {% if thread not in threads%}
+                    <li>{{thread.subject}}</li>
+                    {% endif%}
+                {% endfor %}
+            </ul>
+            
         </div>
     </div>
 {% endblock %}
