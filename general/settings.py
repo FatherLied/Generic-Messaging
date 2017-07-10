@@ -37,9 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'messenger.apps.MessengerConfig'
     'dashboard',
-    'messenger',
     'general'
 ]
 

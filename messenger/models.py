@@ -1,5 +1,3 @@
-from django.db import models
-
 # Create your models here.
 from django.db import models
 from django.contrib.auth.models import User
@@ -39,21 +37,21 @@ class Message(models.Model):
 class Profile(models.Model):
 	first_name = models.CharField(max_length=30, blank = False)
 	last_name = models.CharField(max_length=30, blank = False)
-	owner = models.OneToOneField(User, related_name='owner')
+	owner = models.OneToOneField(User, related_name='profile')
 	thread = models.ManyToManyField(MessageThread, 
 		related_name = '_thread', through = 'ProfileThread')
 
 	def __str__(self):
 		return ('{} : {}  '.format(self.owner, self.thread.count()))
 
-@receiver(post_save, sender=User)
-def create_profile(sender, created, instance, **kwargs):
-    """ Create a profile for every new user """
-    if created:
-        Profile.objects.create(owner=instance)
+# @receiver(post_save, sender=User)
+# def create_profile(sender, created, instance, **kwargs):
+#     """ Create a profile for every new user """
+#     if created:
+#         Profile.objects.create(owner=instance)
 
 
 class ProfileThread(models.Model):
-	user = models.ForeignKey(Profile, on_delete=models.CASCADE)
-	thread = models.ForeignKey(MessageThread, on_delete=models.CASCADE)
+	user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='thread_copies')
+	thread = models.ForeignKey(MessageThread, on_delete=models.CASCADE, related_name='copies')
 	is_removed = models.BooleanField()
