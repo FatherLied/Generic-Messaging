@@ -41,17 +41,18 @@ def thread_details(request, pk):
 
 def addnewthread(request):
 	if request.method == 'POST':
-		subject = request.POST.get('t_subject')
+		subject= request.POST['subject']
 		exists = MessageThread.objects.filter(subject=subject)
 		if exists:
-			return redirect('/')
+			return HttpResponse(' ')
 		thread = MessageThread.objects.create(subject=subject)
 		thread.participants.add(request.user)
-	return redirect('/')
+	return HttpResponse('')
 
 def jointhreads(request):
 	if request.method=='POST':
 		subject = request.POST['subject']
+		print(subject)
 
 		thread = MessageThread.objects.get(subject=subject)
 		print(thread)

@@ -45,11 +45,27 @@
         type:'POST',
         url:'jointhreads/',
         data:{
-          subject:$('#subject').val(),
+          subject:$('#join_subject').val(),
           csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
         },
         success:function(){
           alert('Successfully joined threads')
+        }
+
+      })
+    });
+
+    $(document).on('submit', '#createthreads',function(e){
+      e.preventDefault()
+      $.ajax({
+        type:'POST',
+        url:'addnewthread/',
+        data:{
+          subject:$('#create_subject').val(),
+          csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+        },
+        success:function(){
+          alert('Successfully created threads')
         }
 
       })

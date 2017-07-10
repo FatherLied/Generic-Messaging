@@ -18,16 +18,16 @@
         </div>
         <div class="col-md-6">
             {% block details %}
-                <form action ="{% url 'addnewthread' %}" method ='POST'>
+                <form id="createthreads">
                     {% csrf_token %}
-                    subject: <input type="text" name="t_subject">
+                    subject: <input type="text" name="t_subject" id="create_subject">
                     <button>create</button>
                 </form>
                 <br>
                 <br>
                 <form id="jointhreads">
                     {% csrf_token %}
-                    thread: <input type="text" name="t_subject" id="subject">
+                    thread: <input type="text" name="t_subject" id="join_subject">
                     <button>join</button>
                 </form>
 
