@@ -1,38 +1,31 @@
 {% load staticfiles %}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>{% block title %}Generic Messaging{% endblock %}</title>
+    <title>
+      {% block title %}
+        Generic Messaging
+      {% endblock %}
+    </title>
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
     <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="{% static 'css/blog.css' %}">
   </head>
+
   <body>
     <div class="page-header">
-      <h1><a href="/">Chat App!</a></h1>
-        {% if user.is_authenticated %}
-          <a href="{% url 'logout' %}">Logout</a>
-        {% else %}
-          <a href="{% url 'login' %}">Login</a> / <a href="{% url 'signup' %}">Signup</a>
-        {% endif %}
-      <hr>
+      <h1><a href="/">Oh, Chat App!</a></h1>
     </div>
+
     {% block content %}
-    <div class="content container">
-        <div class="row">
-          <div class="col-md-4">
-            <h3>Test</h3>          </div>
-          <div class="col-sm-4">
-            <h3>Test</h3>
-          </div>
-          <div class="col-sm-4">
-            {% block login %}
-            {% endblock %}
-          </div>
-        </div>
-    </div>
+      <div class="upperlogin">
+          {% block login %}
+          {% endblock %}
+      </div>
     {% endblock %}
   </body>
-  </html>
+
+</html>
