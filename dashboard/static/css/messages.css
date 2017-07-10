@@ -1,0 +1,22 @@
+.messages {
+    background-color: #cecece;
+    padding: 20px;
+}
+
+.message {
+    margin-bottom: 14px;
+    display: flex;
+    flex-direction: row;
+}
+
+
+.message .content {
+    background-color: #ffffff;
+    border-radius: 4px;
+    padding: 12px;
+}
+
+.message .footer {
+    font-size: 8px;
+    text-align: right;
+}
