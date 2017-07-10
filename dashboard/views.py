@@ -33,7 +33,7 @@ def signup(request):
 def thread_details(request, pk):
     thisthreads = get_object_or_404(MessageThread, pk=pk)
     context = {
-        'threads': MessageThread.objects.all().order_by('-when_created'),
+        'threads': MessageThread.objects.filter(participants=request.user).order_by('-when_created'),
         'users' : Profile.objects.all(),
         'thisthreads':thisthreads,
         'messages': Message.objects.filter(thread=thisthreads).order_by('when_created'),
