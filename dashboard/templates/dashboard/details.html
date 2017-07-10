@@ -8,10 +8,11 @@
 		{% endfor %}
 	</textarea>
 <br><br><br>
-	<form>
-		<textarea rows = "3" cols = "80%"></textarea>
+	<form action="{% url 'add_message' %}" method="post">
+        {% csrf_token %}
+		<textarea name="content" id="" rows="3" cols = "80%"></textarea>
+		<input name="thread_id" type="hidden" value="{{thisthreads.id}}" />
 		<button>Send</button>
 	</form>
 </div>
-
 {% endblock %}
