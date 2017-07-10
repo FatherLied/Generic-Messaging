@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, reverse, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate
 from dashboard.forms import SignUpForm
 from django.contrib.auth.decorators import login_required
@@ -34,6 +34,7 @@ def thread_details(request, pk):
         'threads': MessageThread.objects.all().order_by('-when_created'),
         'users' : Profile.objects.all(),
         'thisthreads':thisthreads,
-        'messages': Message.objects.filter(thread=thisthreads).order_by('when_created')
+        'messages': Message.objects.filter(thread=thisthreads).order_by('when_created'),
+        'next_url': reverse('details', args=(pk,))
     }
     return render(request, 'dashboard/details.html', context=context)

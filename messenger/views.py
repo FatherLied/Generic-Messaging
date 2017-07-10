@@ -14,5 +14,6 @@ def add_message(request):
         thread_id = request.POST.get('thread_id')
         thread = MessageThread.objects.get(pk=thread_id)
         Message.objects.add_message(content=content, thread=thread, sender=request.user)
+    print (redirect_url)
     return redirect(redirect_url)
 
