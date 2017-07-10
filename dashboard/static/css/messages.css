@@ -1,6 +1,9 @@
 .messages {
-    background-color: #cecece;
+    background-color: #d6d6d6;
     padding: 20px;
+    height:400px;
+    width: 350px;
+    overflow: auto;
 }
 
 .message {
@@ -9,14 +12,23 @@
     flex-direction: row;
 }
 
-
 .message .content {
+    float:left;
     background-color: #ffffff;
     border-radius: 4px;
     padding: 12px;
+    margin-top: 2px;
 }
 
 .message .footer {
     font-size: 8px;
     text-align: right;
+}
+
+.user{
+    border-radius: 2px;
+    padding-right:5px;
+    height: 25px;
+    text-decoration: underline;
+    float:left;
 }

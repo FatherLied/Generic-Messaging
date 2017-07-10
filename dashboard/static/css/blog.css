@@ -2,6 +2,8 @@
     background-color: #b30000;
     margin-top: 0;
     padding: 20px 20px 20px 40px;
+    border: 4px #b30000;
+    border-style: dashed none none;
 }
 
 .page-header h1, .page-header h1 a, .page-header h1 a:visited, .page-header h1 a:active {
@@ -20,38 +22,131 @@ body{
 
 h1, h2, h3, h4 {
     font-family: 'Lobster', cursive;
-    font-size: 30pt;
+    font-size: 35pt;
 }
 
+.listthreadsusers h3{
+    font-size: 25pt;
+    text-decoration: underline;
+}
+
+.createjointhread h3{
+    font-size: 25pt;
+    text-decoration: underline;
+}
+
+.listallthreads h3{
+    font-size: 25pt;
+    text-decoration: underline;
+}
+
+.listallthreads ul{
+    font-size: 15pt;
+}
+
+.listthreadsusers{
+    float: left;
+    margin-left: 70px;
+    margin-right: 70px;
+    text-align: center;
+}
+
+.threadlist{
+    padding: 20px 20px 20px 20px;
+
+    border: 3px #737373;
+    border-style: dashed;
+}
+
+.userlist{
+    padding: 20px 20px 20px 20px;
+
+    border: 3px #737373;
+    border-style: dashed;
+}
+
+.container{
+    width: 350px;
+    height: 500px;
+
+    padding:0px 0px 0px 0px;
+
+    text-align: center;
+
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.sendmess{
+    padding-top: 10px;
+}
+
+.createjointhread{
+    text-align: center;
+    float: left;
+
+    margin-top: 30px;
+    margin-left: 60px;
+    margin-right: 60px;
+    
+    display: inline-block;
+    vertical-align: middle;
+
+    border: 3px #737373;
+    border-style: dashed;
+}
+
+.createjoinblock{
+    padding: 5px 20px 10px 20px;
+}
+
+.listallthreads{
+    text-align: center;
+    float: left;
+
+    margin-top: 30px;
+    margin-right: 40px;
+    margin-left: 40px;
+
+    width: 350px;
+    height: 500px;
+
+    padding: 5px 10px 10px 10px;
+
+    border: 3px #737373;
+    border-style: dashed;
+}
+
+
+
+
+
+
+
 .upperlogin {
-    border: 4px #b30000;
-    border-style: dashed none none;
     position: relative;
     height: 350px;
     line-height: 200px;
     text-align: center;
     margin-bottom: 200px;
-    margin-top: 20px;
+    margin-top: 30px;
     margin-left: -20px;
     margin-right:-20px;
 }
 
 .innerlogin {
-    position: relative
+    position: relative;
     top: 50%;
     height: 100px;
     margin-top: -50px;
-
     display: inline-block;
     vertical-align: middle;
     line-height: normal;
 }
 
 .uppersignup {
-    border: 4px #b30000;
-    border-style: dashed none none;
     position: relative;
-    height: 350px;
+    height: 450px;
     line-height: 200px;
     text-align: center;
     margin-bottom: 200px;
@@ -60,13 +155,14 @@ h1, h2, h3, h4 {
     margin-right:-20px;
 }
 
-.innersignup h2{
-    margin-top: 40px;
-}
-
-.helptext {
+.innersignup p{
+    font-size: 18px;
     color: black;
     margin-bottom: 10px;
+}
+
+.innersignup h2{
+    margin-top: 40px;
 }
 
 .innersignup {

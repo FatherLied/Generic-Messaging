@@ -1,40 +1,46 @@
 {% extends 'dashboard/base.html' %}
 
 {% block content %}
-  <div class = "row">
-        <div class="col-md-3">
-            <h3> Threads</h3>
-            <div class="list-group">
+    <div class = "row">
+
+        <div class="listthreadsusers">
+            <h3>Joined Threads</h3>
+            <div class="threadlist">
                 {% for thread in threads %}
                     <a href="{% url 'details' pk=thread.pk %}"class="list-group-item">{{thread.subject}}</a>
                 {% endfor %}
             </div>
             <h3> Users</h3>
-            <div class="list-group">
+            <div class="userlist">
                 {% for user in users %}
                     <a href="{% url 'home' %}" class="list-group-item">{{user.owner}}</a>
                 {% endfor %}
             </div>
         </div>
-        <div class="col-md-6">
-            {% block details %}
-                <form id="createthreads">
-                    {% csrf_token %}
-                    subject: <input type="text" name="t_subject" id="create_subject">
-                    <button>create</button>
-                </form>
-                <br>
-                <br>
-                <form id="jointhreads">
-                    {% csrf_token %}
-                    thread: <input type="text" name="t_subject" id="join_subject">
-                    <button>join</button>
-                </form>
 
+        <div class = "createjointhread">
+            {% block details %}
+                <div class = "createjoinblock">
+                    <form id="createthreads">
+                        {% csrf_token %}
+                        <h3>Create a Thread:</h3>
+                        Subject: <input type="text" name="t_subject" id="create_subject">
+                        <br><br>
+                        <button>Create</button>
+                    </form>
+                    <form id="jointhreads">
+                        {% csrf_token %}
+                        <h3>Or Join One!</h3>
+                        Thread: <input type="text" name="t_subject" id="join_subject">
+                        <br><br>
+                        <button>Join</button>
+                    </form>
+                </div>
             {% endblock%}
         </div>
-        <div class="col-md-3">
-            <h3>All threads</h3>
+
+        <div class="listallthreads">
+            <h3>All Unjoined Threads</h3><br>
             <ul>
                 {% for thread in allthreads %}
                     {% if thread not in threads%}
@@ -42,7 +48,7 @@
                     {% endif%}
                 {% endfor %}
             </ul>
-            
         </div>
+
     </div>
 {% endblock %}
