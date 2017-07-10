@@ -13,11 +13,13 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.contrib import admin
+from django.conf import settings
 from django.contrib.auth import views as auth_views
 from dashboard import views as reg_views
-from dashboard.views import thread_details,addnewthread,jointhreads
+from dashboard.views import thread_details, addnewthread, jointhreads
+from messenger.views import add_message
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -27,6 +29,7 @@ urlpatterns = [
     url(r'^signup/$', reg_views.signup, name='signup'),
     url(r'^thread/(?P<pk>\d+)/$',thread_details, name='details'),
     url(r'^addnewthread/$',addnewthread, name='addnewthread'),
-    url(r'^jointhreads/$',jointhreads, name='jointhreads')
+    url(r'^jointhreads/$',jointhreads, name='jointhreads'),
+    url(r'^add/$', add_message, name='add_message')
 ]
 
