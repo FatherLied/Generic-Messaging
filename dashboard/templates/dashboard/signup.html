@@ -2,18 +2,24 @@
 
 {% block content %}
 <div class="content container">
-  <div class="row">
-    <div class="col-md-8">
+  <div class="uppersignup">
+    <div class="innersignup">
       <h2>Sign up</h2>
-      <form method="post">
-        {% csrf_token %}
+      <form method="post">{% csrf_token %}
         {% for field in form %}
           <p>
             {{ field.label_tag }}<br>
             {{ field }}
-            {% if field.help_text %}
-              <small style="color: grey">{{ field.help_text }}</small>
-            {% endif %}
+            <br>
+            
+              {% if field.help_text %}
+                {% if field.name == 'password1' %}
+                  <small style="color: grey">{{ field.help_text|safe }}</small>
+                {% else %}
+                  <small style="color: grey">{{ field.help_text }}</small>
+                {% endif %}
+              {% endif %}
+            
             {% for error in field.errors %}
               <p style="color: red">{{ error }}</p>
             {% endfor %}
