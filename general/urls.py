@@ -17,15 +17,16 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from dashboard import views as reg_views
-from dashboard.views import thread_details,addnewthread
+from dashboard.views import thread_details,addnewthread,jointhreads
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', reg_views.home, name='home'),
-    url(r'^login/$', auth_views.login, {'template_name': 'dashboard/login.html'}, name = 'login'),
-    url(r'^logout/$', auth_views.logout, {'next_page': 'login'}, name = 'logout'),
-    url(r'^signup/$', reg_views.signup, name = 'signup'),
-    url(r'^thread/(?P<pk>\d+)/$',thread_details, name = 'details'),
-    url(r'^addnewthread/$',addnewthread, name='addnewthread')
+    url(r'^login/$', auth_views.login, {'template_name': 'dashboard/login.html'}, name='login'),
+    url(r'^logout/$', auth_views.logout, {'next_page': 'login'}, name='logout'),
+    url(r'^signup/$', reg_views.signup, name='signup'),
+    url(r'^thread/(?P<pk>\d+)/$',thread_details, name='details'),
+    url(r'^addnewthread/$',addnewthread, name='addnewthread'),
+    url(r'^jointhreads/$',jointhreads, name='jointhreads')
 ]
 
