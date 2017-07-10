@@ -1,15 +1,20 @@
 {% extends "dashboard/home.html" %}
+{% load staticfiles %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/messages.css' %}">
+{% endblock %}
 
 {% block details %}
-<div class = "container">
-	<textarea readonly rows = "15" cols = "80%">
+<div class="container">
+	<div class="messages">
 		{% for message in messages %}
-		{{message.sender}} : {{message.content}}   				({{ message.when_created}}) 
+        {% include "dashboard/messages_panel/message.html" %}
 		{% endfor %}
-	</textarea>
+	</div>
 <br><br><br>
 	<form>
-		<textarea rows = "3" cols = "80%"></textarea>
+		<textarea rows="3" cols="80%"></textarea>
 		<button>Send</button>
 	</form>
 </div>
