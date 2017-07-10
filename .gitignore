@@ -120,3 +120,5 @@ build/
 tests/report/
 
 general/local_settings.py
+# Database
+*.sqlite3
