@@ -27,9 +27,10 @@ urlpatterns = [
     url(r'^login/$', auth_views.login, {'template_name': 'dashboard/login.html'}, name='login'),
     url(r'^logout/$', auth_views.logout, {'next_page': 'login'}, name='logout'),
     url(r'^signup/$', reg_views.signup, name='signup'),
-    url(r'^thread/(?P<pk>\d+)/$',thread_details, name='details'),
-    url(r'^addnewthread/$',addnewthread, name='addnewthread'),
-    url(r'^jointhreads/$',jointhreads, name='jointhreads'),
-    url(r'^add/$', add_message, name='add_message')
+
+    url(r'^add/$', add_message.as_view(), name='add_message'),
+    url(r'^addnewthread/$',addnewthread.as_view(), name='addnewthread'),
+    url(r'^jointhreads/$',jointhreads.as_view(), name='jointhreads'),
+    url(r'^thread/(?P<pk>\d+)/$',thread_details.as_view(), name='details'),
 ]
 

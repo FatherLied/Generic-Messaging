@@ -4,16 +4,16 @@ from django.contrib.auth import authenticate, logout, login
 # from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 # Create your views here.
 from .models import Message, MessageThread
+from django.views import View
 
-def add_message(request):
-    redirect_url = request.GET.get('next')
-    if redirect_url is None:
-        redirect_url = '/'
-    if request.method == "POST":
+class add_message(View):
+
+    def None(self, request):
+        return redirect('/')
+
+    def post(self, request):
         content = request.POST.get('content')
         thread_id = request.POST.get('thread_id')
         thread = MessageThread.objects.get(pk=thread_id)
         Message.objects.add_message(content=content, thread=thread, sender=request.user)
-    print (redirect_url)
-    return redirect(redirect_url)
-
+        return redirect(request.GET.get('next'))
