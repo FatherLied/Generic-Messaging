@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, logout, login
 from .models import Message, MessageThread
 from django.views import View
 
-class AddMessage(View):
+class AddMessageView(View):
 
     def post(self, request):
         content = request.POST.get('content')

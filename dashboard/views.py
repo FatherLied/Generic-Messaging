@@ -33,7 +33,7 @@ def signup(request):
 
 #===========================================
 
-class ThreadDetails(View):
+class ThreadDetailsView(View):
 
     def dispatch(self, request, pk):
         thisthreads = get_object_or_404(MessageThread, pk=pk)
@@ -46,7 +46,7 @@ class ThreadDetails(View):
         }
         return render(request, 'dashboard/details.html', context=context)
 
-class AddNewThread(View):
+class AddNewThreadView(View):
 
     def post(self, request):
         subject = request.POST['subject']
@@ -57,7 +57,7 @@ class AddNewThread(View):
         thread.participants.add(request.user)
         return HttpResponse('')
 
-class JoinThreads(View):
+class JoinThreadsView(View):
 
     def post(self, request):
         subject = request.POST['subject']

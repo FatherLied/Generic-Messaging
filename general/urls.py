@@ -18,8 +18,8 @@ from django.contrib import admin
 from django.conf import settings
 from django.contrib.auth import views as auth_views
 from dashboard import views as reg_views
-from dashboard.views import thread_details, addnewthread, jointhreads
-from messenger.views import add_message
+from dashboard.views import ThreadDetailsView, AddNewThreadView, JoinThreadsView
+from messenger.views import AddMessageView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -28,9 +28,9 @@ urlpatterns = [
     url(r'^logout/$', auth_views.logout, {'next_page': 'login'}, name='logout'),
     url(r'^signup/$', reg_views.signup, name='signup'),
 
-    url(r'^add/$', AddMessage.as_view(), name='add_message'),
-    url(r'^addnewthread/$', AddNewThread.as_view(), name='addnewthread'),
-    url(r'^jointhreads/$', JoinThreads.as_view(), name='jointhreads'),
-    url(r'^thread/(?P<pk>\d+)/$', ThreadDetails.as_view(), name='details'),
+    url(r'^add/$', AddMessageView.as_view(), name='add_message'),
+    url(r'^addnewthread/$', AddNewThreadView.as_view(), name='addnewthread'),
+    url(r'^jointhreads/$', JoinThreadsView.as_view(), name='jointhreads'),
+    url(r'^thread/(?P<pk>\d+)/$', ThreadDetailsView.as_view(), name='details'),
 ]
 
