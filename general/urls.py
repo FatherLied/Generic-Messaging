@@ -28,9 +28,9 @@ urlpatterns = [
     url(r'^logout/$', auth_views.logout, {'next_page': 'login'}, name='logout'),
     url(r'^signup/$', reg_views.signup, name='signup'),
 
-    url(r'^add/$', add_message.as_view(), name='add_message'),
-    url(r'^addnewthread/$',addnewthread.as_view(), name='addnewthread'),
-    url(r'^jointhreads/$',jointhreads.as_view(), name='jointhreads'),
-    url(r'^thread/(?P<pk>\d+)/$',thread_details.as_view(), name='details'),
+    url(r'^add/$', AddMessage.as_view(), name='add_message'),
+    url(r'^addnewthread/$', AddNewThread.as_view(), name='addnewthread'),
+    url(r'^jointhreads/$', JoinThreads.as_view(), name='jointhreads'),
+    url(r'^thread/(?P<pk>\d+)/$', ThreadDetails.as_view(), name='details'),
 ]
 
