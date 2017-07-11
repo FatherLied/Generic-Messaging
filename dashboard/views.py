@@ -49,7 +49,7 @@ def addnewthread(request):
             return HttpResponse(' ')
         thread = MessageThread.objects.create(subject=subject)
         thread.participants.add(request.user)
-    return HttpResponse('')
+        return redirect('/')
 
 def jointhreads(request):
     if request.method=='POST':
@@ -60,4 +60,4 @@ def jointhreads(request):
         print(thread)
         thread.participants.add(request.user)
 
-        return HttpResponse('')
+        return redirect('/')
