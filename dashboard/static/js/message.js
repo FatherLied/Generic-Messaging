@@ -13,7 +13,7 @@ require([
             success:function(json){
                 alert('Successfully joined thread')
                 $('#join_subject').val('');
-                window.location.reload(true);
+                $('#threads_joined').append('<a class="list-group-item" href="'+json.thread_url+'">'+json.subject+'</a>');
             }
         })
     });
@@ -27,10 +27,10 @@ require([
                 subject:$('#create_subject').val(),
                 csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
             },
-            success:function(){
+            success:function(json){
                 alert('Successfully created thread')
                 $('#create_subject').val('');
-                window.location.reload(true);
+                $('#threads_joined').append('<a class="list-group-item" href="'+json.thread_url+'">'+json.subject+'</a>');
             }
         })
     });

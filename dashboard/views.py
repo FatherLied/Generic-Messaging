@@ -1,7 +1,7 @@
 from django.shortcuts import render, reverse, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate
 from dashboard.forms import SignUpForm
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 from django.contrib.auth.decorators import login_required
 from messenger.models import MessageThread, Message, Profile
 
@@ -49,15 +49,13 @@ def addnewthread(request):
             return HttpResponse(' ')
         thread = MessageThread.objects.create(subject=subject)
         thread.participants.add(request.user)
-        return redirect('/')
+        thread_url = reverse('details',args=(thread.pk,))
+        return JsonResponse({'subject':thread.subject,'thread_url':thread_url})
 
 def jointhreads(request):
     if request.method=='POST':
         subject = request.POST['subject']
-        print(subject)
-
-        thread = MessageThread.objects.get(subject=subject)
-        print(thread)
+        thread = get_object_or_404(MessageThread,subject=subject)
         thread.participants.add(request.user)
-
-        return redirect('/')
+        thread_url = reverse('details',args=(thread.pk,))
+        return JsonResponse({'subject':thread.subject,'thread_url':thread_url})
