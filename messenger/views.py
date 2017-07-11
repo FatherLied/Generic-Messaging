@@ -10,7 +10,8 @@ def add_message(request):
         content = request.POST.get('content')
         thread_id = request.POST.get('thread_id')
         thread = MessageThread.objects.get(pk=thread_id)
-        Message.objects.add_message(content=content, thread=thread, sender=request.user)
+        message = Message.objects.add_message(content=content, thread=thread, sender=request.user)
+        return JsonResponse({'content': message.content, 'when': message.when_created.isoformat(), 'sender': message.sender.username})
     return HttpResponse('')
 # def send_message(request):
 
