@@ -8,7 +8,7 @@ from django.views import View
 
 # Create your views here.
 @login_required
-def home(request):
+def home(request):0
     context = {
         'threads': MessageThread.objects.filter(participants=request.user).order_by('-when_created'),
         'users' : Profile.objects.all(),
