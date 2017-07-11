@@ -6,11 +6,13 @@ from django.contrib.auth import authenticate, logout, login
 from .models import Message, MessageThread
 from django.views import View
 
-class AddMessageView(View):
+class AddMessageView(View): 
 
     def post(self, request):
+        redirect_url = request.GET.get('next', '/')
+        
         content = request.POST.get('content')
         thread_id = request.POST.get('thread_id')
         thread = MessageThread.objects.get(pk=thread_id)
         Message.objects.add_message(content=content, thread=thread, sender=request.user)
-        return redirect(request.GET.get('next'))
+        return redirect(redirect_url)
