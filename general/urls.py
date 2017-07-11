@@ -18,12 +18,15 @@ from django.contrib import admin
 from django.conf import settings
 from django.contrib.auth import views as auth_views
 from dashboard import views as reg_views
+# from dashboard import views
+from dashboard.views import HomeView, SignUpView
 from dashboard.views import thread_details, addnewthread, jointhreads
 from messenger.views import add_message
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', reg_views.home, name='home'),
+    # url(r'^$', reg_views.home, name='home'),
+    url(r'^$', HomeView.as_view(), name='home'),
     url(r'^login/$', auth_views.login, {'template_name': 'dashboard/login.html'}, name='login'),
     url(r'^logout/$', auth_views.logout, {'next_page': 'login'}, name='logout'),
     url(r'^signup/$', reg_views.signup, name='signup'),
