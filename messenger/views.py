@@ -6,10 +6,7 @@ from django.contrib.auth import authenticate, logout, login
 from .models import Message, MessageThread
 from django.views import View
 
-class add_message(View):
-
-    def None(self, request):
-        return redirect('/')
+class AddMessage(View):
 
     def post(self, request):
         content = request.POST.get('content')

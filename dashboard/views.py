@@ -8,7 +8,7 @@ from django.views import View
 
 # Create your views here.
 @login_required
-def home(request):0
+def home(request):
     context = {
         'threads': MessageThread.objects.filter(participants=request.user).order_by('-when_created'),
         'users' : Profile.objects.all(),
@@ -33,7 +33,7 @@ def signup(request):
 
 #===========================================
 
-class thread_details(View):
+class ThreadDetails(View):
 
     def dispatch(self, request, pk):
         thisthreads = get_object_or_404(MessageThread, pk=pk)
@@ -46,7 +46,7 @@ class thread_details(View):
         }
         return render(request, 'dashboard/details.html', context=context)
 
-class addnewthread(View):
+class AddNewThread(View):
 
     def post(self, request):
         subject = request.POST['subject']
@@ -57,7 +57,7 @@ class addnewthread(View):
         thread.participants.add(request.user)
         return HttpResponse('')
 
-class jointhreads(View):
+class JoinThreads(View):
 
     def post(self, request):
         subject = request.POST['subject']
