@@ -16,7 +16,9 @@
                 {% endfor %}
             </div>
         </div>
-        <div class="col-md-6">
+
+        {% comment %}
+            <div class="col-md-6">
             {% block details %}
                 <form id="createthreads">
                     {% csrf_token %}
@@ -30,6 +32,7 @@
                     thread: <input type="text" id="join_subject">
                     <button>join</button>
                 </form>
+        {% endcomment %}
 
         <div class = "createjointhread">
             {% block details %}
