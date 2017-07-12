@@ -19,7 +19,6 @@ from django.conf import settings
 from django.contrib.auth import views as auth_views
 from dashboard import views as reg_views
 from dashboard.views import thread_details, addnewthread, jointhreads
-from messenger.views import add_message
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -30,7 +29,6 @@ urlpatterns = [
     url(r'^thread/(?P<pk>\d+)/$',thread_details, name='details'),
     url(r'^addnewthread/$',addnewthread, name='addnewthread'),
     url(r'^jointhreads/$',jointhreads, name='jointhreads'),
-    url(r'^add/$', add_message, name='add_message'),
-    # url(r'^send/$', send_message, name='send_message')
+    url(r'^messenger/', include('messenger.urls'))
 ]
 

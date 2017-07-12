@@ -1,6 +1,7 @@
 require([
-    'jquery'
-],function($){
+    'jquery',
+    'longpoll'
+],function($, longpoll){
     $('#jointhreads').on('submit',function(e){
         e.preventDefault()
         $.ajax({
@@ -60,4 +61,7 @@ require([
             }
         });
     });
+    console.log(longpoll);
+    setTimeout(
+        longpoll.fetch, 5000);
 });
