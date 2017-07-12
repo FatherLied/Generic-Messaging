@@ -21,4 +21,14 @@
 			</form>
 		</div>
 	</div>
+<br><br><br>
+	<form id="send_message" action="{% url 'add_message' %}?next={{next_url}}">
+        {% csrf_token %}
+		<textarea name="content" id="content" rows="3" cols = "80%"></textarea>
+		<input name="thread_id" id="thread" type="hidden" value="{{thisthreads.id}}" />
+		<input name="sender" id="sender" type="hidden" value="{{request.user}}" />
+		<input type="submit" class="mdl-button" value="Send" />
+	</form>
+</div>
+
 {% endblock %}

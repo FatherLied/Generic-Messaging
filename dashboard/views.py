@@ -1,8 +1,10 @@
 from django.shortcuts import render, reverse, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate
 from dashboard.forms import SignUpForm
-from django.http import HttpResponse
+
+from django.http import HttpResponse, JsonResponse
 from django.views.generic.base import TemplateView
+
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from messenger.models import MessageThread, Message, Profile
@@ -74,16 +76,16 @@ class SignUpView(TemplateView):
         context = self.get_context_data()
         return self.render_to_response(context)
 
-def thread_details(request, pk):
-    thisthreads = get_object_or_404(MessageThread, pk=pk)
-    context = {
-        'threads': MessageThread.objects.filter(participants=request.user).order_by('-when_created'),
-        'users' : Profile.objects.all(),
-        'thisthreads':thisthreads,
-        'messages': Message.objects.filter(thread=thisthreads).order_by('when_created'),
-        'next_url': reverse('details', args=(pk,))
-    }
-    return render(request, 'dashboard/details.html', context=context)
+# def thread_details(request, pk):
+#     thisthreads = get_object_or_404(MessageThread, pk=pk)
+#     context = {
+#         'threads': MessageThread.objects.filter(participants=request.user).order_by('-when_created'),
+#         'users' : Profile.objects.all(),
+#         'thisthreads':thisthreads,
+#         'messages': Message.objects.filter(thread=thisthreads).order_by('when_created'),
+#         'next_url': reverse('details', args=(pk,))
+#     }
+#     return render(request, 'dashboard/details.html', context=context)
 
 class ThreadDetailsView(View):
     def dispatch(self, request, pk):
@@ -105,15 +107,14 @@ class AddNewThreadView(View):
             return HttpResponse(' ')
         thread = MessageThread.objects.create(subject=subject)
         thread.participants.add(request.user)
-        return HttpResponse('')
+        thread_url = reverse('details',args=(thread.pk,))
+        return JsonResponse({'subject':thread.subject,'thread_url':thread_url})
+
 
 class JoinThreadsView(View):
     def post(self, request):
         subject = request.POST['subject']
-        print(subject)
-
-        thread = MessageThread.objects.get(subject=subject)
-        print(thread)
+        thread = get_object_or_404(MessageThread,subject=subject)
         thread.participants.add(request.user)
-
-        return HttpResponse('')
+        thread_url = reverse('details',args=(thread.pk,))
+        return JsonResponse({'subject':thread.subject,'thread_url':thread_url})

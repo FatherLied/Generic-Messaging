@@ -37,45 +37,16 @@
           {% endblock %}
       </div>
     {% endblock %}
-
-    <script src= "{% static 'js/jquery.js'%}"></script>
-    <script type="text/javascript">
-    
-    $(document).on('submit', '#jointhreads',function(e){
-      e.preventDefault()
-      $.ajax({
-        type:'POST',
-        url:'jointhreads/',
-        data:{
-          subject:$('#join_subject').val(),
-          csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
-        },
-        success:function(){
-          alert('Successfully joined threads')
+    <script src= "{% static 'js/require.js'%}"></script>
+    <script>
+      require.config({
+        paths: {
+          'jquery': "{% static 'js/jquery' %}"
         }
-
-      })
-    });
-
-    $(document).on('submit', '#createthreads',function(e){
-      e.preventDefault()
-      $.ajax({
-        type:'POST',
-        url:'addnewthread/',
-        data:{
-          subject:$('#create_subject').val(),
-          csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
-        },
-        success:function(){
-          alert('Successfully created threads')
-        }
-
-      })
-    });
+      });
     </script>
-    
+    <script src= "{% static 'js/message.js'%}"></script>
   </body>
 
-  <script src="{% static 'message.js' %}"></script>
 
 </html>
