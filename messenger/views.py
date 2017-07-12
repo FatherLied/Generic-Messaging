@@ -16,13 +16,14 @@ from django.views import View
 #     return HttpResponse('')
 
 class AddMessageView(View): 
-    def dispatch(self, request, **kwargs):
-      if request.method is not 'POST':
-        return HttpResponse('')
+    # def dispatch(self, request, **kwargs):
+    #   if request.method is not 'POST':
+    #     return HttpResponse('')
   
     def post(self, request): 
         content = request.POST.get('content')
         thread_id = request.POST.get('thread_id')
         thread = MessageThread.objects.get(pk=thread_id)
+        # print(content+","+thread_id+","+request.user)
         message = Message.objects.add_message(content=content, thread=thread, sender=request.user)
         return JsonResponse({'content': message.content, 'when': message.when_created.isoformat(), 'sender': message.sender.username})

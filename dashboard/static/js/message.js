@@ -1,5 +1,6 @@
 require([
-    'jquery'
+    'jquery',
+    'mustache.min'
 ],function($){
     $('#jointhreads').on('submit',function(e){
         e.preventDefault()
