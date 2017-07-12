@@ -2,15 +2,24 @@
 {% load staticfiles %}
 
 {% block extra_head %}
-<link rel="stylesheet" href="{% static 'css/messages.css' %}">
+	<link rel="stylesheet" href="{% static 'css/messages.css' %}">
 {% endblock %}
 
 {% block details %}
-<div class="container">
-	<div class="messages">
-		{% for message in messages %}
-        {% include "dashboard/messages_panel/message.html" %}
-		{% endfor %}
+	<div class="container">
+		<div class="messages">
+			{% for message in messages %}
+	        {% include "dashboard/messages_panel/message.html" %}
+			{% endfor %}
+		</div>
+		<div class = "sendmess">
+			<form action="{% url 'add_message' %}?next={{next_url}}" method="post">
+		        {% csrf_token %}
+				<textarea name="content" id="" rows="2" cols = "40%"></textarea>
+				<input name="thread_id" type="hidden" value="{{thisthreads.id}}" />
+				<button>Send</button>
+			</form>
+		</div>
 	</div>
 <br><br><br>
 	<form id="send_message" action="{% url 'add_message' %}?next={{next_url}}">
@@ -21,4 +30,5 @@
 		<input type="submit" class="mdl-button" value="Send" />
 	</form>
 </div>
+
 {% endblock %}

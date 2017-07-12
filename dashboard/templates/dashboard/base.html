@@ -21,6 +21,7 @@
   <body>
     <div class="page-header">
       <h1><a href="/">Oh, Chat App!</a></h1>
+        {# login/signup thingy #}
         {% if user.is_authenticated %}
         <p>hello, {{request.user}}</p>
           <a href="{% url 'logout' %}">Logout</a>
@@ -45,8 +46,6 @@
       });
     </script>
     <script src= "{% static 'js/message.js'%}"></script>
-
-  
   </body>
 
 
