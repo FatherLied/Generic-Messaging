@@ -30,6 +30,7 @@ urlpatterns = [
     url(r'^thread/(?P<pk>\d+)/$',thread_details, name='details'),
     url(r'^addnewthread/$',addnewthread, name='addnewthread'),
     url(r'^jointhreads/$',jointhreads, name='jointhreads'),
-    url(r'^add/$', add_message, name='add_message')
+    url(r'^add/$', add_message, name='add_message'),
+    # url(r'^send/$', send_message, name='send_message')
 ]
 
