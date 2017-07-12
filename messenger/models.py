@@ -33,8 +33,8 @@ class MessageThread(models.Model):
 
 
 class Message(models.Model):
-	sender = models.ForeignKey(User, related_name='sender')
-	thread = models.ForeignKey(MessageThread, related_name='thread')
+	sender = models.ForeignKey(User, related_name='messages')
+	thread = models.ForeignKey(MessageThread, related_name='content')
 	content = models.TextField()
 	when_created = models.DateTimeField(auto_now_add=True)
 

@@ -16,9 +16,9 @@ from django.views import View
 #     return HttpResponse('')
 
 class AddMessageView(View): 
-    def dispatch(self, request, **kwargs):
-      if request.method is not 'POST':
-        return HttpResponse('')
+    # def dispatch(self, request, **kwargs):
+    #   if request.method is not 'POST':
+    #     return HttpResponse('')
   
     def post(self, request): 
         content = request.POST.get('content')
