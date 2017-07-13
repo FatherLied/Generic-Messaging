@@ -12,6 +12,12 @@
     text-decoration: none;
 }
 
+.page-header p{
+    color: white;
+    font-size: 36pt;
+    float: right;
+}
+
 .content {
     margin-left: 40px;
 }
@@ -23,6 +29,12 @@ body{
 h1, h2, h3, h4 {
     font-family: 'Lobster', cursive;
     font-size: 35pt;
+}
+
+.welcomemessage{
+    float:right;
+    font-color: white;
+    font-size: 35pt
 }
 
 .listthreadsusers h3{
@@ -81,6 +93,10 @@ h1, h2, h3, h4 {
     padding-top: 10px;
 }
 
+textarea {
+    width: 350px;
+}
+
 .createjointhread{
     text-align: center;
     float: left;
@@ -118,13 +134,8 @@ h1, h2, h3, h4 {
 }
 
 
-
-
-
-
-
 .upperlogin {
-    position: relative;
+    position: absolute;
     height: 350px;
     line-height: 200px;
     text-align: center;

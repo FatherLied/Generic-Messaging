@@ -13,15 +13,17 @@
 			{% endfor %}
 		</div>
 		<div class = "sendmess">
-			<form action="{% url 'add_message' %}?next={{next_url}}" method="post">
+			<form id="send_message" action="{% url 'add_message' %}?next={{next_url}}">
 		        {% csrf_token %}
-				<textarea name="content" id="" rows="2" cols = "40%"></textarea>
+				<textarea name="content" id="content" rows="2" cols = "40%"></textarea>
 				<input name="thread_id" type="hidden" value="{{thisthreads.id}}" />
+				<input name="sender" id="sender" type="hidden" value="{{request.user}}" />
 				<button>Send</button>
 			</form>
 		</div>
 	</div>
-<br><br><br>
+	
+	{% comment %}
 	<form id="send_message" action="{% url 'add_message' %}?next={{next_url}}">
         {% csrf_token %}
 		<textarea name="content" id="content" rows="3" cols = "80%"></textarea>
@@ -29,6 +31,24 @@
 		<input name="sender" id="sender" type="hidden" value="{{request.user}}" />
 		<input type="submit" class="mdl-button" value="Send" />
 	</form>
-</div>
+	{% endcomment %}
+
+	{% verbatim %}
+		<script id="message-template" type="text/template">
+			<div class="message">
+			    <div class="user">
+			        {{sender}}
+			    </div>
+			    <div class="content">
+			        <div class="body">
+			            {{content}}
+			        </div>
+			        <div class="footer">
+			            {{when}}
+			        </div>
+			    </div>
+			</div>
+		</script>
+	{% endverbatim %}
 
 {% endblock %}
