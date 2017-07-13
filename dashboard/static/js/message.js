@@ -2,7 +2,7 @@ require([
     'jquery',
     'mustache.min'
 ],function($,Mustache){
-    
+
     $('#jointhreads').on('submit',function(e){
         e.preventDefault()
 
@@ -71,10 +71,15 @@ require([
 
             success : function(json){
                 date = String(new Date(json.when));
-                console.log(date);
-                message_template = message_template + "<div class='footer'>"+ date +"</div></div></div>";
-                $sm_content.val('');
-                $messages.append(Mustache.render(message_template,json));
+                $('#content').val('');
+                // $('.messages').append('<div class="message"><div class="user">'+json.sender+'</div><div class="content"><div class="body">'+json.content+'</div><div class="footer">'+date+'</div></div></div>')
+                // $('#messages').append(json.data);
+                console.log(json);
+                var template = $('#message-template');
+                var render = Mustache.render(template.html(), json);
+                console.log(render)
+                $('.messages').append(render)
+
                 alert("message sent!")
             }
         });
