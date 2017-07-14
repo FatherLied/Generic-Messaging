@@ -6,23 +6,22 @@
 {% endblock %}
 
 {% block details %}
-	<div class="container">
-		<div class="messages">
-			{% for message in messages %}
-	        {% include "dashboard/messages_panel/message.html" %}
-			{% endfor %}
-		</div>
-		<div class = "sendmess">
-			<form id="send_message" action="{% url 'add_message' %}?next={{next_url}}">
-		        {% csrf_token %}
-				<textarea name="content" id="content" rows="2" cols = "40%"></textarea>
-				<input name="thread_id" type="hidden" value="{{thisthreads.id}}" />
-				<input name="sender" id="sender" type="hidden" value="{{request.user}}" />
-				<button>Send</button>
-			</form>
-		</div>
+	<div class="messages">
+		{% for message in messages %}
+        {% include "dashboard/messages_panel/message.html" %}
+		{% endfor %}
 	</div>
-	
+	<div class = "sendmess">
+		<form id="send_message" action="{% url 'add_message' %}?next={{next_url}}">
+	        {% csrf_token %}
+			<textarea name="content" id="content" rows="2" cols = "40%"></textarea>
+			<input name="thread_id" type="hidden" value="{{thisthreads.id}}" />
+			<input name="sender" id="sender" type="hidden" value="{{request.user}}" />
+			<br>
+			<button>Send</button>
+		</form>
+	</div>
+
 	{% comment %}
 	<form id="send_message" action="{% url 'add_message' %}?next={{next_url}}">
         {% csrf_token %}
@@ -39,6 +38,7 @@
 			    <div class="user">
 			        {{sender}}
 			    </div>
+			    : <br>
 			    <div class="content">
 			        <div class="body">
 			            {{content}}

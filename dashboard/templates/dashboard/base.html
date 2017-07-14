@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
     <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/blog.css' %}">
     {% block extra_head %}
     {% endblock %}
@@ -24,9 +25,9 @@
         {# login/signup thingy #}
           {% if user.is_authenticated %}
             <p>Welcome, {{request.user}} </p>
+          <div class = "logsignout">
             <a href="{% url 'logout' %}">Logout</a>
-          {% else %}
-            <a href="{% url 'login' %}">Login</a> / <a href="{% url 'signup' %}">Signup</a>
+          </div>
           {% endif %}
       <hr>
     </div>
