@@ -61,7 +61,5 @@ require([
             }
         });
     });
-    console.log(longpoll);
-    setTimeout(
-        longpoll.fetch, 5000);
+    longpoll.fetch();
 });
