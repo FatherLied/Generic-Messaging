@@ -31,7 +31,7 @@ class HomeView(TemplateView):
         context = super(HomeView, self).get_context_data(**kwargs)
         context['threads'] = MessageThread.objects.filter(participants=self.request.user).order_by('-when_created')
         context['users'] = Profile.objects.all()
-        context['allthreads'] = MessageThread.objects.all().order_by('-when_created')
+        context['allthreads'] = MessageThread.objects.exclude(participants=self.request.user)
 
         return context
 
@@ -93,7 +93,7 @@ class ThreadDetailsView(View):
         context = {
             'threads':  MessageThread.objects.filter(participants=request.user).order_by('-when_created'),
             'users' : Profile.objects.all(),
-            'thisthreads':thisthreads,
+            'allthreads':MessageThread.objects.exclude(participants=request.user),
             'messages': Message.objects.filter(thread=thisthreads).order_by('when_created'),
             'next_url': reverse('details', args=(pk,))
         }

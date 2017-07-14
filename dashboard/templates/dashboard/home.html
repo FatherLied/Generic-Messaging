@@ -61,9 +61,7 @@
             <h3>All Unjoined Threads</h3><br>
             <ul>
                 {% for thread in allthreads %}
-                    {% if thread not in threads%}
                     <li>{{thread.subject}}</li>
-                    {% endif%}
                 {% endfor %}
             </ul>
         </div>
