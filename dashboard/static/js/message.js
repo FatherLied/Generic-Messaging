@@ -20,7 +20,7 @@ require([
             success:function(json){
                 alert('Successfully joined thread')
                 $jt_textfield.val('');
-                $threads.append(Mustache.render(jt_template,json));
+                $jt_threads.append(Mustache.render(jt_template,json));
             }
         })
     });
@@ -29,7 +29,7 @@ require([
         e.preventDefault()
         
         var ct_template = "<a class='list-group-item' href='{{thread_url}}' >{{subject}}</a> ";
-        var $ct_threads = $('#threads');
+        var $ct_threads = $('#threads_joined');
         var $ct_textfield = $('#create_subject');
 
         $.ajax({
@@ -46,9 +46,9 @@ require([
                 }
 
                 else{
-                    alert('Successfully created thread')
-                    $textfield.val('');
-                    $threads.append(Mustache.render(ct_template,json));
+                    alert('Successfully created thread');
+                    $ct_textfield.val('');
+                    $ct_threads.append(Mustache.render(ct_template,json));
                 }                
             }
         })
@@ -60,8 +60,6 @@ require([
         var $sm_textarea = $('#send_message');
         var $sm_content = $('#content');
         var $messages = $('.messages');
-        var message_template = "<div class='message'><div class='user'>{{sender}}</div>"+
-            "<div class='content'><div class='body'>{{content}}</div>";
 
 
         $.ajax({
@@ -72,8 +70,6 @@ require([
             success : function(json){
                 date = String(new Date(json.when));
                 $('#content').val('');
-                // $('.messages').append('<div class="message"><div class="user">'+json.sender+'</div><div class="content"><div class="body">'+json.content+'</div><div class="footer">'+date+'</div></div></div>')
-                // $('#messages').append(json.data);
                 console.log(json);
                 var template = $('#message-template');
                 var render = Mustache.render(template.html(), json);
