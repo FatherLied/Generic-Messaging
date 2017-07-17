@@ -64,3 +64,25 @@ class ProfileThread(models.Model):
 	user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='thread_copies')
 	threads = models.ForeignKey(MessageThread, on_delete=models.CASCADE, related_name='copies')
 	is_removed = models.BooleanField()
+
+class Archive(models.Model):
+    
+    QUEUED = 'Q'
+    PROCESSING = 'P'
+    FINISHED = 'F'
+    DONE = 'D'
+    
+    ARCHIVE_STATUS= (
+        (QUEUED, 'QUEUED'),
+        (PROCESSING,'PROCESSING'),
+        (FINISHED, 'FINISH PROCESSING'),
+        (DONE,'DONE')
+    )
+
+    status = models.CharField(
+        max_length=1,
+        choices=ARCHIVE_STATUS,
+        default = QUEUED,
+    )
+
+    archive_file = models.FileField()
