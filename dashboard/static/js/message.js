@@ -1,7 +1,8 @@
 require([
     'jquery',
+    'longpoll',
     'mustache.min'
-],function($,Mustache){
+],function($,Mustache,longpoll){
 
     $('#jointhreads').on('submit',function(e){
         e.preventDefault()
@@ -57,7 +58,8 @@ require([
 
     $('#send_message').on('submit', function(e){
         e.preventDefault();
-
+        longpoll.restart();
+      
         var $sm_textarea = $('#send_message');
         var $sm_content = $('#content');
         var $messages = $('.messages');
@@ -68,8 +70,8 @@ require([
             data : $sm_textarea.serialize(),
 
             success : function(json){
-                date = String(new Date(json.when));
                 $('#content').val('');
+
                 console.log(json);
                 var template = $('#message-template');
                 var render = Mustache.render(template.html(), json);
@@ -78,4 +80,5 @@ require([
             }
         });
     });
+    longpoll.fetch();
 });
