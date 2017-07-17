@@ -33,8 +33,8 @@ class MessageThread(models.Model):
 
 
 class Message(models.Model):
-	sender = models.ForeignKey(User, related_name='sender')
-	thread = models.ForeignKey(MessageThread, related_name='thread')
+	sender = models.ForeignKey(User, related_name='messages')
+	thread = models.ForeignKey(MessageThread, related_name='content')
 	content = models.TextField()
 	when_created = models.DateTimeField(auto_now_add=True)
 
@@ -47,8 +47,8 @@ class Profile(models.Model):
 	first_name = models.CharField(max_length=30, blank = False)
 	last_name = models.CharField(max_length=30, blank = False)
 	owner = models.OneToOneField(User, related_name='profile')
-	thread = models.ManyToManyField(MessageThread, 
-		related_name = '_thread', through = 'ProfileThread')
+	threads = models.ManyToManyField(MessageThread, 
+		related_name = 'profiles', through = 'ProfileThread')
 
 	def __str__(self):
 		return ('{} : {}  '.format(self.owner, self.thread.count()))
@@ -62,5 +62,27 @@ class Profile(models.Model):
 
 class ProfileThread(models.Model):
 	user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='thread_copies')
-	thread = models.ForeignKey(MessageThread, on_delete=models.CASCADE, related_name='copies')
+	threads = models.ForeignKey(MessageThread, on_delete=models.CASCADE, related_name='copies')
 	is_removed = models.BooleanField()
+
+class Archive(models.Model):
+    
+    QUEUED = 'Q'
+    PROCESSING = 'P'
+    FINISHED = 'F'
+    DONE = 'D'
+    
+    ARCHIVE_STATUS= (
+        (QUEUED, 'QUEUED'),
+        (PROCESSING,'PROCESSING'),
+        (FINISHED, 'FINISH PROCESSING'),
+        (DONE,'DONE')
+    )
+
+    status = models.CharField(
+        max_length=1,
+        choices=ARCHIVE_STATUS,
+        default = QUEUED,
+    )
+
+    archive_file = models.FileField()

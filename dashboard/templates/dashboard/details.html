@@ -2,17 +2,27 @@
 {% load staticfiles %}
 
 {% block extra_head %}
-<link rel="stylesheet" href="{% static 'css/messages.css' %}">
+	<link rel="stylesheet" href="{% static 'css/messages.css' %}">
 {% endblock %}
 
 {% block details %}
-<div class="container">
 	<div class="messages">
 		{% for message in messages %}
         {% include "dashboard/messages_panel/message.html" %}
 		{% endfor %}
 	</div>
-<br><br><br>
+	<div class = "sendmess">
+		<form id="send_message" action="{% url 'add_message' %}?next={{next_url}}">
+	        {% csrf_token %}
+			<textarea name="content" id="content" rows="2" cols = "40%"></textarea>
+			<input name="thread_id" type="hidden" value="{{thread_id}}" />
+			<input name="sender" id="sender" type="hidden" value="{{request.user}}" />
+			<br>
+			<button>Send</button>
+		</form>
+	</div>
+
+	{% comment %}
 	<form id="send_message" action="{% url 'add_message' %}?next={{next_url}}">
         {% csrf_token %}
 		<textarea name="content" id="content" rows="3" cols = "80%"></textarea>
@@ -20,5 +30,25 @@
 		<input name="sender" id="sender" type="hidden" value="{{request.user}}" />
 		<input type="submit" class="mdl-button" value="Send" />
 	</form>
-</div>
+	{% endcomment %}
+
+	{% verbatim %}
+		<script id="message-template" type="text/template">
+			<div class="message">
+			    <div class="user">
+			        {{sender}}
+			    </div>
+			    : <br>
+			    <div class="content">
+			        <div class="body">
+			            {{content}}
+			        </div>
+			        <div class="footer">
+			            {{when}}
+			        </div>
+			    </div>
+			</div>
+		</script>
+	{% endverbatim %}
+
 {% endblock %}

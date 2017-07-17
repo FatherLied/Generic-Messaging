@@ -3,6 +3,7 @@
 {% block login %}
   <div class="innerlogin">
     <h2>Log in to Oh, Chat App!</h2>
+    <br>
     {% if form.errors %}
       <p style="color: red">Your username and password didn't match. Please try again.</p>
     {% endif %}
@@ -22,8 +23,7 @@
             {% endif %}
           </p>
         {% endfor %}
-        <button type="submit">Log in</button>
-        <br><br>
+        <button type="submit" >Log in</button><br><br>
         <a href="{% url 'signup' %}">New user? Sign up here!</a>
       </div>
     </form>
