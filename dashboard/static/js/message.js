@@ -18,6 +18,7 @@ require([
                 csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
             },
             success:function(json){
+                $(".listallthreads ul li:contains("+ json.subject+")").remove();
                 alert('Successfully joined thread')
                 $jt_textfield.val('');
                 $jt_threads.append(Mustache.render(jt_template,json));
