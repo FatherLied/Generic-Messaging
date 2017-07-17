@@ -85,4 +85,9 @@ class Archive(models.Model):
         default = QUEUED,
     )
 
+    requestor = models.ForeignKey(Profile, related_name='archive_requests')
     archive_file = models.FileField()
+
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    
