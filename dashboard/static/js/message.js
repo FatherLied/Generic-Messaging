@@ -1,7 +1,7 @@
 require([
     'jquery',
-    'longpoll',
-    'mustache.min'
+    'mustache.min',
+    'longpoll'
 ],function($,Mustache,longpoll){
 
     $('#jointhreads').on('submit',function(e){
