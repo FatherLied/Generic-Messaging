@@ -75,8 +75,6 @@ require([
                 var render = Mustache.render(template.html(), json);
                 console.log(render);
                 $('.messages').append(render);
-
-                alert("message sent!");
             }
         });
     });
