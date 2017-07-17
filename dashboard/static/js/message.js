@@ -61,7 +61,6 @@ require([
         var $sm_content = $('#content');
         var $messages = $('.messages');
 
-
         $.ajax({
             url : $sm_textarea.attr('action'),
             type : 'POST',
@@ -73,10 +72,10 @@ require([
                 console.log(json);
                 var template = $('#message-template');
                 var render = Mustache.render(template.html(), json);
-                console.log(render)
-                $('.messages').append(render)
+                console.log(render);
+                $('.messages').append(render);
 
-                alert("message sent!")
+                alert("message sent!");
             }
         });
     });

@@ -16,7 +16,7 @@
 			<form id="send_message" action="{% url 'add_message' %}?next={{next_url}}">
 		        {% csrf_token %}
 				<textarea name="content" id="content" rows="2" cols = "40%"></textarea>
-				<input name="thread_id" type="hidden" value="{{thisthreads.id}}" />
+				<input name="thread_id" type="hidden" value="{{thread_id}}" />
 				<input name="sender" id="sender" type="hidden" value="{{request.user}}" />
 				<button>Send</button>
 			</form>

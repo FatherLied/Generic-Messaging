@@ -22,10 +22,12 @@ class AddMessageView(View):
     #     return HttpResponse('')
   
     def post(self, request): 
+        print('Here')
         content = request.POST.get('content')
+        print(request.POST.get('content'))
         thread_id = request.POST.get('thread_id')
+        print(request.POST.get('thread_id'))
         thread = MessageThread.objects.get(pk=thread_id)
-        # print(content+","+thread_id+","+request.user)
         message = Message.objects.add_message(content=content, thread=thread, sender=request.user)
         t = message.when_created.strftime("%B %d, %Y, %-I:%M %p")
         return JsonResponse({'content': message.content, 'when': t, 'sender': message.sender.username})
