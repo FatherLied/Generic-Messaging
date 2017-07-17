@@ -18,6 +18,7 @@ require([
                 csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
             },
             success:function(json){
+                $(".listallthreads ul li:contains("+ json.subject+")").remove();
                 alert('Successfully joined thread')
                 $jt_textfield.val('');
                 $jt_threads.append(Mustache.render(jt_template,json));
@@ -74,8 +75,6 @@ require([
                 var render = Mustache.render(template.html(), json);
                 console.log(render);
                 $('.messages').append(render);
-
-                alert("message sent!");
             }
         });
     });
