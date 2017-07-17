@@ -1,0 +1,1 @@
+celery -A general beat -l info -S django
