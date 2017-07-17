@@ -22,7 +22,6 @@ from dashboard import views as reg_views
 # from dashboard import views
 from dashboard.views import HomeView, SignUpView
 from dashboard.views import ThreadDetailsView, AddNewThreadView, JoinThreadsView
-from messenger.views import AddMessageView
 
 
 urlpatterns = [
@@ -34,10 +33,9 @@ urlpatterns = [
     url(r'^signup/$', reg_views.signup, name='signup'),
 
     # url(r'^send/$', send_message, name='send_message')
-
-    url(r'^add/$', AddMessageView.as_view(), name='add_message'),
     url(r'^addnewthread/$', AddNewThreadView.as_view(), name='addnewthread'),
     url(r'^jointhreads/$', JoinThreadsView.as_view(), name='jointhreads'),
     url(r'^thread/(?P<pk>\d+)/$', ThreadDetailsView.as_view(), name='details'),
+    url(r'^messenger/',include('messenger.urls'))
 ]
 
