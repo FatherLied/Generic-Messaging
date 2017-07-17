@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+# from .utils import publish_to_csv
+
 # Create your models here.
 
 class ThreadManager(models.Manager):
@@ -29,7 +31,7 @@ class MessageThread(models.Model):
     objects = ThreadManager()
 
     def __str__(self):
-    	return (' {} '.format(self.subject))
+    	return ('{}'.format(self.subject))
 
 
 class Message(models.Model):
@@ -51,7 +53,7 @@ class Profile(models.Model):
 		related_name = 'profiles', through = 'ProfileThread')
 
 	def __str__(self):
-		return ('{} : {}  '.format(self.owner, self.thread.count()))
+		return ('{} : {}  '.format(self.owner, self.threads.count()))
 
 # @receiver(post_save, sender=User)
 # def create_profile(sender, created, instance, **kwargs):
@@ -70,13 +72,13 @@ class Archive(models.Model):
     QUEUED = 'Q'
     PROCESSING = 'P'
     FINISHED = 'F'
-    DONE = 'D'
+    EXPIRED = 'E'
     
     ARCHIVE_STATUS= (
         (QUEUED, 'QUEUED'),
         (PROCESSING,'PROCESSING'),
-        (FINISHED, 'FINISH PROCESSING'),
-        (DONE,'DONE')
+        (FINISHED, 'FINISHED'),
+        (EXPIRED,'EXPIRED')
     )
 
     status = models.CharField(
@@ -85,9 +87,20 @@ class Archive(models.Model):
         default = QUEUED,
     )
 
-    requestor = models.ForeignKey(Profile, related_name='archive_requests')
-    archive_file = models.FileField()
+    thread = models.ForeignKey(MessageThread, related_name='archives', null=True)
+    requestor = models.ForeignKey(Profile, null=True, related_name='archive_requests',
+    	on_delete=models.SET_NULL)
+    archive_file = models.FileField(default=None, blank=True, null=True)
 
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    
+    def __str__(self):
+    	return 'Requestor: {} | Status: {} | Thread: {}'.format(self.requestor.owner.username,
+    		self.status, self.thread)
+
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    def save_file(self, filename, *args, **kwargs):
+
+    	with open(filename) as local_file:
+    		self.archive_file.save(filename, local_file)
