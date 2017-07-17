@@ -1,48 +1,74 @@
 define([
     'jquery'
 ],function($){
-    var latestId = $('.messages .message:last-child').data('id')
+    var latestId = $('.messages .message:last-child').data('id');
     console.log(latestId);
+    var x = 5000;
     var len = 0;
-        function fetch() {
-            var x = 5000;
+    var timer;
 
-            function _fetch(){
-                $.ajax({
-                    url: '/messenger/retrieve/',
-                    type: 'GET',
-                    data: {
-                        latestId: latestId,
-                    },
-                    success : function(data){
-                        len = data.objects.messages.length;
-                        console.log(data.objects.messages);
-                        console.log(data.objects.messages.length);
-                        if(len === 0){
-                            console.log("no message");
+    function ajaxCall(callback, errorCallback){
+        $.ajax({
+            url: '/messenger/retrieve/',
+            type: 'GET',
+            data: {
+                latestId: latestId,
+            },
+            success : function(data){
+                len = data.objects.messages.length;
+                if(len === 0){
+                    console.log("no message");
+                }
+                else{
+                    for(var x=0; x < len; x++){
+                        if(latestId <= data.objects.messages[x].pk){
+                            latestId = data.objects.messages[x].pk;
                         }
-                        else{
-                            for(var x=0; x < len; x++){
-                                var date = String(new Date(data.objects.messages[x].when));
-                                $('.messages').append('<div class="message"><div class="user">'+data.objects.messages[x].sender+'</div><div class="content"><div class="body">'+data.objects.messages[x].content+'</div><div class="footer">'+date+'</div></div></div>')
-                            }
-                            latestId += 1;
+                        var date = String(new Date(data.objects.messages[x].when));
+                        if($(".message[data-id=" + data.objects.messages[x].pk + "]").length === 0){
+                            $('.messages').append('<div class="message" data-id="' + data.objects.messages[x].pk + '"><div class="user">'+data.objects.messages[x].sender+'</div><div class="content"><div class="body">'+data.objects.messages[x].content+'</div><div class="footer">'+date+'</div></div></div>')   
                         }
                     }
-                });
-                if(len === 0){
-                    x += 1000;
-                    console.log(x);
-                }else{
-                    x = 5000;
-                    console.log(x);
+                    console.log(latestId);
                 }
-                setTimeout(_fetch, x);
+                if (typeof callback === "function"){
+                    callback(data);
+                }
+            },
+            error : function(e){
+                console.log(e);
+                if (typeof errorCallback === "function"){
+                    errorCallback(e);
+                }
             }
-            setTimeout(_fetch, x);
-        }   
+        });
+    }
+
+    function longpoll() {
+        ajaxCall(function(data) {
+            console.log(x);
+            if (data.objects.messages.length === 0){
+                x += 1000;
+            } else{
+                x = 5000;
+            }
+            console.log(x);
+            timer = setTimeout(longpoll, x);
+        });
+    }
+
+    function fetch() {
+        timer = setTimeout(longpoll, x);
+    }
+
+    function restartTimer(){
+        clearTimeout(timer);
+        fetch();
+    }
+
     return {
-        fetch: fetch
+        fetch: fetch,
+        restart: restartTimer
     };
 
 });
