@@ -70,7 +70,7 @@ require([
             data : $sm_textarea.serialize(),
 
             success : function(json){
-                $('#content').val('');
+                $sm_content.val('');
 
                 console.log(json);
                 var template = $('#message-template');

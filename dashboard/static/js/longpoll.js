@@ -2,7 +2,6 @@ define([
     'jquery'
 ],function($){
     var latestId = $('.messages .message:last-child').data('id');
-    console.log(latestId);
     var x = 5000;
     var len = 0;
     var timer;
@@ -16,6 +15,7 @@ define([
             },
             success : function(data){
                 len = data.objects.messages.length;
+                console.log(data.objects.messages);
                 if(len === 0){
                     console.log("no message");
                 }
@@ -47,7 +47,7 @@ define([
     function longpoll() {
         ajaxCall(function(data) {
             console.log(x);
-            if (data.objects.messages.length === 0){
+            if (data.objects.messages.length === 0 || latestId === undefined){
                 x += 1000;
             } else{
                 x = 5000;

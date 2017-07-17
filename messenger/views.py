@@ -32,7 +32,7 @@ class AddMessageView(View):
         thread = MessageThread.objects.get(pk=thread_id)
         message = Message.objects.add_message(content=content, thread=thread, sender=request.user)
         t = message.when_created.strftime("%B %d, %Y, %-I:%M %p")
-        return JsonResponse({'content': message.content, 'when': t, 'sender': message.sender.username})
+        return JsonResponse({'pk': message.pk, 'content': message.content, 'when': t, 'sender': message.sender.username})
 
 
 class RetrieveMessage(View):
