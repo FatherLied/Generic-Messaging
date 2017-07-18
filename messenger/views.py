@@ -26,7 +26,7 @@ class AddMessageView(View):
             'when': t, 
             'sender': message.sender.username, 
             'sender_pk': message.sender.pk
-            }
+            })
 
 def download_csv(request, archive_obj):
     pass
