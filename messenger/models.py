@@ -16,7 +16,8 @@ class ThreadManager(models.Manager):
 class MessageManager(models.Manager):
 	
 	def add_message(self, sender, thread, content):
-		return self.create(sender=sender, thread=thread, content=content)
+		return self.create(sender=sender, 
+            thread=thread, content=content)
 	
 	def getMessagebyThread(self, thread):
 		return self.filter(thread=thread)
@@ -25,7 +26,8 @@ class MessageManager(models.Manager):
 
 class MessageThread(models.Model):
     subject = models.CharField(max_length=255, blank=True)
-    participants = models.ManyToManyField(User, related_name='message_threads', blank=True)
+    participants = models.ManyToManyField(User, 
+        related_name='message_threads', blank=True)
     when_created = models.DateTimeField(auto_now_add=True)
 
     objects = ThreadManager()
@@ -63,8 +65,10 @@ class Profile(models.Model):
 
 
 class ProfileThread(models.Model):
-	user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='thread_copies')
-	threads = models.ForeignKey(MessageThread, on_delete=models.CASCADE, related_name='copies')
+	user = models.ForeignKey(Profile, on_delete=models.CASCADE, 
+        related_name='thread_copies')
+	threads = models.ForeignKey(MessageThread, on_delete=models.CASCADE, 
+        related_name='copies')
 	is_removed = models.BooleanField()
 
 class Archive(models.Model):
@@ -73,32 +77,23 @@ class Archive(models.Model):
     PROCESSING = 'P'
     FINISHED = 'F'
     EXPIRED = 'E'
-    
-    ARCHIVE_STATUS= (
-        (QUEUED, 'QUEUED'),
-        (PROCESSING,'PROCESSING'),
-        (FINISHED, 'FINISHED'),
-        (EXPIRED,'EXPIRED')
-    )
-
+    ARCHIVE_STATUS= ((QUEUED, 'QUEUED'),(PROCESSING,'PROCESSING'),
+        (FINISHED, 'FINISHED'),(EXPIRED,'EXPIRED'))
     status = models.CharField(
         max_length=1,
         choices=ARCHIVE_STATUS,
         default = QUEUED,
     )
 
-    thread = models.ForeignKey(MessageThread, related_name='archives', null=True)
-    requestor = models.ForeignKey(Profile, null=True, related_name='archive_requests',
-    	on_delete=models.SET_NULL)
+    thread = models.ForeignKey(MessageThread, 
+        related_name='archives', null=True)
+    requestor = models.ForeignKey(Profile, null=True, 
+        related_name='archive_requests', on_delete=models.SET_NULL)
     archive_file = models.FileField(default=None, blank=True, null=True)
 
-    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
     def __str__(self):
-    	return 'Requestor: {} | Status: {} | Thread: {}'.format(self.requestor.owner.username,
-    		self.status, self.thread)
-
-    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    	return 'Requestor: {} | Status: {} | Thread: {}'.format(
+            self.requestor.owner.username,self.status, self.thread)
 
     def save_file(self, filename, *args, **kwargs):
 
