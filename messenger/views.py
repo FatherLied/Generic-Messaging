@@ -38,8 +38,10 @@ class AddMessageView(View):
 class RetrieveMessage(View):
 
     def get(self, request, *args, **kwargs):
+        print (request.GET.keys())
         latest_id = request.GET['latestId']
-        messages = Message.objects.filter(id__gt=latest_id)
+        thread_id = request.GET['threadId']
+        messages = Message.objects.filter(id__gt=latest_id, thread__id=thread_id)
         context = {}
         context['messages'] = []
         for message in messages:

@@ -6,6 +6,7 @@
 {% endblock %}
 
 {% block details %}
+	<input name="thread_id_ref" type="hidden" value="{{thread_id}}" />
 	<div class="messages">
 		{% for message in messages %}
         {% include "dashboard/messages_panel/message.html" %}

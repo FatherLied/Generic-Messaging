@@ -2,7 +2,11 @@ define([
     'jquery'
 ],function($){
     var latestId = $('.messages .message:last-child').data('id');
-    var x = 5000;
+    if(!latestId){
+        latestId = 0;
+    }
+    var threadId = $('[name=thread_id_ref]').val();
+    var x = 3000;
     var len = 0;
     var timer;
 
@@ -12,12 +16,15 @@ define([
             type: 'GET',
             data: {
                 latestId: latestId,
+                threadId: threadId,
             },
             success : function(data){
                 len = data.objects.messages.length;
                 console.log(data.objects.messages);
                 if(len === 0){
                     console.log("no message");
+
+
                 }
                 else{
                     for(var x=0; x < len; x++){
@@ -47,10 +54,13 @@ define([
     function longpoll() {
         ajaxCall(function(data) {
             console.log(x);
-            if (data.objects.messages.length === 0 || latestId === undefined){
+            if (data.objects.messages.length === 0){
                 x += 1000;
+                if(x>5000){
+                    x = 5000;
+                }
             } else{
-                x = 5000;
+                x = 3000;
             }
             console.log(x);
             timer = setTimeout(longpoll, x);
