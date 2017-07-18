@@ -8,7 +8,7 @@ define([
     }
     var threadId = $('[name=thread_id_ref]').val();
     var userId = $('[name=user_pk]').val();
-    var x = 3000;
+    var x = 2000;
     var len = 0;
     var timer;
 
@@ -63,7 +63,7 @@ define([
                     x = 5000;
                 }
             } else{
-                x = 3000;
+                x = 2000;
             }
             timer = setTimeout(longpoll, x);
         });
