@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, logout, login
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 # Create your views here.
-from .models import Message, MessageThread
+from .models import Message, MessageThread, Archive
 from django.views import View
 import time
 
@@ -31,3 +31,6 @@ class AddMessageView(View):
         message = Message.objects.add_message(content=content, thread=thread, sender=request.user)
         t = message.when_created.strftime("%B %d, %Y, %-I:%M %p")
         return JsonResponse({'content': message.content, 'when': t, 'sender': message.sender.username})
+
+def download_csv(request, archive_obj):
+    pass
