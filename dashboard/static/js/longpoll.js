@@ -7,6 +7,10 @@ define([
         latestId = 0;
     }
     var threadId = $('[name=thread_id_ref]').val();
+    if(!threadId){
+        threadId = 0;
+    }
+    console.log(threadId);
     var userId = $('[name=user_pk]').val();
     var x = 2000;
     var len = 0;

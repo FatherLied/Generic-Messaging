@@ -18,24 +18,7 @@
                 {% endfor %}
             </div>
         </div>
-        
-        {% comment %}
-            <div class="col-md-6">
-            {% block details %}
-                <form id="createthreads">
-                    {% csrf_token %}
-                    subject: <input type="text" id="create_subject">
-                    <button>create</button>
-                </form>
-                <br>
-                <br>
-                <form id="jointhreads">
-                    {% csrf_token %}
-                    thread: <input type="text" id="join_subject">
-                    <button>join</button>
-                </form>
-        {% endcomment %}
-
+    
         <div class = "createjointhread">
             {% block details %}
                 <div class = "createjoinblock">
@@ -44,14 +27,14 @@
                         <h3>Create a Thread:</h3>
                         Subject: <input type="text" name="t_subject" id="create_subject">
                         <br><br>
-                        <button>Create</button>
+                        <input type="submit" class="mdl-button" id="create" value="Create" />
                     </form>
                     <form id="jointhreads">
                         {% csrf_token %}
                         <h3>Or Join One!</h3>
                         Thread: <input type="text" name="t_subject" id="join_subject">
                         <br><br>
-                        <button>Join</button>
+                        <input type="submit" class="mdl-button" id="join" value="Join" />
                     </form>
                 </div>
             {% endblock%}

@@ -23,6 +23,7 @@ require([
                 alert('Successfully joined thread')
                 $jt_textfield.val('');
                 $jt_threads.append(Mustache.render(jt_template,json));
+                
             }
         })
     });
@@ -51,6 +52,7 @@ require([
                     alert('Successfully created thread');
                     $ct_textfield.val('');
                     $ct_threads.append(Mustache.render(ct_template,json));
+                    
                 }                
             }
         })
@@ -83,17 +85,38 @@ require([
             }
         });
     });
-    $(document).ready(function() {
-        $('#send').attr('disabled','disabled');
-        $('#content').keyup(function() {
-            if($(this).val() != '') {
-                $('#send').removeAttr('disabled');
-            }
-            else {
+
+    $('#send').attr('disabled','disabled');
+    $('#create').attr('disabled','disabled');
+    $('#join').attr('disabled','disabled');
+    // send
+    $('#content').keyup(function() {
+        if($(this).val() == '' || (/^ *$/.test($(this).val()))  ) {
             $('#send').attr('disabled','disabled');
-            }
-        });
+            alert("Can't send blank messages")
+        }
+        else {
+        	$('#send').removeAttr('disabled');
+        }
     });
-    
+    // create
+    $('#create_subject').keyup(function() {
+        if($(this).val() == '' || (/^ *$/.test($(this).val()))  ) {
+            $('#create').attr('disabled','disabled');
+            alert("Can't create thread if subject is empty")
+        }
+        else {
+        	$('#create').removeAttr('disabled');
+        }
+    });
+    // join
+    $('#join_subject').keyup(function() {
+        if($(this).val() != '' ) {
+            $('#join').removeAttr('disabled');
+        }
+        else {
+        $('#join').attr('disabled','disabled');
+        }
+    });
     longpoll.fetch();
 });
