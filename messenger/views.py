@@ -21,12 +21,16 @@ class AddMessageView(View):
             thread=thread, sender=request.user)
         t = message.when_created.strftime("%B %d, %Y, %-I:%M %p")
 
-        return JsonResponse({'pk': message.pk, 'content': message.content, 'when': t,
-            'sender': message.sender.username, 'sender_pk': message.sender.pk})
-        
+        return JsonResponse({'pk': message.pk, 
+            'content': message.content, 
+            'when': t, 
+            'sender': message.sender.username, 
+            'sender_pk': message.sender.pk
+            }
 
 def download_csv(request, archive_obj):
     pass
+
 
 class RetrieveMessage(View):
 
@@ -37,7 +41,11 @@ class RetrieveMessage(View):
         context = {}
         context['messages'] = []
         for message in messages:
-            context['messages'].append({'pk': message.pk, 'content': message.content, 'when': message.when_created.isoformat(), 'sender': message.sender.username, 'sender_pk': message.sender.pk})
+            context['messages'].append({'pk': message.pk, 
+                'content': message.content, 
+                'when': message.when_created.strftime("%B %d, %Y, %-I:%M %p"), 
+                'sender': message.sender.username, 
+                'sender_pk': message.sender.pk})
         return JsonResponse({'objects': context})
 """
 
