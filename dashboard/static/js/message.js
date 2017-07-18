@@ -3,6 +3,9 @@ require([
     'mustache.min',
     'longpoll'
 ],function($,Mustache,longpoll){
+	$('#send').attr('disabled','disabled');
+    $('#create').attr('disabled','disabled');
+    $('#join').attr('disabled','disabled');
     var userId = $('[name=user_pk]').val();
     $('#jointhreads').on('submit',function(e){
         e.preventDefault()
@@ -23,6 +26,7 @@ require([
                 alert('Successfully joined thread')
                 $jt_textfield.val('');
                 $jt_threads.append(Mustache.render(jt_template,json));
+                $('#join').attr('disabled','disabled');
                 
             }
         })
@@ -52,6 +56,7 @@ require([
                     alert('Successfully created thread');
                     $ct_textfield.val('');
                     $ct_threads.append(Mustache.render(ct_template,json));
+                    $('#create').attr('disabled','disabled');
                     
                 }                
             }
@@ -82,18 +87,16 @@ require([
                 var render = Mustache.render(template.html(), json);
                 console.log(render);
                 $('.messages').append(render);
+                $('#send').attr('disabled','disabled');
+
             }
         });
     });
-
-    $('#send').attr('disabled','disabled');
-    $('#create').attr('disabled','disabled');
-    $('#join').attr('disabled','disabled');
+    
     // send
     $('#content').keyup(function() {
         if($(this).val() == '' || (/^ *$/.test($(this).val()))  ) {
             $('#send').attr('disabled','disabled');
-            alert("Can't send blank messages")
         }
         else {
         	$('#send').removeAttr('disabled');
@@ -102,8 +105,7 @@ require([
     // create
     $('#create_subject').keyup(function() {
         if($(this).val() == '' || (/^ *$/.test($(this).val()))  ) {
-            $('#create').attr('disabled','disabled');
-            alert("Can't create thread if subject is empty")
+        	$('#create').attr('disabled','disabled');
         }
         else {
         	$('#create').removeAttr('disabled');
@@ -118,5 +120,6 @@ require([
         $('#join').attr('disabled','disabled');
         }
     });
+
     longpoll.fetch();
 });
