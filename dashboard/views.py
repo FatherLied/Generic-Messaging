@@ -1,24 +1,13 @@
 from django.shortcuts import render, reverse, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate
 from dashboard.forms import SignUpForm
-
 from django.http import HttpResponse, JsonResponse
 from django.views.generic.base import TemplateView
-
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from messenger.models import MessageThread, Message, Profile
 from django.views import View
 
-# # Create your views here.
-# @login_required
-# def home(request):
-#     context = {
-#         'threads': MessageThread.objects.filter(participants=request.user).order_by('-when_created'),
-#         'users' : Profile.objects.all(),
-#         'allthreads':MessageThread.objects.all().order_by('-when_created')
-#     }
-#     return render(request, 'dashboard/home.html',context = context)
 
 @method_decorator(login_required, name='dispatch')
 class HomeView(TemplateView):
@@ -29,9 +18,11 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
-        context['threads'] = MessageThread.objects.filter(participants=self.request.user).order_by('-when_created')
+        context['threads'] = MessageThread.objects.filter(
+            participants=self.request.user).order_by('-when_created')
         context['users'] = Profile.objects.all()
-        context['allthreads'] = MessageThread.objects.exclude(participants=self.request.user)
+        context['allthreads'] = MessageThread.objects.exclude(
+            participants=self.request.user)
 
         return context
 
@@ -50,7 +41,6 @@ def signup(request):
         form = SignUpForm()
     return render(request, 'dashboard/signup.html', {'form': form})
 
-#===========================================
 
 class SignUpView(TemplateView):
     template_name = 'dashboard/signup.html'
@@ -76,26 +66,18 @@ class SignUpView(TemplateView):
         context = self.get_context_data()
         return self.render_to_response(context)
 
-# def thread_details(request, pk):
-#     thisthreads = get_object_or_404(MessageThread, pk=pk)
-#     context = {
-#         'threads': MessageThread.objects.filter(participants=request.user).order_by('-when_created'),
-#         'users' : Profile.objects.all(),
-#         'thisthreads':thisthreads,
-#         'messages': Message.objects.filter(thread=thisthreads).order_by('when_created'),
-#         'next_url': reverse('details', args=(pk,))
-#     }
-#     return render(request, 'dashboard/details.html', context=context)
 
 class ThreadDetailsView(View):
     def dispatch(self, request, pk):
         thisthreads = get_object_or_404(MessageThread, pk=pk)
         context = {
-            'threads':  MessageThread.objects.filter(participants=request.user).order_by('-when_created'),
+            'threads':  MessageThread.objects.filter(
+                participants=request.user).order_by('-when_created'),
             'users' : Profile.objects.all(),
             'thread_id':pk,
             'allthreads':MessageThread.objects.exclude(participants=request.user),
-            'messages': Message.objects.filter(thread=thisthreads).order_by('when_created'),
+            'messages': Message.objects.filter(
+                thread=thisthreads).order_by('when_created'),
             'next_url': reverse('details', args=(pk,))
         }
         return render(request, 'dashboard/details.html', context=context)
