@@ -20,7 +20,7 @@
 			<input name="thread_id" type="hidden" value="{{thread_id}}" />
 			<input name="sender" id="sender" type="hidden" value="{{request.user}}" />
 			<br>
-			<button>Send</button>
+			<input type="submit" class="mdl-button" id="send" value="Send" />
 		</form>
 	</div>
 
@@ -30,7 +30,7 @@
 		<textarea name="content" id="content" rows="3" cols = "80%"></textarea>
 		<input name="thread_id" id="thread" type="hidden" value="{{thisthreads.id}}" />
 		<input name="sender" id="sender" type="hidden" value="{{request.user}}" />
-		<input type="submit" class="mdl-button" value="Send" />
+		<input type="submit" class="mdl-button" id="send" value="Send" />
 	</form>
 	{% endcomment %}
 
