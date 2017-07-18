@@ -1,8 +1,10 @@
 require([
     'jquery',
     'mustache.min',
-    'longpoll'
-],function($,Mustache,longpoll){
+    'longpoll',
+    'archive_d'
+],function($,Mustache,longpoll,archive_d){
+    $('#download_archive #download_button').hide();
     var userId = $('[name=user_pk]').val();
     $('#jointhreads').on('submit',function(e){
         e.preventDefault()
@@ -84,4 +86,23 @@ require([
         });
     });
     longpoll.fetch();
+
+    $('#archive').on('submit', function(e){
+        
+        e.preventDefault();
+        
+        var $archive_tag = $('#archive');
+        $.ajax({
+            type:'POST',
+            url: $archive_tag.attr('action'),
+            data:{
+                thread_id: $('#id_thread').val(),
+                requestor: $('#requestor').val(),
+                csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+            },
+            success: function(data){
+                alert('Successfully archived');
+            }
+        });
+    });
 });

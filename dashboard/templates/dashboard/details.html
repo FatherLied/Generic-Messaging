@@ -6,8 +6,15 @@
 {% endblock %}
 
 {% block details %}
-	<input name="thread_id_ref" type="hidden" value="{{thread_id}}" />
-	<input name="user_pk" type="hidden" value="{{request.user.pk}}">
+	<form id="archive" action="{% url 'archive'%}">
+		<button>Archive</button>
+		<input type="hidden" id="id_thread" value="{{thread_id}}" />
+		<input type="hidden" id="requestor" value="{{request.user}}">
+	</form>
+	<form id="download_archive">
+		<button id="download_button">Download</button>
+	</form>
+	
 	<div class="messages">
 		{% for message in messages %}
         {% include "dashboard/messages_panel/message.html" %}

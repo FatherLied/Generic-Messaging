@@ -6,7 +6,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.views.generic import View
 from django.views import View
 
-from .models import Message, MessageThread, Archive
+from .models import Message, MessageThread, Archive,Profile
 
 import time
 
@@ -24,10 +24,6 @@ class AddMessageView(View):
         return JsonResponse({'pk': message.pk, 'content': message.content, 'when': t,
             'sender': message.sender.username, 'sender_pk': message.sender.pk})
         
-
-def download_csv(request, archive_obj):
-    pass
-
 class RetrieveMessage(View):
 
     def get(self, request, *args, **kwargs):
@@ -37,8 +33,33 @@ class RetrieveMessage(View):
         context = {}
         context['messages'] = []
         for message in messages:
-            context['messages'].append({'pk': message.pk, 'content': message.content, 'when': message.when_created.isoformat(), 'sender': message.sender.username, 'sender_pk': message.sender.pk})
+            context['messages'].append({'pk': message.pk, 'content': message.content, 
+                'when': message.when_created.strftime("%B %d, %Y, %-I:%M %p"), 
+                'sender': message.sender.username, 'sender_pk': message.sender.pk})
         return JsonResponse({'objects': context})
+
+class ArchiveView(View):
+
+    def post(self, request):
+        requestor = request.POST['requestor']
+        profile = Profile.objects.get(owner=request.user)
+        print(profile)
+        thread_id = request.POST['thread_id']
+        print(requestor+":"+thread_id)
+        thread = MessageThread.objects.get(pk=thread_id)
+        archive = Archive.objects.create(thread=thread, requestor=profile)
+        return HttpResponse('')
+        # filename = archive.archive_file.name
+        # response = HttpResponse(archive.archive_file, content_type='text/plain')
+        # response['Content-Disposition'] = 'attachment; filename=%s' % filename
+
+        # return response
+class DownloadArchive(View):
+    
+    def get(self, request, *args, **kwargs):
+        pass
+        
+
 """
 
 js
