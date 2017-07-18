@@ -96,6 +96,7 @@ class Archive(models.Model):
             self.requestor.owner.username,self.status, self.thread)
 
     def save_file(self, filename, *args, **kwargs):
+    	print(self.pk, filename)
 
     	with open(filename) as local_file:
     		self.archive_file.save(filename, local_file)

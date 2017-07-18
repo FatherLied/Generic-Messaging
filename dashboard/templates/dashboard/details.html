@@ -6,23 +6,24 @@
 {% endblock %}
 
 {% block details %}
-	<div class="container">
-		<div class="messages">
-			{% for message in messages %}
-	        {% include "dashboard/messages_panel/message.html" %}
-			{% endfor %}
-		</div>
-		<div class = "sendmess">
-			<form id="send_message" action="{% url 'add_message' %}?next={{next_url}}">
-		        {% csrf_token %}
-				<textarea name="content" id="content" rows="2" cols = "40%"></textarea>
-				<input name="thread_id" type="hidden" value="{{thread_id}}" />
-				<input name="sender" id="sender" type="hidden" value="{{request.user}}" />
-				<button>Send</button>
-			</form>
-		</div>
+	<input name="thread_id_ref" type="hidden" value="{{thread_id}}" />
+	<input name="user_pk" type="hidden" value="{{request.user.pk}}">
+	<div class="messages">
+		{% for message in messages %}
+        {% include "dashboard/messages_panel/message.html" %}
+		{% endfor %}
 	</div>
-	
+	<div class = "sendmess">
+		<form id="send_message" action="{% url 'add_message' %}?next={{next_url}}">
+	        {% csrf_token %}
+			<textarea name="content" id="content" rows="2" cols = "40%"></textarea>
+			<input name="thread_id" type="hidden" value="{{thread_id}}" />
+			<input name="sender" id="sender" type="hidden" value="{{request.user}}" />
+			<br>
+			<button>Send</button>
+		</form>
+	</div>
+
 	{% comment %}
 	<form id="send_message" action="{% url 'add_message' %}?next={{next_url}}">
         {% csrf_token %}
@@ -35,10 +36,11 @@
 
 	{% verbatim %}
 		<script id="message-template" type="text/template">
-			<div class="message">
+			<div class="message {{classes}}" data-id="{{pk}}">
 			    <div class="user">
 			        {{sender}}
 			    </div>
+			    : <br>
 			    <div class="content">
 			        <div class="body">
 			            {{content}}

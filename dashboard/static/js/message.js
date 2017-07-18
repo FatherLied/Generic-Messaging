@@ -1,8 +1,9 @@
 require([
     'jquery',
-    'mustache.min'
-],function($,Mustache){
-
+    'mustache.min',
+    'longpoll'
+],function($,Mustache,longpoll){
+    var userId = $('[name=user_pk]').val();
     $('#jointhreads').on('submit',function(e){
         e.preventDefault()
 
@@ -18,6 +19,7 @@ require([
                 csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
             },
             success:function(json){
+                $(".listallthreads ul li:contains("+ json.subject+")").remove();
                 alert('Successfully joined thread')
                 $jt_textfield.val('');
                 $jt_threads.append(Mustache.render(jt_template,json));
@@ -56,7 +58,8 @@ require([
 
     $('#send_message').on('submit', function(e){
         e.preventDefault();
-
+        longpoll.restart();
+      
         var $sm_textarea = $('#send_message');
         var $sm_content = $('#content');
         var $messages = $('.messages');
@@ -67,16 +70,18 @@ require([
             data : $sm_textarea.serialize(),
 
             success : function(json){
-                date = String(new Date(json.when));
-                $('#content').val('');
+                $sm_content.val('');
+                console.log(userId);
                 console.log(json);
                 var template = $('#message-template');
+                if(userId == json.sender_pk){
+                    json.classes = "user-message";
+                }
                 var render = Mustache.render(template.html(), json);
                 console.log(render);
                 $('.messages').append(render);
-
-                alert("message sent!");
             }
         });
     });
+    longpoll.fetch();
 });

@@ -14,7 +14,7 @@
 
 .message .content {
     float:left;
-    background-color: #ffffff;
+    background-color: #9a99c5;
     border-radius: 4px;
     padding: 12px;
     margin-top: 2px;
@@ -31,4 +31,7 @@
     height: 25px;
     text-decoration: underline;
     float:left;
+}
+.user-message .content {
+    background-color: #c19e9e;
 }

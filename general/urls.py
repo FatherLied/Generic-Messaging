@@ -18,9 +18,10 @@ from django.contrib import admin
 from django.conf import settings
 from django.contrib.auth import views as auth_views
 from dashboard import views as reg_views
+
 from dashboard.views import HomeView, SignUpView
 from dashboard.views import ThreadDetailsView, AddNewThreadView, JoinThreadsView
-from messenger.views import AddMessageView
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -29,9 +30,11 @@ urlpatterns = [
         {'template_name': 'dashboard/login.html'}, name='login'),
     url(r'^logout/$', auth_views.logout, {'next_page':'login'}, name='logout'),
     url(r'^signup/$', reg_views.signup, name='signup'),
-    url(r'^add/$', AddMessageView.as_view(), name='add_message'),
+    # url(r'^send/$', send_message, name='send_message')
+  
     url(r'^addnewthread/$', AddNewThreadView.as_view(), name='addnewthread'),
     url(r'^jointhreads/$', JoinThreadsView.as_view(), name='jointhreads'),
     url(r'^thread/(?P<pk>\d+)/$', ThreadDetailsView.as_view(), name='details'),
+    url(r'^messenger/',include('messenger.urls'))
 ]
 
