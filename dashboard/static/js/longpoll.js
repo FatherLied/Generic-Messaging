@@ -1,9 +1,14 @@
 define([
-    'jquery'
-],function($){
+    'jquery',
+    'mustache.min'
+],function($, Mustache){
     var latestId = $('.messages .message:last-child').data('id');
-    console.log(latestId);
-    var x = 5000;
+    if(!latestId){
+        latestId = 0;
+    }
+    var threadId = $('[name=thread_id_ref]').val();
+    var userId = $('[name=user_pk]').val();
+    var x = 3000;
     var len = 0;
     var timer;
 
@@ -13,6 +18,7 @@ define([
             type: 'GET',
             data: {
                 latestId: latestId,
+                threadId: threadId,
             },
             success : function(data){
                 len = data.objects.messages.length;
@@ -24,12 +30,17 @@ define([
                         if(latestId <= data.objects.messages[x].pk){
                             latestId = data.objects.messages[x].pk;
                         }
-                        var date = String(new Date(data.objects.messages[x].when));
+                        // var date = String(new Date(data.objects.messages[x].when));
                         if($(".message[data-id=" + data.objects.messages[x].pk + "]").length === 0){
-                            $('.messages').append('<div class="message" data-id="' + data.objects.messages[x].pk + '"><div class="user">'+data.objects.messages[x].sender+'</div><div class="content"><div class="body">'+data.objects.messages[x].content+'</div><div class="footer">'+date+'</div></div></div>')   
+                            // $('.messages').append('<div class="message" data-id="' + data.objects.messages[x].pk + '"><div class="user">'+data.objects.messages[x].sender+'</div><div class="content"><div class="body">'+data.objects.messages[x].content+'</div><div class="footer">'+date+'</div></div></div>')   
+                            var template = $('#message-template');
+                            if(userId == data.objects.messages[x].sender_pk){
+                                data.objects.messages[x].classes = "user-message";
+                            }
+                            var render = Mustache.render(template.html(), data.objects.messages[x]);
+                            $('.messages').append(render);
                         }
                     }
-                    console.log(latestId);
                 }
                 if (typeof callback === "function"){
                     callback(data);
@@ -46,13 +57,14 @@ define([
 
     function longpoll() {
         ajaxCall(function(data) {
-            console.log(x);
             if (data.objects.messages.length === 0){
                 x += 1000;
+                if(x>5000){
+                    x = 5000;
+                }
             } else{
-                x = 5000;
+                x = 3000;
             }
-            console.log(x);
             timer = setTimeout(longpoll, x);
         });
     }
