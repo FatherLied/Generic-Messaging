@@ -3,7 +3,7 @@ require([
     'mustache.min',
     'longpoll'
 ],function($,Mustache,longpoll){
-
+    var userId = $('[name=user_pk]').val();
     $('#jointhreads').on('submit',function(e){
         e.preventDefault()
 
@@ -71,9 +71,12 @@ require([
 
             success : function(json){
                 $sm_content.val('');
-
+                console.log(userId);
                 console.log(json);
                 var template = $('#message-template');
+                if(userId == json.sender_pk){
+                    json.classes = "user-message";
+                }
                 var render = Mustache.render(template.html(), json);
                 console.log(render);
                 $('.messages').append(render);

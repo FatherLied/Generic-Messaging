@@ -7,6 +7,7 @@
 
 {% block details %}
 	<input name="thread_id_ref" type="hidden" value="{{thread_id}}" />
+	<input name="user_pk" type="hidden" value="{{request.user.pk}}">
 	<div class="messages">
 		{% for message in messages %}
         {% include "dashboard/messages_panel/message.html" %}
@@ -35,7 +36,7 @@
 
 	{% verbatim %}
 		<script id="message-template" type="text/template">
-			<div class="message" data-id="{{pk}}">
+			<div class="message {{classes}}" data-id="{{pk}}">
 			    <div class="user">
 			        {{sender}}
 			    </div>
