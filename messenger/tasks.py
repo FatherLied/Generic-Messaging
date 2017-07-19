@@ -1,9 +1,11 @@
+from django.utils import timezone
+
 from datetime import timedelta
 from itertools import chain
 from celery.decorators import periodic_task
 from messenger.models import Archive
 from messenger.utils import publish_to_csv
-from datetime import datetime
+# from datetime import datetime
 
 
 # @periodic_task(run_every=timedelta(seconds=5))
@@ -57,6 +59,7 @@ def check_archive_queue():
 def check_expired_archive():
     """Deletes archive model instances and files that are expired"""
     expired_archives = Archive.objects.filter(status='E')
+    deleted = []
 
     # Archives without requestors
     vagrant_archives = Archive.objects.filter(requestor=None)
@@ -64,17 +67,27 @@ def check_expired_archive():
     trash_archives = list(chain(expired_archives, vagrant_archives))
 
     for archive in trash_archives:
+        deleted.append(archive)
+
         archive.archive_file.delete()
         archive.delete()
+        # archive.save()
+
+    return deleted
 
 @periodic_task(run_every=timedelta(minutes=1))
 def expire_archives():
     """Expires unclaimed archives"""
     unused_archives = Archive.objects.filter(status='F')
+    expired = []
 
     for archive in unused_archives:
-        current_time = datetime.now()
+        current_time = timezone.now()
 
         if current_time > archive.expiry:
             archive.status = 'E'
             archive.save()
+
+            expired.append(archive)
+
+    return expired
