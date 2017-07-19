@@ -4,23 +4,25 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+from datetime import datetime, timedelta
+
 # from .utils import publish_to_csv
 
 # Create your models here.
 
 class ThreadManager(models.Manager):
-	def add_user(self, user):
-		self.participants.add(user)
-		return user
+    def add_user(self, user):
+        self.participants.add(user)
+        return user
 
 class MessageManager(models.Manager):
-	
-	def add_message(self, sender, thread, content):
-		return self.create(sender=sender, 
+    
+    def add_message(self, sender, thread, content):
+        return self.create(sender=sender, 
             thread=thread, content=content)
-	
-	def getMessagebyThread(self, thread):
-		return self.filter(thread=thread)
+    
+    def getMessagebyThread(self, thread):
+        return self.filter(thread=thread)
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -33,29 +35,29 @@ class MessageThread(models.Model):
     objects = ThreadManager()
 
     def __str__(self):
-    	return ('{}'.format(self.subject))
+        return ('{}'.format(self.subject))
 
 
 class Message(models.Model):
-	sender = models.ForeignKey(User, related_name='messages')
-	thread = models.ForeignKey(MessageThread, related_name='content')
-	content = models.TextField()
-	when_created = models.DateTimeField(auto_now_add=True)
+    sender = models.ForeignKey(User, related_name='messages')
+    thread = models.ForeignKey(MessageThread, related_name='content')
+    content = models.TextField()
+    when_created = models.DateTimeField(auto_now_add=True)
 
-	objects = MessageManager()
+    objects = MessageManager()
 
-	def __str__(self):
-		return ('{}:{} '.format(self.thread, self.content))
+    def __str__(self):
+        return ('{}:{} '.format(self.thread, self.content))
 
 class Profile(models.Model):
-	first_name = models.CharField(max_length=30, blank = False)
-	last_name = models.CharField(max_length=30, blank = False)
-	owner = models.OneToOneField(User, related_name='profile')
-	threads = models.ManyToManyField(MessageThread, 
-		related_name = 'profiles', through = 'ProfileThread')
+    first_name = models.CharField(max_length=30, blank = False)
+    last_name = models.CharField(max_length=30, blank = False)
+    owner = models.OneToOneField(User, related_name='profile')
+    threads = models.ManyToManyField(MessageThread, 
+        related_name = 'profiles', through = 'ProfileThread')
 
-	def __str__(self):
-		return ('{} : {}  '.format(self.owner, self.threads.count()))
+    def __str__(self):
+        return ('{} : {}  '.format(self.owner, self.threads.count()))
 
 # @receiver(post_save, sender=User)
 # def create_profile(sender, created, instance, **kwargs):
@@ -65,11 +67,11 @@ class Profile(models.Model):
 
 
 class ProfileThread(models.Model):
-	user = models.ForeignKey(Profile, on_delete=models.CASCADE, 
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE, 
         related_name='thread_copies')
-	threads = models.ForeignKey(MessageThread, on_delete=models.CASCADE, 
+    threads = models.ForeignKey(MessageThread, on_delete=models.CASCADE, 
         related_name='copies')
-	is_removed = models.BooleanField()
+    is_removed = models.BooleanField()
 
 class Archive(models.Model):
     
@@ -77,7 +79,8 @@ class Archive(models.Model):
     PROCESSING = 'P'
     FINISHED = 'F'
     EXPIRED = 'E'
-    ARCHIVE_STATUS= ((QUEUED, 'QUEUED'),(PROCESSING,'PROCESSING'),
+
+    ARCHIVE_STATUS = ((QUEUED, 'QUEUED'),(PROCESSING,'PROCESSING'),
         (FINISHED, 'FINISHED'),(EXPIRED,'EXPIRED'))
     status = models.CharField(
         max_length=1,
@@ -85,18 +88,30 @@ class Archive(models.Model):
         default = QUEUED,
     )
 
-    thread = models.ForeignKey(MessageThread, 
-        related_name='archives', null=True)
-    requestor = models.ForeignKey(Profile, null=True, 
-        related_name='archive_requests', on_delete=models.SET_NULL)
-    archive_file = models.FileField(default=None, blank=True, null=True)
+
+    thread = models.ForeignKey(
+        MessageThread, 
+        related_name='archives',
+        null=True
+    )
+    requestor = models.ForeignKey(
+        Profile,
+        null=True, 
+        related_name='archive_requests',
+        on_delete=models.SET_NULL
+    )
+    archive_file = models.FileField(default=None,
+        blank=True,
+        null=True
+    )
+    expiry = models.DateTimeField(default=datetime.now()+timedelta(minutes=1))
 
     def __str__(self):
-    	return 'Requestor: {} | Status: {} | Thread: {}'.format(
+        return 'Requestor: {} | Status: {} | Thread: {}'.format(
             self.requestor.owner.username,self.status, self.thread)
 
     def save_file(self, filename, *args, **kwargs):
-    	print(self.pk, filename)
+        print(self.pk, filename)
 
-    	with open(filename) as local_file:
-    		self.archive_file.save(filename, local_file)
+        with open(filename) as local_file:
+            self.archive_file.save(filename, local_file)

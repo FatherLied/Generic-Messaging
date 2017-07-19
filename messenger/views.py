@@ -4,9 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, logout, login
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.views.generic import View
-from django.views import View
 
-from .models import Message, MessageThread, Archive
+from .models import Archive, Message, MessageThread
 
 import time
 
