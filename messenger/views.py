@@ -1,5 +1,4 @@
-
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, logout, login
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
@@ -48,7 +47,8 @@ class ArchiveView(View):
         print(requestor+":"+thread_id)
         thread = MessageThread.objects.get(pk=thread_id)
         archive = Archive.objects.create(thread=thread, requestor=profile)
-        return HttpResponse('')
+        print(archive.pk)
+        return JsonResponse({'archive_pk':archive.pk})
         # filename = archive.archive_file.name
         # response = HttpResponse(archive.archive_file, content_type='text/plain')
         # response['Content-Disposition'] = 'attachment; filename=%s' % filename
@@ -56,8 +56,19 @@ class ArchiveView(View):
         # return response
 class DownloadArchive(View):
     
-    def get(self, request, *args, **kwargs):
-        pass
+    def get(self, request):
+        archive_id = request.GET['archive_id']
+        archive = get_object_or_404(Archive,pk=archive_id)
+        if archive.status=='Q':
+            return JsonResponse({'status':'Your archive is being processed.'})
+        if archive.status=='F':
+            filename = archive.archive_file.name.split('/')[-1]
+            print(archive.archive_file.path)
+            response = HttpResponse(archive.archive_file, content_type='text/csv')
+            response['Content-Disposition'] = 'attachment;filename=%s' %filename
+            print(response)
+            return response
+        return HttpResponse('')
         
 
 """

@@ -4,7 +4,10 @@ require([
     'longpoll',
     'archive_d'
 ],function($,Mustache,longpoll,archive_d){
-    $('#download_archive #download_button').hide();
+    var $download_button = $('#archive_d_button');
+    var $archive_id = $('#id_archive');
+    $download_button.hide();
+
     var userId = $('[name=user_pk]').val();
     $('#jointhreads').on('submit',function(e){
         e.preventDefault()
@@ -92,6 +95,7 @@ require([
         e.preventDefault();
         
         var $archive_tag = $('#archive');
+
         $.ajax({
             type:'POST',
             url: $archive_tag.attr('action'),
@@ -101,7 +105,29 @@ require([
                 csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
             },
             success: function(data){
-                alert('Successfully archived');
+                $('#archive_button').text('Archived');
+                console.log(data.archive_pk);
+                $download_button.show();
+                $archive_id.val(data.archive_pk);
+
+            }
+        });
+    });
+
+    $('#archive_download').on('submit', function(e){
+        e.preventDefault();
+        $.ajax({
+            type:'GET',
+            url:$('#archive_download').attr('action'),
+            data:{
+                archive_id: $('#id_archive').val(),
+                // csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+            },
+            success: function(data){
+                if (data.status!= undefined)
+                    alert(data.status)
+                else
+                    alert('success')
             }
         });
     });

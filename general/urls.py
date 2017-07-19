@@ -21,7 +21,6 @@ from dashboard import views as reg_views
 
 from dashboard.views import HomeView, SignUpView
 from dashboard.views import ThreadDetailsView, AddNewThreadView, JoinThreadsView
-from messenger.views import ArchiveView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -31,7 +30,6 @@ urlpatterns = [
     url(r'^logout/$', auth_views.logout, {'next_page':'login'}, name='logout'),
     url(r'^signup/$', reg_views.signup, name='signup'),
     # url(r'^send/$', send_message, name='send_message')
-    url(r'^archive/$', ArchiveView.as_view(), name='archive' ),
     url(r'^addnewthread/$', AddNewThreadView.as_view(), name='addnewthread'),
     url(r'^jointhreads/$', JoinThreadsView.as_view(), name='jointhreads'),
     url(r'^thread/(?P<pk>\d+)/$', ThreadDetailsView.as_view(), name='details'),
