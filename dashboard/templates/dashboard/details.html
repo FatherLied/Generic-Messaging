@@ -42,5 +42,17 @@
 			</div>
 		</script>
 	{% endverbatim %}
+{% endblock %}
+{% block script %}
+<script src= "{% static 'js/require.js'%}"></script>
+    <script>
+      require.config({
+        baseUrl: "{% static 'js/' %}",
 
+        paths: {
+          'jquery': "{% static 'js/jquery' %}"
+        }
+      });
+    </script>
+    <script src= "{% static 'js/longpoll.js'%}"></script>
 {% endblock %}

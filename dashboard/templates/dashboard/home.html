@@ -7,7 +7,7 @@
             <div class="threadlist">
                 <div class="list-group" id="threads_joined">
                     {% for thread in threads %}
-                        <a href="{% url 'details' pk=thread.pk %}"class="list-group-item">{{thread.subject}}</a>
+                        <a href="{% url 'details' pk=thread.pk %}" class="list-group-item" id="joined_thread">{{thread.subject}}</a>
                     {% endfor %}
                 </div>
             </div>

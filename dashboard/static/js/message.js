@@ -1,12 +1,12 @@
 require([
     'jquery',
-    'mustache.min',
-    'longpoll'
-],function($,Mustache,longpoll){
+    'mustache.min'
+],function($,Mustache){
 	$('#send').attr('disabled','disabled');
     $('#create').attr('disabled','disabled');
     $('#join').attr('disabled','disabled');
     var userId = $('[name=user_pk]').val();
+
     $('#jointhreads').on('submit',function(e){
         e.preventDefault()
 
@@ -23,11 +23,11 @@ require([
             },
             success:function(json){
                 $(".listallthreads ul li:contains("+ json.subject+")").remove();
-                alert('Successfully joined thread')
+                alert('Successfully joined thread');
                 $jt_textfield.val('');
                 $jt_threads.append(Mustache.render(jt_template,json));
                 $('#join').attr('disabled','disabled');
-                
+                window.location.href = json.thread_url;
             }
         })
     });
@@ -57,7 +57,9 @@ require([
                     $ct_textfield.val('');
                     $ct_threads.append(Mustache.render(ct_template,json));
                     $('#create').attr('disabled','disabled');
-                    
+                    // longpoll.fetch();
+                    window.location.href = json.thread_url;
+                    // console.log("hceck");s
                 }                
             }
         })
@@ -65,7 +67,6 @@ require([
 
     $('#send_message').on('submit', function(e){
         e.preventDefault();
-        longpoll.restart();
       
         var $sm_textarea = $('#send_message');
         var $sm_content = $('#content');
@@ -88,7 +89,6 @@ require([
                 console.log(render);
                 $('.messages').append(render);
                 $('#send').attr('disabled','disabled');
-
             }
         });
     });
@@ -121,5 +121,4 @@ require([
         }
     });
 
-    longpoll.fetch();
 });

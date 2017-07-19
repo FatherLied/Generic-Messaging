@@ -1,4 +1,4 @@
-define([
+require([
     'jquery',
     'mustache.min'
 ],function($, Mustache){
@@ -34,9 +34,7 @@ define([
                         if(latestId <= data.objects.messages[x].pk){
                             latestId = data.objects.messages[x].pk;
                         }
-                        // var date = String(new Date(data.objects.messages[x].when));
                         if($(".message[data-id=" + data.objects.messages[x].pk + "]").length === 0){
-                            // $('.messages').append('<div class="message" data-id="' + data.objects.messages[x].pk + '"><div class="user">'+data.objects.messages[x].sender+'</div><div class="content"><div class="body">'+data.objects.messages[x].content+'</div><div class="footer">'+date+'</div></div></div>')   
                             var template = $('#message-template');
                             if(userId == data.objects.messages[x].sender_pk){
                                 data.objects.messages[x].classes = "user-message";
@@ -82,8 +80,8 @@ define([
         fetch();
     }
 
+    fetch();
     return {
-        fetch: fetch,
         restart: restartTimer
     };
 
