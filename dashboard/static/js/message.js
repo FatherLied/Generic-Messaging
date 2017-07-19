@@ -7,6 +7,12 @@ require([
     $('#join').attr('disabled','disabled');
     var userId = $('[name=user_pk]').val();
 
+    if(typeof(String.prototype.trim) === "undefined"){
+	    String.prototype.trim = function() {
+	        return String(this).replace(/^\s+|\s+$/g, '');
+	    };
+	}
+
     $('#jointhreads').on('submit',function(e){
         e.preventDefault()
 
@@ -57,9 +63,8 @@ require([
                     $ct_textfield.val('');
                     $ct_threads.append(Mustache.render(ct_template,json));
                     $('#create').attr('disabled','disabled');
-                    // longpoll.fetch();
                     window.location.href = json.thread_url;
-                    // console.log("hceck");s
+                    
                 }                
             }
         })
@@ -95,7 +100,7 @@ require([
     
     // send
     $('#content').keyup(function() {
-        if($(this).val() == '' || (/^ *$/.test($(this).val()))  ) {
+        if($(this).val().trim() == '') {
             $('#send').attr('disabled','disabled');
         }
         else {
@@ -113,11 +118,11 @@ require([
     });
     // join
     $('#join_subject').keyup(function() {
-        if($(this).val() != '' ) {
-            $('#join').removeAttr('disabled');
+        if($(this).val() == '' || (/^ *$/.test($(this).val()))  ) {
+            $('#join').attr('disabled','disabled');
         }
         else {
-        $('#join').attr('disabled','disabled');
+        	$('#join').removeAttr('disabled');
         }
     });
 
