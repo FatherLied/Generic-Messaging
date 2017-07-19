@@ -13,7 +13,7 @@ require([
 
         $.ajax({
             type:'POST',
-            url:'jointhreads/',
+            url:$('#jointhreads').attr('action'),
             data:{
                 subject: $jt_textfield.val(),
                 csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
@@ -42,7 +42,7 @@ require([
 
         $.ajax({
             type:'POST',
-            url:'addnewthread/',
+            url:$('#createthreads').attr('action'),
             data:{
                 subject: $ct_textfield.val(),
                 csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()

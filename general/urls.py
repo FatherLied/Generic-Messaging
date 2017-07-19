@@ -31,10 +31,7 @@ urlpatterns = [
     url(r'^logout/$', auth_views.logout, {'next_page':'login'}, name='logout'),
     url(r'^signup/$', reg_views.signup, name='signup'),
     # url(r'^send/$', send_message, name='send_message')
-  
-    url(r'^addnewthread/$', AddNewThreadView.as_view(), name='addnewthread'),
-    url(r'^jointhreads/$', JoinThreadsView.as_view(), name='jointhreads'),
-    url(r'^thread/(?P<pk>\d+)/$', ThreadDetailsView.as_view(), name='details'),
+    url(r'^dashboard/',include('dashboard.urls')),
     url(r'^messenger/',include('messenger.urls'))
 ]
 

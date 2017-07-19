@@ -39,14 +39,14 @@
         <div class = "createjointhread">
             {% block details %}
                 <div class = "createjoinblock">
-                    <form id="createthreads">
+                    <form id="createthreads" action="{% url 'addnewthread'%}">
                         {% csrf_token %}
                         <h3>Create a Thread:</h3>
                         Subject: <input type="text" name="t_subject" id="create_subject">
                         <br><br>
                         <button>Create</button>
                     </form>
-                    <form id="jointhreads">
+                    <form id="jointhreads" action="{% url 'jointhreads'%}">
                         {% csrf_token %}
                         <h3>Or Join One!</h3>
                         Thread: <input type="text" name="t_subject" id="join_subject">
