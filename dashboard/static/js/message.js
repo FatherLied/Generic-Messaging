@@ -25,10 +25,11 @@ require([
                     $jt_textfield.val('');
                     $jt_threads.append(Mustache.render(jt_template,json));
                 }
-                else{
-                    alert(json.status)
-                }
+                else if(json.status == 'error1')
+                    alert(json.context)
                 
+                else
+                    alert(json.context)
             }
         })
     });
