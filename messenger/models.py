@@ -25,7 +25,7 @@ class MessageManager(models.Manager):
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 class MessageThread(models.Model):
-    subject = models.CharField(max_length=255, blank=True)
+    subject = models.CharField(max_length=255, blank=False)
     participants = models.ManyToManyField(User, 
         related_name='message_threads', blank=True)
     when_created = models.DateTimeField(auto_now_add=True)
