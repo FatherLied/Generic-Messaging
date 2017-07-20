@@ -13,7 +13,7 @@ from messenger.utils import publish_to_csv
 #     print('Hello')
 #     print('World')
 
-@periodic_task(run_every=timedelta(seconds=10))
+@periodic_task(run_every=timedelta(seconds=30))
 def check_archive_queue():
     """Processes requests to archive thread"""
     archives = Archive.objects.filter(status='Q')[:5] # Filter all pending archives; processing 5 at a time
@@ -55,7 +55,7 @@ def check_archive_queue():
     return processed
 
 
-@periodic_task(run_every=timedelta(minutes=1))
+@periodic_task(run_every=timedelta(minutes=10))
 def check_expired_archive():
     """Deletes archive model instances and files that are expired"""
     expired_archives = Archive.objects.filter(status='E')
@@ -69,13 +69,13 @@ def check_expired_archive():
     for archive in trash_archives:
         deleted.append(archive)
 
-        archive.archive_file.delete()
+        # archive.archive_file.delete()
         archive.delete()
         # archive.save()
 
     return deleted
 
-@periodic_task(run_every=timedelta(minutes=1))
+@periodic_task(run_every=timedelta(minutes=10))
 def expire_archives():
     """Expires unclaimed archives"""
     unused_archives = Archive.objects.filter(status='F')
