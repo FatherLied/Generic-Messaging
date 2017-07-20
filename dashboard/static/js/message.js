@@ -22,18 +22,26 @@ require([
 
         $.ajax({
             type:'POST',
-            url:'jointhreads/',
+            url:$('#jointhreads').attr('action'),
             data:{
                 subject: $jt_textfield.val(),
                 csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
             },
             success:function(json){
-                $(".listallthreads ul li:contains("+ json.subject+")").remove();
-                alert('Successfully joined thread');
-                $jt_textfield.val('');
-                $jt_threads.append(Mustache.render(jt_template,json));
-                $('#join').attr('disabled','disabled');
-                window.location.href = json.thread_url;
+
+                if(json.status == 'success'){
+                    $(".listallthreads ul li:contains("+ json.subject+")").remove();
+                    alert('Successfully joined thread')
+                    $jt_textfield.val('');
+                    $jt_threads.append(Mustache.render(jt_template,json));
+                    $('#join').attr('disabled','disabled');
+                    window.location.href = json.thread_url;
+                }
+                else if(json.status == 'error1')
+                    alert(json.context)
+                
+                else
+                    alert(json.context)
             }
         })
     });
@@ -47,7 +55,7 @@ require([
 
         $.ajax({
             type:'POST',
-            url:'addnewthread/',
+            url:$('#createthreads').attr('action'),
             data:{
                 subject: $ct_textfield.val(),
                 csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
