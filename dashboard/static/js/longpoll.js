@@ -14,7 +14,6 @@ require([
     var userId = $('[name=user_pk]').val();
     var x = 2000;
     var len = 0;
-    var timer;
 
     function ajaxCall(callback, errorCallback){
         $.ajax({
@@ -67,22 +66,14 @@ require([
             } else{
                 x = 2000;
             }
-            timer = setTimeout(longpoll, x);
+            setTimeout(longpoll, x);
         });
     }
 
     function fetch() {
-        timer = setTimeout(longpoll, x);
-    }
-
-    function restartTimer(){
-        clearTimeout(timer);
-        fetch();
+        setTimeout(longpoll, x);
     }
 
     fetch();
-    return {
-        restart: restartTimer
-    };
 
 });

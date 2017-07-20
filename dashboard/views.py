@@ -97,12 +97,16 @@ class AddNewThreadView(View):
 class JoinThreadsView(View):
     def post(self, request):
         subject = request.POST['subject']
-        thread = MessageThread.objects.filter(subject=subject)
+        print(subject)
+        thread = MessageThread.objects.get(subject=subject)
         thread1 = MessageThread.objects.filter(subject=subject).exclude(participants=request.user)
         if not thread:
             return JsonResponse({'status':'error1','context':'The thread does not exists.'})
         if not thread1:
             return JsonResponse({'status':'error2','context':'You are already part of the thread'})
+        
+        # thread = MessageThread.objects.filter(subject=subject)
         thread.participants.add(request.user)
         thread_url = reverse('details',args=(thread.pk,))
+        
         return JsonResponse({'subject':thread.subject,'thread_url':thread_url,'status':'success'})
