@@ -1,0 +1,22 @@
+{% comment %}
+{% extends "dashboard/base.html" %}
+{% load static %}
+
+{% block pageheader%}
+
+{% endblock%}
+
+{% block content %}
+<h1>Client's Website</h1>
+{% endblock %}
+{% endcomment %}
+
+{% load static%}
+<html>
+<head>
+    <title>This website</title>
+</head>
+<body>
+<iframe src="{% url 'home' %}" width="50%" height="50%"></iframe>
+</body>
+</html>
