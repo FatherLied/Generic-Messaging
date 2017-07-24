@@ -1,31 +1,50 @@
 .page-header {
     background-color: #b30000;
-    margin-top: 0;
-    padding: 20px 20px 20px 40px;
+    padding: 0px 20px 15px 20px;
     border: 4px #b30000;
     border-style: dashed none none;
+    margin-top: 0;
+    margin-bottom: 0px;
 }
 
-.page-header h1, .page-header h1 a, .page-header h1 a:visited, .page-header h1 a:active {
+.page-header h1 a{
     color: #ffffff;
-    font-size: 36pt;
+    font-size: 41pt;
     text-decoration: none;
+    width:350px;
+    margin-top: 10px;
+    margin-right: 0px;
+    margin-bottom: auto;
+    margin-left: 10px;
 }
 
-.page-header p{
+.page-header p{//Welcome, user
     font-family: 'Ubuntu';
     color: white;
-    font-size: 27pt;
+    font-size: 24pt;
     float: right;
-    margin-bottom: 0px;
+    margin: 0px auto 0px 80px;
+}
+
+.logsignout{//Log out
+    font-family: 'Ubuntu';
+    color: white;
+    font-size: 24pt;
+    float:left;
+    margin: 0px auto 0px 20px;
+}
+
+a.logsignout:hover{//Log out darken
+   color: #8c8c8c;
+   text-decoration: none;
+}
+
+.page-header hr{
+    margin: 10px 0px 5px 0px;
 }
 
 .container{
     width:350px;
-}
-
-.logsignout{
-    font-size: 20pt;
 }
 
 body{
@@ -47,13 +66,9 @@ h1, h2, h3, h4 {
     text-decoration: underline;
 }
 
-.listallthreads h3{
-    font-size: 25pt;
-    text-decoration: underline;
-}
-
 .listallthreads ul{
     font-size: 15pt;
+    padding-left: 0px;
 }
 
 .listthreadsusers{
@@ -119,6 +134,7 @@ textarea {
 
     width: 350px;
     height: 500px;
+    overflow: auto;
 
     padding: 5px 10px 10px 10px;
 

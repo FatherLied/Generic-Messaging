@@ -3,7 +3,7 @@ require([
     'mustache.min'
 ],function($,Mustache){
 
-    $('#jointhreads').on('submit',function(e){
+    $('#jointhreads').on('click',function(e){
         e.preventDefault()
 
         var jt_template = "<a class='list-group-item' href='{{thread_url}}' >{{subject}}</a> ";
@@ -19,7 +19,7 @@ require([
             },
             success:function(json){
                 alert('Successfully joined thread')
-                $jt_textfield.val('');
+                // $jt_textfield.val('');
                 $jt_threads.append(Mustache.render(jt_template,json));
             }
         })
