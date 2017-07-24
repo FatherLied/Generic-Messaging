@@ -8,3 +8,9 @@ class WidgetView(TemplateView):
 
     def dispatch(self, request, *args, **kwargs):
         return super(WidgetView,self).dispatch(self.request, *args, **kwargs)
+
+class ClientView(TemplateView):
+    template_name = 'widget/client.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        return super(ClientView,self).dispatch(self.request, *args, **kwargs)

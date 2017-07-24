@@ -7,11 +7,12 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from messenger.models import MessageThread, Message, Profile
 from django.views import View
+from braces.views import LoginRequiredMixin
 
-
-@method_decorator(login_required, name='dispatch')
-class HomeView(TemplateView):
+# @method_decorator(login_required, name='dispatch')
+class HomeView(LoginRequiredMixin, TemplateView):
     template_name = 'dashboard/home.html'
+    login_url = "/login/"
 
     def dispatch(self, request, *args, **kwargs):
         return super(HomeView, self).dispatch(self.request, *args, **kwargs)
@@ -67,7 +68,8 @@ class SignUpView(TemplateView):
         return self.render_to_response(context)
 
 
-class ThreadDetailsView(View):
+class ThreadDetailsView(LoginRequiredMixin, View):
+    login_url = "/login/"
     def dispatch(self, request, pk):
         thisthreads = get_object_or_404(MessageThread, pk=pk)
         context = {
@@ -97,7 +99,6 @@ class AddNewThreadView(View):
 class JoinThreadsView(View):
     def post(self, request):
         subject = request.POST['subject']
-        print(subject)
         thread = MessageThread.objects.get(subject=subject)
         thread1 = MessageThread.objects.filter(subject=subject).exclude(participants=request.user)
         if not thread:
