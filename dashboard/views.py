@@ -92,6 +92,7 @@ class ThreadDetailsView(View):
         context = {
             'threads':  MessageThread.objects.filter(participants=request.user).order_by('-when_created'),
             'users' : Profile.objects.all(),
+            'thread_subject': thisthreads.subject,
             'thread_id':pk,
             'allthreads':MessageThread.objects.exclude(participants=request.user),
             'messages': Message.objects.filter(thread=thisthreads).order_by('when_created'),

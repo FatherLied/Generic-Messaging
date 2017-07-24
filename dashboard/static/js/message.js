@@ -9,19 +9,18 @@ require([
         var jt_template = "<a class='list-group-item' href='{{thread_url}}' >{{subject}}</a> ";
         var $jt_threads = $('#threads_joined');
         var $jt_textfield = $('#join_subject');
-        console.log($jt_textfield.val());
 
         $.ajax({
             type:'POST',
-            url:'jointhreads/',
+            url: $('#jointhreads').attr('action'),
             data:{
-                subject: $jt_textfield.val(),
+                subject: $jt_textfield.text(),
                 csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
             },
             success:function(json){
-                alert('Successfully joined thread')
-                // $jt_textfield.val('');
+                $jt_textfield.remove();
                 $jt_threads.append(Mustache.render(jt_template,json));
+                alert('Successfully joined thread');
             }
         })
     });

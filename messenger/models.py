@@ -51,7 +51,7 @@ class Profile(models.Model):
 		related_name = 'profiles', through = 'ProfileThread')
 
 	def __str__(self):
-		return ('{} : {}  '.format(self.owner, self.thread.count()))
+		return ('{} : {}  '.format(self.owner, self.threads.count()))
 
 # @receiver(post_save, sender=User)
 # def create_profile(sender, created, instance, **kwargs):
