@@ -1,10 +1,13 @@
 # Create your models here.
 from django.db import models
 from django.contrib.auth.models import User
+# from django.contrib.sites.models import Site
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from datetime import datetime, timedelta
+
+import uuid
 
 # from .utils import publish_to_csv
 
@@ -81,10 +84,24 @@ class Message(models.Model):
         return ('{}:{} '.format(self.thread, self.content))
 
 class MessageThread(models.Model):
+    PUBLIC = 'PU'
+    PRIVATE = 'PR'
+    PERSONAL = 'PE'
+
+    THREAD_TYPE = ((PUBLIC, 'PUBLIC'),(PRIVATE,'PRIVATE'),
+        (PERSONAL, 'PERSONAL'))
+    status = models.CharField(
+        max_length=2,
+        choices=THREAD_TYPE,
+        default=PRIVATE,
+    )
+
     subject = models.CharField(max_length=255, blank=False)
     participants = models.ManyToManyField(User, 
         related_name='message_threads', blank=True)
     when_created = models.DateTimeField(auto_now_add=True)
+
+    site = models.ForeignKey(SiteProfile)
 
     objects = ThreadManager()
 
@@ -97,6 +114,8 @@ class Profile(models.Model):
     owner = models.OneToOneField(User, related_name='profile')
     threads = models.ManyToManyField(MessageThread, 
         related_name = 'profiles', through = 'ProfileThread')
+
+    site = models.ForeignKey(SiteProfile)
 
     def __str__(self):
         return ('{} : {}  '.format(self.owner, self.threads.count()))
@@ -114,3 +133,10 @@ class ProfileThread(models.Model):
     threads = models.ForeignKey(MessageThread, on_delete=models.CASCADE, 
         related_name='copies')
     is_removed = models.BooleanField()
+
+class SiteProfile(models.Model):
+    # owner = models.ForeignKey(User, related_name="sites)
+    # domain = models.OneToOneField(Site, related_name='site_profile')
+    domain = models.CharField()
+    site_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    owner = models.ForeignKey(User, related_name='sites')
