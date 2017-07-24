@@ -1,22 +1,41 @@
-{% comment %}
-{% extends "dashboard/base.html" %}
 {% load static %}
 
-{% block pageheader%}
-
-{% endblock%}
-
-{% block content %}
-<h1>Client's Website</h1>
-{% endblock %}
-{% endcomment %}
-
-{% load static%}
 <html>
 <head>
     <title>This website</title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
 </head>
 <body>
-<iframe src="{% url 'home' %}" width="50%" height="50%"></iframe>
+    <h3>Sample website</h3>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-2" style="border-right: 1px solid lightgray; height: 98%">
+                <h3>Users</h3>
+                <ul class="list-group">
+                    {% for user in users %}
+                    <li class="list-group-item" id="item"> 
+                        <a value="{{request.user}}{{user.owner}}">{{user.owner}}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <iframe id="details" src="{% url 'details' pk=67 %}" width="25%" height="50%" style="position: absolute;top:50%">hdjadnsjk</iframe>
+        </div>
+    </div>
+    <script src= "{% static 'js/require.js'%}"></script>
+    <script>
+        require.config({
+            baseUrl: "{% static 'js/' %}",
+
+            paths: {
+              'jquery': "{% static 'js/jquery' %}"
+            }
+          });
+    </script>
+    <script src= "{% static 'js/widget.js'%}"></script>
+    {% comment %}
+    <iframe src="{% url 'home' %}" width="50%" height="50%"></iframe>
+    {% endcomment %}
 </body>
 </html>
