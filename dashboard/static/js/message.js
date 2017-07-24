@@ -9,6 +9,7 @@ require([
         var jt_template = "<a class='list-group-item' href='{{thread_url}}' >{{subject}}</a> ";
         var $jt_threads = $('#threads_joined');
         var $jt_textfield = $('#join_subject');
+        console.log($jt_textfield.val());
 
         $.ajax({
             type:'POST',
