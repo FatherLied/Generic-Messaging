@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from messenger.models import MessageThread, Message, Profile
 from django.views import View
+from braces.views import LoginRequiredMixin
 
 from braces.views import LoginRequiredMixin
 
@@ -34,7 +35,9 @@ class AuthenticatedView(LoginRequiredMixin, TemplateView):
 
 # @method_decorator(login_required, name='dispatch')
 class HomeView(AuthenticatedView):
+
     template_name = 'dashboard/home.html'
+    login_url = "/login/"
 
     http_method_names = [
         'get'
@@ -57,22 +60,6 @@ class HomeView(AuthenticatedView):
             participants=self.request.user)
 
         return context
-
-def signup(request):
-    if request.method == 'POST':
-        form = SignUpForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            user.refresh_from_db()
-            user.save()
-            password = form.cleaned_data.get('password1')
-            user = authenticate(username=user.username, password=password)
-            login(request, user)
-            return redirect('home')
-    else:
-        form = SignUpForm()
-    return render(request, 'dashboard/signup.html', {'form': form})
-
 
 class SignUpView(TemplateView):
     template_name = 'dashboard/signup.html'
@@ -97,6 +84,7 @@ class SignUpView(TemplateView):
     def get(self, request, *args, **kwargs):
         context = self.get_context_data()
         return self.render_to_response(context)
+
 
 
 class ThreadDetailsView(AuthenticatedView):
@@ -150,7 +138,6 @@ class JoinThreadsView(AuthenticatedView):
 
     def post(self, request):
         subject = request.POST['subject']
-        print(subject)
         thread = MessageThread.objects.get(subject=subject)
         thread1 = MessageThread.objects.filter(subject=subject).exclude(participants=request.user)
         if not thread:
