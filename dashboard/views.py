@@ -116,6 +116,14 @@ class ThreadDetailsView(AuthenticatedView):
 
         return context
 
+class ProfileView(AuthenticatedView):
+    template_name = 'dashboard/profile.html'
+
+    def get(self, request, pk):
+        pass
+    def get_context_data(self, pk):
+        pass
+
 class AddNewThreadView(AuthenticatedView):
     http_method_names = [
         'post'

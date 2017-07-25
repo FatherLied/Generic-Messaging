@@ -3,7 +3,7 @@ from django.contrib.auth import views as auth_views
 from dashboard import views as reg_views
 from django.conf import settings
 
-from dashboard.views import HomeView, SignUpView
+from dashboard.views import HomeView, SignUpView, ProfileView
 from dashboard.views import ThreadDetailsView, AddNewThreadView, JoinThreadsView
 
 urlpatterns = [
@@ -15,5 +15,6 @@ urlpatterns = [
 
     url(r'^addnewthread/$', AddNewThreadView.as_view(), name='addnewthread'),
     url(r'^jointhreads/$', JoinThreadsView.as_view(), name='jointhreads'),
-    url(r'^thread/(?P<pk>\d+)/$', ThreadDetailsView.as_view(), name='details')
+    url(r'^thread/(?P<pk>\d+)/$', ThreadDetailsView.as_view(), name='details'),
+    url(r'^profile/(?P<pk>\d+)/$', ProfileView.as_view(), name='profile')
 ]
