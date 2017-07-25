@@ -5,7 +5,7 @@ import os
 """
 Returns filename on use.
 
-Please store on call 
+Please store on call
     i.e. 'messenger.models.Archive.reference = publish_to_csv(thread)'
 
     Note: Ensure that Archive does not have a reference before calling
@@ -30,8 +30,7 @@ def publish_to_csv(thread):
             thread.when_created.date().strftime('%Y-%m-%d'), inc)
         inc += 1
 
-    
-    with open( os.path.join(folder_path, filename), 'w') as archive:
+    with open(os.path.join(folder_path, filename), 'w') as archive:
         thread_content = thread.content.all().order_by('when_created')
 
         for message in thread_content:

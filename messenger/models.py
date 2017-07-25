@@ -59,6 +59,7 @@ class Profile(models.Model):
     def __str__(self):
         return ('{} : {}  '.format(self.owner, self.threads.count()))
 
+
 # @receiver(post_save, sender=User)
 # def create_profile(sender, created, instance, **kwargs):
 #     """ Create a profile for every new user """

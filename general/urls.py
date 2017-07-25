@@ -26,3 +26,4 @@ urlpatterns = [
     url(r'^',include('dashboard.urls')),
     url(r'^messenger/',include('messenger.urls'))
 ]
+

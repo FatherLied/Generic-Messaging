@@ -6,8 +6,11 @@
 {% endblock %}
 
 {% block details %}
+	<h5>{{thread_subject}}</h5>
+
 	<input name="thread_id_ref" type="hidden" value="{{thread_id}}" />
 	<input name="user_pk" type="hidden" value="{{request.user.pk}}">
+
 	<div class="messages">
 		{% for message in messages %}
         {% include "dashboard/messages_panel/message.html" %}

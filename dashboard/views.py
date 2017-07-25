@@ -48,8 +48,7 @@ class SignUpView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(SignUpView, self).get_context_data(**kwargs)
-        context['form'] = self.form
-        
+        context['form'] = self.form   
         return context
 
     def post(self, request, *args, **kwargs):
@@ -74,6 +73,7 @@ class ThreadDetailsView(View):
             'threads':  MessageThread.objects.filter(
                 participants=request.user).order_by('-when_created'),
             'users' : Profile.objects.all(),
+            'thread_subject': thisthreads.subject,
             'thread_id':pk,
             'allthreads':MessageThread.objects.exclude(participants=request.user),
             'messages': Message.objects.filter(
