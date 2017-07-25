@@ -1,4 +1,4 @@
-<div class="message">
+<div class="message {% if message.sender == request.user %} user-message {% endif %}" data-id="{{ message.id }}">
     <div class="user">
         {{message.sender}}
     </div>

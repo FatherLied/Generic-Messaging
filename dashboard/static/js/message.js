@@ -2,6 +2,16 @@ require([
     'jquery',
     'mustache.min'
 ],function($,Mustache){
+	$('#send').attr('disabled','disabled');
+    $('#create').attr('disabled','disabled');
+    $('#join').attr('disabled','disabled');
+    var userId = $('[name=user_pk]').val();
+
+    if(typeof(String.prototype.trim) === "undefined"){
+	    String.prototype.trim = function() {
+	        return String(this).replace(/^\s+|\s+$/g, '');
+	    };
+	}
 
     $('#jointhreads').on('click',function(e){
         e.preventDefault()
@@ -13,6 +23,7 @@ require([
         $.ajax({
             type:'POST',
             url: $('#jointhreads').attr('action'),
+
             data:{
                 subject: $jt_textfield.text(),
                 csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
@@ -21,6 +32,7 @@ require([
                 $jt_textfield.remove();
                 $jt_threads.append(Mustache.render(jt_template,json));
                 alert('Successfully joined thread');
+
             }
         })
     });
@@ -34,7 +46,7 @@ require([
 
         $.ajax({
             type:'POST',
-            url:'addnewthread/',
+            url:$('#createthreads').attr('action'),
             data:{
                 subject: $ct_textfield.val(),
                 csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
@@ -49,6 +61,9 @@ require([
                     alert('Successfully created thread');
                     $ct_textfield.val('');
                     $ct_threads.append(Mustache.render(ct_template,json));
+                    $('#create').attr('disabled','disabled');
+                    window.location.href = json.thread_url;
+                    
                 }                
             }
         })
@@ -56,7 +71,7 @@ require([
 
     $('#send_message').on('submit', function(e){
         e.preventDefault();
-
+      
         var $sm_textarea = $('#send_message');
         var $sm_content = $('#content');
         var $messages = $('.messages');
@@ -67,16 +82,47 @@ require([
             data : $sm_textarea.serialize(),
 
             success : function(json){
-                date = String(new Date(json.when));
-                $('#content').val('');
+                $sm_content.val('');
+                console.log(userId);
                 console.log(json);
                 var template = $('#message-template');
+                if(userId == json.sender_pk){
+                    json.classes = "user-message";
+                }
                 var render = Mustache.render(template.html(), json);
                 console.log(render);
                 $('.messages').append(render);
-
-                alert("message sent!");
+                $('#send').attr('disabled','disabled');
             }
         });
     });
+    
+    // send
+    $('#content').keyup(function() {
+        if($(this).val().trim() == '') {
+            $('#send').attr('disabled','disabled');
+        }
+        else {
+        	$('#send').removeAttr('disabled');
+        }
+    });
+    // create
+    $('#create_subject').keyup(function() {
+        if($(this).val() == '' || (/^ *$/.test($(this).val()))  ) {
+        	$('#create').attr('disabled','disabled');
+        }
+        else {
+        	$('#create').removeAttr('disabled');
+        }
+    });
+    // join
+    $('#join_subject').keyup(function() {
+        if($(this).val() == '' || (/^ *$/.test($(this).val()))  ) {
+            $('#join').attr('disabled','disabled');
+        }
+        else {
+        	$('#join').removeAttr('disabled');
+        }
+    });
+
 });

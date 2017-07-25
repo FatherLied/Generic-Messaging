@@ -124,4 +124,5 @@ general/local_settings.py
 # Database
 db.sqlite3
 *.sqlite3
-messenger/archived/
+messenger/archived/*.csv
+*.csv

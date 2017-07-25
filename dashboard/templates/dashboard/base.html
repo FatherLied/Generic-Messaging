@@ -36,14 +36,18 @@
     <script src= "{% static 'js/require.js'%}"></script>
     <script>
       require.config({
-        baseUrl:"{% static 'js/' %}" ,
+        baseUrl: "{% static 'js/' %}",
+
         paths: {
           'jquery': "{% static 'js/jquery' %}"
         }
       });
     </script>
     <script src= "{% static 'js/message.js'%}"></script>
-  </body>
 
+    {% block script %}
+    {% endblock %}
+    
+  </body>
 
 </html>

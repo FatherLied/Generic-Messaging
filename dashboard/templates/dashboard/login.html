@@ -1,6 +1,11 @@
 {% extends 'dashboard/base.html' %}
 
 {% block login %}
+{% if user.is_authenticated %}
+  <div class="innerlogin">
+    <h2>Welcome to Oh, Chat App!</h2>
+  </div>
+{% else %}
   <div class="innerlogin">
     <h2>Log in to Oh, Chat App!</h2>
     <br>
@@ -28,4 +33,5 @@
       </div>
     </form>
   </div>
+{% endif %}
 {% endblock %}
