@@ -34,6 +34,8 @@ class SiteProfile(models.Model):
     site_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     owner = models.ForeignKey(User, related_name='sites')
     company_name = models.CharField(max_length=32)
+    access_secret = models.CharField(max_length=256)
+    access_key = models.CharField(max_length=256)
 
 class MessageThread(models.Model):
     PUBLIC = 'PU'

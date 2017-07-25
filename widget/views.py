@@ -7,12 +7,12 @@ from dashboard.forms import SignUpForm
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from messenger.models import MessageThread, Message, Profile, Archive
+from messenger.models import MessageThread, Message, Profile, Archive, SiteProfile
 
 from braces.views import LoginRequiredMixin
-
-import time
-
+from widget.forms import RegisterForm
+import time, os, base64
+from django.core import signing
 # @method_decorator(login_required, name='dispatch')
 class WidgetView(LoginRequiredMixin, TemplateView):
 
@@ -55,12 +55,26 @@ class SignUpClientSiteView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(SignUpClientSiteView, self).get_context_data(**kwargs)
-        context['form'] = self.form        
+        context['form'] = self.form       
         return context
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data()
         return self.render_to_response(context)
+
+    def post(self, request, *args, **kwargs):
+        form = RegisterForm(self.request.POST)
+        if form.is_valid():            
+            company_name = form.cleaned_data['company_name']
+            web_domain = form.cleaned_data['web_domain']
+            access_secret = base64.b64encode(os.urandom(50)).decode('ascii')
+            # print ('access_secret:' + access_secret)
+            access_key = signing.dumps(access_secret)
+            # print('access_key:'+ access_key)
+            SiteProfile.objects.create(domain=web_domain, access_secret=access_secret, 
+                company_name=company_name, owner=request.user, access_key=access_key)
+            # return JsonResponse({'access_key':access_key, 'access_secret': access_secret})
+            return redirect('/')
 
        
 
