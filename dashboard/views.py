@@ -1,7 +1,7 @@
 from django.shortcuts import render, reverse, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate
 from dashboard.forms import SignUpForm
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, Http404
 from django.views.generic.base import TemplateView
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -32,7 +32,10 @@ class AuthenticatedView(LoginRequiredMixin, TemplateView):
             handler = self.http_method_not_allowed
         return handler(request, *args, **kwargs)
 
-# @method_decorator(login_required, name='dispatch')
+    def http_method_not_allowed(self, request, *args, **kwargs):
+        super(AuthenticatedView, self).http_method_not_allowed(request)
+        raise Http404
+        
 class HomeView(AuthenticatedView):
     template_name = 'dashboard/home.html'
 
@@ -45,7 +48,7 @@ class HomeView(AuthenticatedView):
             return redirect(self.login_url)
 
         context = self.get_context_data()
-        return render(request, self.template_name, context)
+        return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
@@ -76,23 +79,30 @@ def signup(request):
 
 class SignUpView(TemplateView):
     template_name = 'dashboard/signup.html'
-    form = SignUpForm()
+
+    http_method_names = [
+        'get',
+        'post'
+    ]
 
     def get_context_data(self, **kwargs):
         context = super(SignUpView, self).get_context_data(**kwargs)
-        context['form'] = self.form
+        context['form'] = SignUpForm()
         
         return context
 
     def post(self, request, *args, **kwargs):
-        self.form = SignUpForm(self.request.POST)
-        if self.form.is_valid():
+        form = SignUpForm(self.request.POST)
+        if form.is_valid():
             user = form.save()
             user.refresh_from_db()
+            password = form.cleaned_data.get('password1')
             user = authenticate(username=user.username, password=password)
-            login(self.request.user)
+            login(self.request, user)
 
             return redirect('home')
+
+        return self.render_to_response({'form': form})
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data()
@@ -111,7 +121,7 @@ class ThreadDetailsView(AuthenticatedView):
             return redirect(self.login_url)
 
         context = self.get_context_data(pk)
-        return render(request, self.template_name, context=context)
+        return self.render_to_response(context)
 
     def get_context_data(self, pk):
         this_thread = get_object_or_404(MessageThread, pk=pk)
@@ -132,6 +142,7 @@ class AddNewThreadView(AuthenticatedView):
     http_method_names = [
         'post'
     ]
+
     def post(self, request):
         subject = request.POST['subject']
         exists = MessageThread.objects.filter(subject=subject)
