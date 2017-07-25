@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     
     'messenger.apps.MessengerConfig',
     'dashboard',
-    'general'
+    'general',
+    'widget'
 ]
 
 MIDDLEWARE = [

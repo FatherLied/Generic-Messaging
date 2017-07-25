@@ -11,7 +11,7 @@ urlpatterns = [
     url(r'^login/$', auth_views.login, 
         {'template_name': 'dashboard/login.html'}, name='login'),
     url(r'^logout/$', auth_views.logout, {'next_page':'login'}, name='logout'),
-    url(r'^signup/$', reg_views.signup, name='signup'),
+    url(r'^signup/$', SignUpView.as_view(), name='signup'),
 
     url(r'^addnewthread/$', AddNewThreadView.as_view(), name='addnewthread'),
     url(r'^jointhreads/$', JoinThreadsView.as_view(), name='jointhreads'),
