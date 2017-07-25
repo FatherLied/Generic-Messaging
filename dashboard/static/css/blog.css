@@ -226,3 +226,8 @@ textarea {
 .post h1 a, .post h1 a:visited {
     color: #000000;
 }
+
+a.list-group-item:hover{
+    font-weight: bold;
+    padding: 10px;
+}

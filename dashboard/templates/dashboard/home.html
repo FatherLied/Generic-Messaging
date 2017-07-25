@@ -34,7 +34,7 @@
                         <br><br>
                         <input type="submit" class="mdl-button" id="create" value="Create" />
                     </form>
-
+                    {% comment %}
                     <form id="jointhreads" action="{% url 'jointhreads'%}">
                         {% csrf_token %}
                         <h3>Or Join One!</h3>
@@ -42,6 +42,7 @@
                         <br><br>
                         <input type="submit" class="mdl-button" id="join" value="Join" />
                     </form>
+                    {% endcomment %}
                 </div>
             {% endblock%}
         </div>
@@ -53,10 +54,7 @@
                     <form id="jointhreads" action="{% url 'jointhreads'%}">
                     {% csrf_token %}
                     {% for thread in allthreads %}
-                    
-                    
                         <a class="list-group-item" name="t_subject" id="join_subject">{{thread.subject}}</a>
-                    
                     {% endfor %}
                     </form>
             </ul>
