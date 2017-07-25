@@ -1,23 +1,58 @@
 from django.shortcuts import render, reverse, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate
 from dashboard.forms import SignUpForm
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, Http404
 from django.views.generic.base import TemplateView
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from messenger.models import MessageThread, Message, Profile
 from django.views import View
 
+from braces.views import LoginRequiredMixin
 
-@method_decorator(login_required, name='dispatch')
-class HomeView(TemplateView):
-    template_name = 'dashboard/home.html'
+"""
+  AuthenticatedView just requires you to define:
+    - template_name
+    - http_method_names
+    - get(), post(), etc.
+    - get_context_data()
+"""
+class AuthenticatedView(LoginRequiredMixin, TemplateView):
+    login_url = "/login/"
+    redirect_field_name = "Log-in"
+
+    raise_exception = True
+    redirect_unauthenticated_users = True
 
     def dispatch(self, request, *args, **kwargs):
-        return super(HomeView, self).dispatch(self.request, *args, **kwargs)
+        # return super(WidgetView,self).dispatch(self.request, *args, **kwargs)
+        if request.method.lower() in self.http_method_names:
+            handler = getattr(self, request.method.lower(), self.http_method_not_allowed)
+        else:
+            handler = self.http_method_not_allowed
+        return handler(request, *args, **kwargs)
+
+    def http_method_not_allowed(self, request, *args, **kwargs):
+        super(AuthenticatedView, self).http_method_not_allowed(request)
+        raise Http404
+        
+class HomeView(AuthenticatedView):
+    template_name = 'dashboard/home.html'
+
+    http_method_names = [
+        'get'
+    ]
+
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated() or request.user.is_anonymous():
+            return redirect(self.login_url)
+
+        context = self.get_context_data()
+        return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
+        # context['users'] = Profile.objects.all().exclude(owner=self.request.user)
         context['threads'] = MessageThread.objects.filter(
             participants=self.request.user).order_by('-when_created')
         context['users'] = Profile.objects.all()
@@ -44,45 +79,71 @@ def signup(request):
 
 class SignUpView(TemplateView):
     template_name = 'dashboard/signup.html'
-    form = SignUpForm()
+
+    http_method_names = [
+        'get',
+        'post'
+    ]
 
     def get_context_data(self, **kwargs):
         context = super(SignUpView, self).get_context_data(**kwargs)
-        context['form'] = self.form   
+        context['form'] = SignUpForm()
+        
         return context
 
     def post(self, request, *args, **kwargs):
-        self.form = SignUpForm(self.request.POST)
-        if self.form.is_valid():
+        form = SignUpForm(self.request.POST)
+        if form.is_valid():
             user = form.save()
             user.refresh_from_db()
+            password = form.cleaned_data.get('password1')
             user = authenticate(username=user.username, password=password)
-            login(self.request.user)
+            login(self.request, user)
 
             return redirect('home')
+
+        return self.render_to_response({'form': form})
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data()
         return self.render_to_response(context)
 
 
-class ThreadDetailsView(View):
-    def dispatch(self, request, pk):
-        thisthreads = get_object_or_404(MessageThread, pk=pk)
+class ThreadDetailsView(AuthenticatedView):
+    template_name = 'dashboard/details.html'
+
+    http_method_names = [
+        'get'
+    ]
+
+    def get(self, request, pk):
+        if not request.user.is_authenticated() or request.user.is_anonymous():
+            return redirect(self.login_url)
+
+        context = self.get_context_data(pk)
+        return self.render_to_response(context)
+
+    def get_context_data(self, pk):
+        this_thread = get_object_or_404(MessageThread, pk=pk)
         context = {
             'threads':  MessageThread.objects.filter(
-                participants=request.user).order_by('-when_created'),
+                participants=self.request.user).order_by('-when_created'),
             'users' : Profile.objects.all(),
             'thread_subject': thisthreads.subject,
             'thread_id':pk,
-            'allthreads':MessageThread.objects.exclude(participants=request.user),
+            'allthreads':MessageThread.objects.exclude(participants=self.request.user),
             'messages': Message.objects.filter(
-                thread=thisthreads).order_by('when_created'),
+                thread=this_thread).order_by('when_created'),
             'next_url': reverse('details', args=(pk,))
         }
-        return render(request, 'dashboard/details.html', context=context)
 
-class AddNewThreadView(View):
+        return context
+
+class AddNewThreadView(AuthenticatedView):
+    http_method_names = [
+        'post'
+    ]
+
     def post(self, request):
         subject = request.POST['subject']
         exists = MessageThread.objects.filter(subject=subject)
@@ -94,7 +155,11 @@ class AddNewThreadView(View):
         return JsonResponse({'subject':thread.subject,'thread_url':thread_url})
 
 
-class JoinThreadsView(View):
+class JoinThreadsView(AuthenticatedView):
+    http_method_names = [
+        'post'
+    ]
+
     def post(self, request):
         subject = request.POST['subject']
         print(subject)
