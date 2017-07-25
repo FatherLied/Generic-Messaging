@@ -30,11 +30,10 @@ class MessageManager(models.Manager):
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 class SiteProfile(models.Model):
-    # owner = models.ForeignKey(User, related_name="sites)
-    # domain = models.OneToOneField(Site, related_name='site_profile')
     domain = models.CharField(max_length=512)
     site_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     owner = models.ForeignKey(User, related_name='sites')
+    company_name = models.CharField(max_length=32)
 
 class MessageThread(models.Model):
     PUBLIC = 'PU'
@@ -46,7 +45,7 @@ class MessageThread(models.Model):
     status = models.CharField(
         max_length=2,
         choices=THREAD_TYPE,
-        default=PRIVATE,
+        default=PUBLIC,
     )
 
     subject = models.CharField(max_length=255, blank=False)
