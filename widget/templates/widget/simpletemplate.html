@@ -1,0 +1,46 @@
+{% load staticfiles %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>
+        Generic Messaging
+        </title>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/weejet.css' %}">
+    </head>
+
+    <body>
+      {% block pageheader %}
+      <div class="page-header">
+        <h1><a href="/">Oh, Chat App!</a></h1>
+      </div>
+      {% endblock %}
+      
+      {% block content %}
+        <div class="upperlogin">
+            {% block login %}
+            {% endblock %}
+        </div>
+      {% endblock %}
+
+      <script src= "{% static 'js/require.js'%}"></script>
+      <script>
+        require.config({
+          baseUrl: "{% static 'js/' %}",
+
+          paths: {
+            'jquery': "{% static 'js/jquery' %}"
+          }
+        });
+      </script>
+      <script src= "{% static 'js/message.js'%}"></script>
+      {% block script %}
+      {% endblock %}
+  </body>
+</html>
