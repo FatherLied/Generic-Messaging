@@ -1,4 +1,8 @@
-from django.conf.urls import url 
+from django.conf.urls import url
+from django.contrib.auth import views as auth_views
+from dashboard import views as reg_views
+from django.conf import settings
+
 
 from .views import WidgetView, SignUpClientSiteView
 

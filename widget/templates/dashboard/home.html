@@ -1,0 +1,53 @@
+{% extends 'widget/simpletemplate.html' %}
+
+{% block content %}
+  <div class = "row">
+        <div class="listthreadsusers">
+            <h3>Joined Threads</h3>
+            <div class="threadlist">
+                <div class="list-group" id="threads_joined">
+                    {% for thread in threads %}
+                        <a href="{% url 'details' pk=thread.pk %}" class="list-group-item" id="joined_thread">{{thread.subject}}</a>
+                    {% endfor %}
+                </div>
+            </div>
+            <h3> Users</h3>
+            <div class="userlist">
+                {% for user in users %}
+                    <a href="{% url 'home' %}" class="list-group-item">{{user.owner}}</a>
+                {% endfor %}
+            </div>
+        </div>
+    
+        <div class = "createjointhread">
+            {% block details %}
+                <div class = "createjoinblock">
+                    <form id="createthreads" action="{% url 'addnewthread'%}">
+                        {% csrf_token %}
+                        <h3>Create a Thread:</h3>
+                        Subject: <input type="text" name="t_subject" id="create_subject">
+                        <br><br>
+                        <input type="submit" class="mdl-button" id="create" value="Create" />
+                    </form>
+                    <form id="jointhreads" action="{% url 'jointhreads'%}">
+                        {% csrf_token %}
+                        <h3>Or Join One!</h3>
+                        Thread: <input type="text" name="t_subject" id="join_subject">
+                        <br><br>
+                        <input type="submit" class="mdl-button" id="join" value="Join" />
+                    </form>
+                </div>
+            {% endblock%}
+        </div>
+
+        <div class="listallthreads">
+            <h3>All Unjoined Threads</h3><br>
+            <ul>
+                {% for thread in allthreads %}
+                    <li>{{thread.subject}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+    </div>
+{% endblock %}
