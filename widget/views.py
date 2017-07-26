@@ -74,7 +74,6 @@ class SignUpClientSiteView(TemplateView):
 
             access_secret = base64.b64encode(os.urandom(50)).decode('ascii')
             access_key = signing.dumps(access_secret)[0:(len(access_secret))]
-            # print('access_key:'+ access_key)
             SiteProfile.objects.create(domain=web_domain, access_secret=access_secret, 
                 company_name=company_name, owner=request.user, access_key=access_key)
             # return JsonResponse({'access_key':access_key, 'access_secret': access_secret})
@@ -85,4 +84,4 @@ class Widget_UrlView(View):
     def dispatch(self, request, *args, **kwargs):
         access_key = request.GET.get('access_key')
         # print(access_key)
-        return HttpResponse
+        return HttpResponse('')
