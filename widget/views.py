@@ -1,3 +1,4 @@
+
 from django.views.generic.base import TemplateView
 from django.views import View
 from django.shortcuts import render, reverse, redirect, get_object_or_404
@@ -6,14 +7,15 @@ from dashboard.forms import SignUpForm
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from messenger.models import MessageThread, Message, Profile, Archive
+from messenger.models import MessageThread, Message, Profile, Archive, SiteProfile
 
 from braces.views import LoginRequiredMixin
-
-import time
-
+from widget.forms import RegisterForm
+import time, os, base64
+from django.core import signing
 # @method_decorator(login_required, name='dispatch')
 class WidgetView(LoginRequiredMixin, TemplateView):
+
     template_name = 'widget/simpletemplate.html'
 
     login_url = "/login/"
@@ -40,105 +42,43 @@ class WidgetView(LoginRequiredMixin, TemplateView):
         return context
 
     def dispatch(self, request, *args, **kwargs):
-        # return super(WidgetView,self).dispatch(self.request, *args, **kwargs)
+       # return super(WidgetView,self).dispatch(self.request, *args, **kwargs)
         if request.method.lower() in self.http_method_names:
             handler = getattr(self, request.method.lower(), self.http_method_not_allowed)
         else:
             handler = self.http_method_not_allowed
         return handler(request, *args, **kwargs)
 
-# def signup(request):
-#     if request.method == 'POST':
-#         form = SignUpForm(request.POST)
-#         if form.is_valid():
-#             user = form.save()
-#             user.refresh_from_db()
-#             user.save()
-#             password = form.cleaned_data.get('password1')
-#             user = authenticate(username=user.username, password=password)
-#             login(request, user)
-#             return redirect('home')
-#     else:
-#         form = SignUpForm()
-#     return render(request, 'dashboard/signup.html', {'form': form})
+class SignUpClientSiteView(TemplateView):
+    template_name = 'widget/client.html'
+    form = RegisterForm()
 
+    def get_context_data(self, **kwargs):
+        context = super(SignUpClientSiteView, self).get_context_data(**kwargs)
+        context['form'] = self.form       
+        return context
 
-# class ThreadDetailsView(View):
-#     def dispatch(self, request, pk):
-#         thisthreads = get_object_or_404(MessageThread, pk=pk)
-#         context = {
-#             'threads':  MessageThread.objects.filter(
-#                 participants=request.user).order_by('-when_created'),
-#             'users' : Profile.objects.all(),
-#             'thread_id':pk,
-#             'allthreads':MessageThread.objects.exclude(participants=request.user),
-#             'messages': Message.objects.filter(
-#                 thread=thisthreads).order_by('when_created'),
-#             'next_url': reverse('details', args=(pk,))
-#         }
-#         return render(request, 'dashboard/details.html', context=context)
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data()
+        return self.render_to_response(context)
 
-# class AddNewThreadView(View):
-#     def post(self, request):
-#         subject = request.POST['subject']
-#         exists = MessageThread.objects.filter(subject=subject)
-#         if exists:
-#             return HttpResponse(' ')
-#         thread = MessageThread.objects.create(subject=subject)
-#         thread.participants.add(request.user)
-#         thread_url = reverse('details',args=(thread.pk,))
-#         return JsonResponse({'subject':thread.subject,'thread_url':thread_url})
+    def post(self, request, *args, **kwargs):
+        form = RegisterForm(self.request.POST)
+        if form.is_valid():            
+            company_name = form.cleaned_data['company_name']
+            web_domain = form.cleaned_data['web_domain']
+            
+            domain = SiteProfile.objects.filter(domain=web_domain)
+            if domain:
+                return HttpResponse('That domain is already registered.')
 
+            access_secret = base64.b64encode(os.urandom(50)).decode('ascii')
+            access_key = signing.dumps(access_secret)[0:(len(access_secret))]
+            # print('access_key:'+ access_key)
+            SiteProfile.objects.create(domain=web_domain, access_secret=access_secret, 
+                company_name=company_name, owner=request.user, access_key=access_key)
+            # return JsonResponse({'access_key':access_key, 'access_secret': access_secret})
+            return redirect('/')
 
-# class JoinThreadsView(View):
-#     def post(self, request):
-#         subject = request.POST['subject']
-#         print(subject)
-#         thread = MessageThread.objects.get(subject=subject)
-#         thread1 = MessageThread.objects.filter(subject=subject).exclude(participants=request.user)
-#         if not thread:
-#             return JsonResponse({'status':'error1','context':'The thread does not exists.'})
-#         if not thread1:
-#             return JsonResponse({'status':'error2','context':'You are already part of the thread'})
-        
-#         # thread = MessageThread.objects.filter(subject=subject)
-#         thread.participants.add(request.user)
-#         thread_url = reverse('details',args=(thread.pk,))
-        
-#         return JsonResponse({'subject':thread.subject,'thread_url':thread_url,'status':'success'})
+       
 
-# class AddMessageView(View):
-#     def post(self, request):
-#         content = request.POST.get('content')
-#         thread_id = request.POST.get('thread_id')
-#         thread = MessageThread.objects.get(pk=thread_id)
-#         message = Message.objects.add_message(content=content, 
-#             thread=thread, sender=request.user)
-#         t = message.when_created.strftime("%B %d, %Y, %-I:%M %p")
-#         return JsonResponse({'pk': message.pk,
-#             'threadId': message.thread_id,
-#             'content': message.content,
-#             'when': t,
-#             'sender': message.sender.username,
-#             'sender_pk': message.sender.pk
-#             })
-
-#     def download_csv(request, archive_obj):
-#         pass
-
-
-# class RetrieveMessage(View):
-
-#     def get(self, request, *args, **kwargs):
-#         latest_id = request.GET['latestId']
-#         thread_id = request.GET['threadId']
-#         messages = Message.objects.filter(id__gt=latest_id, thread__id=thread_id)
-#         context = {}
-#         context['messages'] = []
-#         for message in messages:
-#             context['messages'].append({'pk': message.pk, 
-#                 'content': message.content, 
-#                 'when': message.when_created.strftime("%B %d, %Y, %-I:%M %p"), 
-#                 'sender': message.sender.username, 
-#                 'sender_pk': message.sender.pk})
-#         return JsonResponse({'objects': context})

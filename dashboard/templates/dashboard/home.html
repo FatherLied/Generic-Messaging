@@ -3,8 +3,9 @@
 {% block wellog %}
     <div class="wellog">
       {% if user.is_authenticated %}
-        <p>Welcome, {{request.user}} </p>
+        <p>Welcome, <a href="{% url 'profile' pk=request.user.pk %}">{{request.user}}</a> </p>
         <a  href="{% url 'logout' %}" class = "logsignout">Logout</a>
+        <a href="{% url 'client_register'%}" class = "logsignout" >Site Registration </a>
         <br><br><hr>
       {% endif %}
     </div>
