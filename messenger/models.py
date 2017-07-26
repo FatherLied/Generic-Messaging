@@ -55,12 +55,12 @@ class MessageThread(models.Model):
         related_name='message_threads', blank=True)
     when_created = models.DateTimeField(auto_now_add=True)
 
-    site = models.ForeignKey(SiteProfile, null=True)
+    site = models.ForeignKey(SiteProfile, null=True, blank=True)
 
     objects = ThreadManager()
 
     def __str__(self):
-        return ('{}'.format(self.subject))
+        return ('[{}]: {}'.format(self.pk, self.subject))
 
 class Profile(models.Model):
     first_name = models.CharField(max_length=30, blank = False)

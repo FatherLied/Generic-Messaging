@@ -113,13 +113,17 @@ class ThreadDetailsView(AuthenticatedView):
 
     def get_context_data(self, pk):
         this_thread = get_object_or_404(MessageThread, pk=pk)
+
+        if self.request.user not in this_thread.participants.all():
+            raise Http404('Thread does not exist')
+
         context = {
             'threads':  MessageThread.objects.filter(
                 participants=self.request.user).order_by('-when_created'),
             'users' : Profile.objects.all(),
             'thread_subject': this_thread.subject,
-            'thread_id':pk,
-            'allthreads':MessageThread.objects.exclude(participants=self.request.user),
+            'thread_id': pk,
+            'allthreads': MessageThread.objects.exclude(participants=self.request.user),
             'messages': Message.objects.filter(
                 thread=this_thread).order_by('when_created'),
             'next_url': reverse('details', args=(pk,))

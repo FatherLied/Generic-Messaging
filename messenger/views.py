@@ -6,11 +6,15 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.views.generic import View
 
 from .models import Archive, Message, MessageThread
+from dashboard.views import AuthenticatedView
 
 import time
 
 
-class AddMessageView(View): 
+class AddMessageView(AuthenticatedView):
+    http_method_names = [
+        'post'
+    ]
     
     def post(self, request):
         content = request.POST.get('content')
@@ -31,7 +35,11 @@ def download_csv(request, archive_obj):
     pass
 
 
-class RetrieveMessage(View):
+class RetrieveMessage(AuthenticatedView):
+    http_method_names = [
+        'get'
+    ]
+
 
     def get(self, request, *args, **kwargs):
         latest_id = request.GET['latestId']
