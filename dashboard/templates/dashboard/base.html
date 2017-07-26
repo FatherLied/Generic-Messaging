@@ -36,15 +36,21 @@
           </div>
           {% endif %}
       <hr>
-    </div>
-    {% endblock %}
 
-    {% block content %}
-      <div class="upperlogin">
-          {% block login %}
-          {% endblock %}
-      </div>
+        {% block wellog %}
+          <hr>
+        {% endblock %}
+
+    </div>
+
     {% endblock %}
+    
+    {% block content %}
+    {% endblock %}
+    <div class="upperlogin">
+        {% block login %}
+        {% endblock %}
+    </div>
     <script src= "{% static 'js/require.js'%}"></script>
     <script>
       require.config({

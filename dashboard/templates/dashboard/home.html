@@ -1,5 +1,15 @@
 {% extends 'dashboard/base.html' %}
 
+{% block wellog %}
+    <div class="wellog">
+      {% if user.is_authenticated %}
+        <p>Welcome, {{request.user}} </p>
+        <a  href="{% url 'logout' %}" class = "logsignout">Logout</a>
+        <br><br><hr>
+      {% endif %}
+    </div>
+{% endblock %}
+
 {% block content %}
   <div class = "row">
         <div class="listthreadsusers">
@@ -11,12 +21,7 @@
                     {% endfor %}
                 </div>
             </div>
-            <h3> Users</h3>
-            <div class="userlist">
-                {% for user in users %}
-                    <a href="{% url 'home' %}" class="list-group-item">{{user.owner}}</a>
-                {% endfor %}
-            </div>
+            
         </div>
     
         <div class = "createjointhread">
@@ -29,6 +34,7 @@
                         <br><br>
                         <input type="submit" class="mdl-button" id="create" value="Create" />
                     </form>
+                    {% comment %}
                     <form id="jointhreads" action="{% url 'jointhreads'%}">
                         {% csrf_token %}
                         <h3>Or Join One!</h3>
@@ -36,16 +42,21 @@
                         <br><br>
                         <input type="submit" class="mdl-button" id="join" value="Join" />
                     </form>
+                    {% endcomment %}
                 </div>
             {% endblock%}
         </div>
 
         <div class="listallthreads">
-            <h3>All Unjoined Threads</h3><br>
+            <h3>Public Threads</h3><br>
             <ul>
-                {% for thread in allthreads %}
-                    <li>{{thread.subject}}</li>
-                {% endfor %}
+                
+                    <form id="jointhreads" action="{% url 'jointhreads'%}">
+                    {% csrf_token %}
+                    {% for thread in allthreads %}
+                        <a class="list-group-item" name="t_subject" id="join_subject">{{thread.subject}}</a>
+                    {% endfor %}
+                    </form>
             </ul>
         </div>
 
