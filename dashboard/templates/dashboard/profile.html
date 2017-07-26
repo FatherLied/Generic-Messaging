@@ -1,5 +1,22 @@
-{% extends 'dashboard/base.html' %}
+{% extends 'dashboard/base2.html' %}
 
 {% block content %}
- <h1>My profile</h1>
+    <h1 style="padding-left: 20px"> {{request.user.first_name}} {{request.user.last_name}} </h1>
+    <div class="row">
+        <div class="col-sm-8" style="padding-left: 40px">
+            <h1 style="padding-left: 20px">sites registered </h2>
+            {% if len == 0 %}
+                Nothing to show
+            {% endif %}
+            {% for site in sites %}
+            domain: {{ site.domain}}  <br><br>
+            access secret: {{ site.access_secret }} <br>
+            access key: {{site.access_key}} <br><br>
+            {% endfor %}
+        </div>
+        <div class="col-sm-4"></div>
+    </div>
+        
+
+ 
 {% endblock %}

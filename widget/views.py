@@ -67,9 +67,13 @@ class SignUpClientSiteView(TemplateView):
         if form.is_valid():            
             company_name = form.cleaned_data['company_name']
             web_domain = form.cleaned_data['web_domain']
+            
+            domain = SiteProfile.objects.filter(domain=web_domain)
+            if domain:
+                return HttpResponse('That domain is already registered.')
+
             access_secret = base64.b64encode(os.urandom(50)).decode('ascii')
-            # print ('access_secret:' + access_secret)
-            access_key = signing.dumps(access_secret)
+            access_key = signing.dumps(access_secret)[0:(len(access_secret))]
             # print('access_key:'+ access_key)
             SiteProfile.objects.create(domain=web_domain, access_secret=access_secret, 
                 company_name=company_name, owner=request.user, access_key=access_key)

@@ -5,11 +5,11 @@ from django.http import HttpResponse, JsonResponse
 from django.views.generic.base import TemplateView
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from messenger.models import MessageThread, Message, Profile
+from messenger.models import MessageThread, Message, Profile, SiteProfile
 from django.views import View
 from braces.views import LoginRequiredMixin
+from django.contrib.auth.models import User
 
-from braces.views import LoginRequiredMixin
 
 """
   AuthenticatedView just requires you to define:
@@ -119,10 +119,25 @@ class ThreadDetailsView(AuthenticatedView):
 class ProfileView(AuthenticatedView):
     template_name = 'dashboard/profile.html'
 
+    http_method_names = [
+        'get'
+    ]
+
     def get(self, request, pk):
-        pass
+        if not request.user.is_authenticated() or request.user.is_anonymous():
+            return redirect(self.login_url)
+        context = self.get_context_data(pk)
+        return render(request, self.template_name, context=context)
+
+
     def get_context_data(self, pk):
-        pass
+        this_profile = get_object_or_404(User, pk=pk)
+        context = {
+            'sites': SiteProfile.objects.filter(owner=this_profile),
+            'threads': MessageThread.objects.filter(participants=this_profile),
+            'len': len(SiteProfile.objects.filter(owner=this_profile))
+        }
+        return context
 
 class AddNewThreadView(AuthenticatedView):
     http_method_names = [
