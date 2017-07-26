@@ -133,6 +133,7 @@ class ThreadDetailsView(AuthenticatedView):
             'threads':  MessageThread.objects.filter(
                 participants=self.request.user).order_by('-when_created'),
             'users' : Profile.objects.all(),
+            'thread_subject': this_thread.subject,
             'thread_id': pk,
             'allthreads': MessageThread.objects.exclude(participants=self.request.user),
             'messages': Message.objects.filter(
