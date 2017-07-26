@@ -46,5 +46,3 @@ class RetrieveMessage(View):
                 'sender': message.sender.username, 
                 'sender_pk': message.sender.pk})
         return JsonResponse({'objects': context})
-
-

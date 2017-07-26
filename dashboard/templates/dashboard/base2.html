@@ -28,29 +28,27 @@
     <div class="page-header">
       <h1><a href="/">Oh, Chat App!</a></h1>
         {# login/signup thingy #}
+          {% comment %}
           {% if user.is_authenticated %}
+          
             <p>Welcome, <a href="{% url 'profile' pk=request.user.pk %}">{{request.user}}</a> </p>
+          }
           <div class = "logsignout">
             <a href="{% url 'client_register'%}">Site Registration </a> 
             <a href="{% url 'logout' %}">Logout</a>
           </div>
-          {% endif %}
+          {% endif %}     
       <hr>
-
-        {% block wellog %}
-          <hr>
-        {% endblock %}
-
+      {% endcomment %}
     </div>
-
     {% endblock %}
-    
+
     {% block content %}
+      <div class="upperlogin">
+          {% block login %}
+          {% endblock %}
+      </div>
     {% endblock %}
-    <div class="upperlogin">
-        {% block login %}
-        {% endblock %}
-    </div>
     <script src= "{% static 'js/require.js'%}"></script>
     <script>
       require.config({
@@ -65,6 +63,3 @@
 
     {% block script %}
     {% endblock %}
-    
-  </body>
-</html>

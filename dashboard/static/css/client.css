@@ -1,54 +1,31 @@
-iframe{
-    float: right;
-}
-
 .page-header {
     background-color: #b30000;
-    padding: 0px 20px 15px 20px;
+    margin-top: 0;
+    padding: 20px 20px 20px 40px;
     border: 4px #b30000;
     border-style: dashed none none;
-    margin-top: 0;
-    margin-bottom: 0px;
 }
 
-.page-header h1 a{
+.page-header h1, .page-header h1 a, .page-header h1 a:visited, .page-header h1 a:active {
     color: #ffffff;
-    font-size: 41pt;
+    font-size: 36pt;
     text-decoration: none;
-    width:350px;
-    margin-top: 10px;
-    margin-right: 0px;
-    margin-bottom: auto;
-    margin-left: 10px;
 }
 
-.page-header p{//Welcome, user
+.page-header p{
     font-family: 'Ubuntu';
     color: white;
-    font-size: 24pt;
+    font-size: 27pt;
     float: right;
-    margin: 0px auto 0px 80px;
-}
-
-.logsignout{//Log out
-    font-family: 'Ubuntu';
-    color: white;
-    font-size: 24pt;
-    float:left;
-    margin: 0px auto 0px 20px;
-}
-
-a.logsignout:hover{//Log out darken
-   color: #8c8c8c;
-   text-decoration: none;
-}
-
-.page-header hr{
-    margin: 10px 0px 5px 0px;
+    margin-bottom: 0px;
 }
 
 .container{
     width:350px;
+}
+
+.logsignout{
+    font-size: 20pt;
 }
 
 body{
@@ -70,9 +47,13 @@ h1, h2, h3, h4 {
     text-decoration: underline;
 }
 
+.listallthreads h3{
+    font-size: 25pt;
+    text-decoration: underline;
+}
+
 .listallthreads ul{
     font-size: 15pt;
-    padding-left: 0px;
 }
 
 .listthreadsusers{
@@ -109,10 +90,6 @@ textarea {
 
 .createjointhread{
     text-align: center;
-    float: left;
-
-    margin-top: 30px;
-    margin-left: 60px;
     margin-right: 60px;
     margin-bottom:0px;
     
@@ -138,7 +115,6 @@ textarea {
 
     width: 350px;
     height: 500px;
-    overflow: auto;
 
     padding: 5px 10px 10px 10px;
 
@@ -231,8 +207,40 @@ textarea {
     color: #000000;
 }
 
-a.list-group-item:hover{
-    font-weight: bold;
-    padding: 10px;
+.messages {
+    background-color: #d6d6d6;
+    padding: 20px;
+    height:400px;
+    width: 350px;
+    overflow: auto;
 }
 
+.message {
+    margin-bottom: 14px;
+    display: flex;
+    flex-direction: row;
+}
+
+.message .content {
+    float:left;
+    background-color: #9a99c5;
+    border-radius: 4px;
+    padding: 12px;
+    margin-top: 2px;
+}
+
+.message .footer {
+    font-size: 8px;
+    text-align: right;
+}
+
+.user{
+    border-radius: 2px;
+    padding-right:5px;
+    height: 25px;
+    text-decoration: underline;
+    float:left;
+}
+.user-message .content {
+    background-color: #c19e9e;
+}

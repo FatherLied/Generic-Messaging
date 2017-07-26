@@ -5,10 +5,11 @@ from django.http import HttpResponse, JsonResponse, Http404
 from django.views.generic.base import TemplateView
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from messenger.models import MessageThread, Message, Profile
+from messenger.models import MessageThread, Message, Profile, SiteProfile
 from django.views import View
-
 from braces.views import LoginRequiredMixin
+from django.contrib.auth.models import User
+
 
 """
   AuthenticatedView just requires you to define:
@@ -37,7 +38,9 @@ class AuthenticatedView(LoginRequiredMixin, TemplateView):
         raise Http404
         
 class HomeView(AuthenticatedView):
+
     template_name = 'dashboard/home.html'
+    login_url = "/login/"
 
     http_method_names = [
         'get'
@@ -60,22 +63,6 @@ class HomeView(AuthenticatedView):
             participants=self.request.user)
 
         return context
-
-def signup(request):
-    if request.method == 'POST':
-        form = SignUpForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            user.refresh_from_db()
-            user.save()
-            password = form.cleaned_data.get('password1')
-            user = authenticate(username=user.username, password=password)
-            login(request, user)
-            return redirect('home')
-    else:
-        form = SignUpForm()
-    return render(request, 'dashboard/signup.html', {'form': form})
-
 
 class SignUpView(TemplateView):
     template_name = 'dashboard/signup.html'
@@ -109,6 +96,7 @@ class SignUpView(TemplateView):
         return self.render_to_response(context)
 
 
+
 class ThreadDetailsView(AuthenticatedView):
     template_name = 'dashboard/details.html'
 
@@ -139,6 +127,29 @@ class ThreadDetailsView(AuthenticatedView):
 
         return context
 
+class ProfileView(AuthenticatedView):
+    template_name = 'dashboard/profile.html'
+
+    http_method_names = [
+        'get'
+    ]
+
+    def get(self, request, pk):
+        if not request.user.is_authenticated() or request.user.is_anonymous():
+            return redirect(self.login_url)
+        context = self.get_context_data(pk)
+        return render(request, self.template_name, context=context)
+
+
+    def get_context_data(self, pk):
+        this_profile = get_object_or_404(User, pk=pk)
+        context = {
+            'sites': SiteProfile.objects.filter(owner=this_profile),
+            'threads': MessageThread.objects.filter(participants=this_profile),
+            'len': len(SiteProfile.objects.filter(owner=this_profile))
+        }
+        return context
+
 class AddNewThreadView(AuthenticatedView):
     http_method_names = [
         'post'
@@ -162,7 +173,6 @@ class JoinThreadsView(AuthenticatedView):
 
     def post(self, request):
         subject = request.POST['subject']
-        print(subject)
         thread = MessageThread.objects.get(subject=subject)
         thread1 = MessageThread.objects.filter(subject=subject).exclude(participants=request.user)
         if not thread:
