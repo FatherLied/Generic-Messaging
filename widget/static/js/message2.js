@@ -72,7 +72,6 @@ require([
                     $ct_threads.append(Mustache.render(ct_template,json));
                     $('#create').attr('disabled','disabled');
                     window.location.href = json.thread_url;
-                    
                 }                
             }
         })

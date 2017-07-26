@@ -26,11 +26,24 @@
         <input name="user_pk" type="hidden" value="{{request.user.pk}}">
         
         <div class="innerbox">
+
           <div class="messages">
             {% for message in messages %}
                 {% include "dashboard/messages_panel/message.html" %}
             {% endfor %}
           </div>
+
+          <div class="loginer" id = "loginer">
+            <div class = "emaildetail">
+              <p>To obtain a copy of this conversation, please enter the following details:</p>
+              <h1>Username</h1>
+              <textarea autofocus name="content" id="content" rows="1" style="width:212px;margin-right:3px"></textarea>
+              <h1>E-mail Address</h1>
+              <textarea autofocus name="content" id="content" rows="1" style="width:212px;margin-right:3px"></textarea>
+              <input type="submit" class="mdl-button" id="send" style="margin-top: 5px;" value="Send" />
+            </div>
+          </div>
+
         </div>
 
         <div class = "sendmess">
@@ -40,9 +53,9 @@
               <input name="thread_id" type="hidden" value="{{thread_id}}" />
               <input name="sender" id="sender" type="hidden" value="{{request.user}}" />
               <input type="submit" class="mdl-button" id="send" value="Send" />
-              <input type="submit" class="mdl-button" id="dl" value="..." />
+              <input type="submit" class="mdl-button" onclick="hide()" id="dl" value="..." />
           </form>
-        </div>
+        </div
 
         {% verbatim %}
           <script id="message-template" type="text/template">
@@ -65,6 +78,8 @@
 
       </div>
 
+
+
       <script src= "{% static 'js/require.js'%}"></script>
       <script>
         require.config({
@@ -75,7 +90,17 @@
           }
         });
       </script>
-      <script src= "{% static 'js/message.js'%}"></script>
+      <script>
+        function hide() {
+            var x = document.getElementById('loginer');
+            if (x.style.display === 'none') {
+                x.style.display = 'block';
+            } else {
+                x.style.display = 'none';
+            }
+        }
+      </script>
+      <script src= "{% static 'js/message2.js'%}"></script>
       {% block script %}
       {% endblock %}
 
