@@ -147,10 +147,16 @@ class ProfileView(AuthenticatedView):
 
     def get_context_data(self, pk):
         this_profile = get_object_or_404(User, pk=pk)
+        snippet1 = '<iframe src=" '
+        snippet2 = ' frameborder="1" align = "top" height = "403" width = "303" scrolling = '
+        snippet3 = '"no" style="float: right;position:fixed;right:20px;bottom:15px;"></iframe>'
         context = {
             'sites': SiteProfile.objects.filter(owner=this_profile),
             'threads': MessageThread.objects.filter(participants=this_profile),
-            'len': len(SiteProfile.objects.filter(owner=this_profile))
+            'len': len(SiteProfile.objects.filter(owner=this_profile)),
+            'snippet1': snippet1,
+            'snippet2': snippet2,
+            'snippet3': snippet3
         }
         return context
 
