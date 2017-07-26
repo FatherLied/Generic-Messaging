@@ -80,5 +80,9 @@ class SignUpClientSiteView(TemplateView):
             # return JsonResponse({'access_key':access_key, 'access_secret': access_secret})
             return redirect('/')
 
-       
+class Widget_UrlView(View):
 
+    def dispatch(self, request, *args, **kwargs):
+        access_key = request.GET.get('access_key')
+        # print(access_key)
+        return HttpResponse
