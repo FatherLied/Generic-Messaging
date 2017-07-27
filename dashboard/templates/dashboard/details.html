@@ -27,6 +27,10 @@
 		</form>
 	</div>
 
+	<div>
+		<a href="{% url 'leavethread' pk=thread_id_ref %}">Leave Thread</a>
+	</div>>
+
 	{% verbatim %}
 		<script id="message-template" type="text/template">
 			<div class="message {{classes}}" data-id="{{pk}}">

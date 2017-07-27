@@ -198,10 +198,44 @@ class JoinThreadsView(AuthenticatedView):
 
 class LeaveThreadView(AuthenticatedView):
     http_method_names = [
-        'post'
+        'get'
+        # ,'post'
     ]
 
-    def post(self, request):
-        # Get ID of thread
-        # thread.participants.remove(self.request.user)
-        pass
+    # def post(self, request):
+    #     # Get ID of thread
+    #     # thread.participants.remove(self.request.user)
+    #     pass
+
+    def get(self, request, pk):
+        if not request.user.is_authenticated() or request.user.is_anonymous():
+            return redirect(self.login_url)
+
+        reverse('leavethread', args=(pk,)
+
+        # context = self.get_context_data(pk)
+        this_thread = get_object_or_404(MessageThread, pk=pk)
+        this_thread.participants.remove(self.request.user)
+
+        # return self.render_to_response(context)
+        return redirect('/')
+
+    # def get_context_data(self, pk):
+    #     this_thread = get_object_or_404(MessageThread, pk=pk)
+
+    #     if self.request.user not in this_thread.participants.all():
+    #         raise Http404('Thread does not exist')
+
+    #     context = {
+    #         'threads':  MessageThread.objects.filter(
+    #             participants=self.request.user).order_by('-when_created'),
+    #         'users' : Profile.objects.all(),
+    #         'thread_subject': this_thread.subject,
+    #         'thread_id': pk,
+    #         'allthreads': MessageThread.objects.exclude(participants=self.request.user),
+    #         'messages': Message.objects.filter(
+    #             thread=this_thread).order_by('when_created'),
+    #         'next_url': reverse('details', args=(pk,))
+    #     }
+
+    #     return context
