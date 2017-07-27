@@ -82,6 +82,7 @@ class SignUpClientSiteView(TemplateView):
             return redirect('/')
 
 class Widget_UrlView(TemplateView):
+    template_name = "widget/simpletemplate.html"
     http_method_names = [
         'get'
     ]
@@ -90,8 +91,14 @@ class Widget_UrlView(TemplateView):
 
     def get(self, request, *args, **kwargs):
         access_key = request.GET.get('access_key')
-        # print(access_key)
-        return HttpResponse('')
+        print(access_key)
+        # return HttpResponse('Hallo')
+        context = self.get_context_data()
+        return self.render_to_response(context)
+
+    def get_context_data(self, **kwargs):
+        context = super(Widget_UrlView, self).get_context_data(**kwargs)
+        return context
 
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
