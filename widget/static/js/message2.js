@@ -2,6 +2,8 @@ require([
     'jquery',
     'mustache.min'
 ],function($,Mustache){
+    console.log(this.contentWindow);
+    console.log(this.contentWindow.document.domain);
 	$('#send').attr('disabled','disabled');
     $('#create').attr('disabled','disabled');
     $('#join').attr('disabled','disabled');
@@ -13,7 +15,7 @@ require([
 	    };
 	}
 
-    $('#jointhreads').on('click',function(e){
+    $('#jointhreads').on('submit',function(e){
         e.preventDefault()
 
         var jt_template = "<a class='list-group-item' href='{{thread_url}}' >{{subject}}</a> ";
@@ -22,17 +24,26 @@ require([
 
         $.ajax({
             type:'POST',
-            url: $('#jointhreads').attr('action'),
-
+            url:$('#jointhreads').attr('action'),
             data:{
-                subject: $jt_textfield.text(),
+                subject: $jt_textfield.val(),
                 csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
             },
             success:function(json){
-                $jt_textfield.remove();
-                $jt_threads.append(Mustache.render(jt_template,json));
-                alert('Successfully joined thread');
 
+                if(json.status == 'success'){
+                    $(".listallthreads ul li:contains("+ json.subject+")").remove();
+                    alert('Successfully joined thread')
+                    $jt_textfield.val('');
+                    $jt_threads.append(Mustache.render(jt_template,json));
+                    $('#join').attr('disabled','disabled');
+                    window.location.href = json.thread_url;
+                }
+                else if(json.status == 'error1')
+                    alert(json.context)
+                
+                else
+                    alert(json.context)
             }
         })
     });
@@ -63,7 +74,6 @@ require([
                     $ct_threads.append(Mustache.render(ct_template,json));
                     $('#create').attr('disabled','disabled');
                     window.location.href = json.thread_url;
-                    
                 }                
             }
         })
@@ -96,7 +106,6 @@ require([
                     $('#send').attr('disabled','disabled');
                 }
             });
-            scrollToBottom('messages');
         }
     });
 
@@ -127,11 +136,6 @@ require([
             }
         });
     });
-
-    function scrollToBottom(id){
-       var div = document.getElementById(id);
-       //div.scrollTop = ((div.scrollHeight) - (div.clientHeight));
-    };
     
     // send
     $('#content').keyup(function() {
