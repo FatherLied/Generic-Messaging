@@ -59,9 +59,9 @@ require([
     function longpoll() {
         ajaxCall(function(data) {
             if (data.objects.messages.length === 0){
-                x += 1000;
-                if(x>5000){
-                    x = 5000;
+                x += 100;
+                if(x>3000){
+                    x = 3000;
                 }
             } else{
                 x = 2000;
