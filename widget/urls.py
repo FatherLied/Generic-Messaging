@@ -11,4 +11,3 @@ urlpatterns = [
     url(r'^send_message/$', SendMessageView.as_view(), name='send_message'),
     url(r'^retrieve/$', FetchMessage.as_view(), name='retrieve-message'),
     url(r'^createnewthread/$', AddNewThreadView.as_view(), name='createnewthread'),
-]

@@ -4,14 +4,17 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, logout, login
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.views.generic import View
-from django.views import View
 
-from .models import Message, MessageThread, Archive
+from .models import Archive, Message, MessageThread
+from dashboard.views import AuthenticatedView
 
 import time
 
 
-class AddMessageView(View): 
+class AddMessageView(AuthenticatedView):
+    http_method_names = [
+        'post'
+    ]
     
     def post(self, request):
         content = request.POST.get('content')
@@ -32,7 +35,11 @@ def download_csv(request, archive_obj):
     pass
 
 
-class RetrieveMessage(View):
+class RetrieveMessage(AuthenticatedView):
+    http_method_names = [
+        'get'
+    ]
+
 
     def get(self, request, *args, **kwargs):
         latest_id = request.GET['latestId']
@@ -47,5 +54,3 @@ class RetrieveMessage(View):
                 'sender': message.sender.username, 
                 'sender_pk': message.sender.pk})
         return JsonResponse({'objects': context})
-
-
