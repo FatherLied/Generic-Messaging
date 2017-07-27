@@ -18,12 +18,29 @@
     margin-left: 10px;
 }
 
+.page-header a:hover{
+    color: #8c8c8c;
+    text-decoration: none;
+}
+
 .page-header p{//Welcome, user
     font-family: 'Ubuntu';
     color: white;
     font-size: 24pt;
     float: right;
     margin: 0px auto 0px 80px;
+}
+
+.wellog a, p{
+    font-family: 'Ubuntu';
+    color: white;
+    font-size: 24pt;
+    text-decoration: none;
+}
+
+.wellog a:hover{
+    color: #8c8c8c;
+    text-decoration: none;
 }
 
 .logsignout{//Log out
@@ -53,7 +70,17 @@ body{
 
 h1, h2, h3, h4 {
     font-family: 'Lobster', cursive;
-    font-size: 35pt;
+    font-size: 25pt;
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+.listallthreads h3{
+    font-family: 'Lobster', cursive;
+    font-size: 25pt;
+    text-decoration: underline;
+    margin-bottom: 15px;
+    margin-top: 15px;
 }
 
 .listthreadsusers h3{
@@ -67,8 +94,14 @@ h1, h2, h3, h4 {
 }
 
 .listallthreads ul{
-    font-size: 15pt;
+    font-size: 13pt;
     padding-left: 0px;
+    text-decoration: none;
+}
+
+.listallthreads a:hover{
+    text-decoration: none;
+    cursor: pointer;
 }
 
 .listthreadsusers{
@@ -79,10 +112,13 @@ h1, h2, h3, h4 {
 }
 
 .threadlist{
-    padding: 20px 20px 20px 20px;
+    padding: 0px 20px 0px 20px;
 
     border: 3px #737373;
     border-style: dashed;
+    margin-top: 30px;
+    max-height: 300px;
+    overflow: auto;
 }
 
 .userlist{
@@ -128,7 +164,7 @@ h1, h2, h3, h4 {
     margin-bottom: 70px;
 
     width: 350px;
-    height: 500px;
+    max-height: 300px;
     overflow: auto;
 
     padding: 5px 10px 10px 10px;
