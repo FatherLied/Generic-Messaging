@@ -211,7 +211,7 @@ class LeaveThreadView(AuthenticatedView):
         if not request.user.is_authenticated() or request.user.is_anonymous():
             return redirect(self.login_url)
 
-        reverse('leavethread', args=(pk,)
+        # reverse('leavethread', args=(pk,)
 
         # context = self.get_context_data(pk)
         this_thread = get_object_or_404(MessageThread, pk=pk)
