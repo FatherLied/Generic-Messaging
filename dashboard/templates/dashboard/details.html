@@ -8,7 +8,7 @@
 {% block details %}
 	<input name="thread_id_ref" type="hidden" value="{{thread_id}}" />
 	<input name="user_pk" type="hidden" value="{{request.user.pk}}">
-	<div class="messages">
+	<div class="messages" id = "messages">
 		{% for message in messages %}
         {% include "dashboard/messages_panel/message.html" %}
 		{% endfor %}
@@ -40,6 +40,7 @@
 			        </div>
 			    </div>
 			</div>
+
 		</script>
 	{% endverbatim %}
 {% endblock %}

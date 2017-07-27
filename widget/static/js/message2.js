@@ -2,6 +2,8 @@ require([
     'jquery',
     'mustache.min'
 ],function($,Mustache){
+    console.log(this.contentWindow);
+    console.log(this.contentWindow.document.domain);
 	$('#send').attr('disabled','disabled');
     $('#create').attr('disabled','disabled');
     $('#join').attr('disabled','disabled');

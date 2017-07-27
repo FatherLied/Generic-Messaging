@@ -105,6 +105,7 @@ require([
                     $('#send').attr('disabled','disabled');
                 }
             });
+            scrollToBottom('messages');
         }
     });
 
@@ -135,6 +136,11 @@ require([
             }
         });
     });
+
+    function scrollToBottom(id){
+       var div = document.getElementById(id);
+       //div.scrollTop = ((div.scrollHeight) - (div.clientHeight));
+    };
     
     // send
     $('#content').keyup(function() {

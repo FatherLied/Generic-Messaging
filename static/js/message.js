@@ -1,0 +1,1 @@
+/home/repete53/Git Projects/Generic-Messaging/dashboard/static/js/message.js
