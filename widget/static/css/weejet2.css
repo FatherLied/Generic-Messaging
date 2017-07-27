@@ -1,0 +1,129 @@
+body{
+    background-color: rgba(0, 0, 0, 0.5)
+}
+
+.page-header{
+    background-color: #b30000;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding-left: 20px;
+    padding-top: 10px;
+    width:100%;
+    border: #b30000;
+}
+
+.page-header h1, .page-header h1 a, .page-header h1 a:visited, .page-header h1 a:active {
+    color: #ffffff;
+    font-size: 27pt;
+    font-family: 'Lobster', cursive;
+    text-decoration: none;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.message{
+    margin-bottom: 14px;
+    display: flex;
+    flex-direction: row;
+}
+
+.message .content{
+    float:left;
+    background-color: #9a99c5;
+    border-radius: 4px;
+    padding: 12px;
+    margin-top: 2px;
+}
+
+.message .footer{
+    font-size: 8px;
+    text-align: right;
+}
+
+.user{
+    border-radius: 2px;
+    padding-right:5px;
+    height: 25px;
+    text-decoration: underline;
+    float:left;
+}
+.user-message .content{
+    background-color: #c19e9e;
+}
+
+.chatbox{
+    position: relative;
+    width: 100%;
+    height: 400px;
+}
+
+.innerbox{
+    position: relative;
+    bottom: 0px;
+    width: 100%;
+    height: 400px;
+    overflow-y: scroll;
+}
+
+.messages{
+    background-color: rgba(214, 214, 214, 0.7);
+    padding: 5px 0px 5px 0px;
+    width: 297px;
+    height:310px;
+    overflow: auto;
+}
+
+.loginer{
+    background-color: rgba(214, 214, 214, 0.7);
+    margin-bottom: 20px;
+    padding: 5px 0px 5px 0px;
+    width: 285px;
+    height:300px;
+}
+
+.emaildetail{
+    text-align: center;
+    float: center;
+
+    margin-left: 3px;
+    margin-right: 6px;
+    margin-top: auto;
+    margin-bottom: auto;
+    
+    padding-left: 5px;
+    padding-right: 0px;
+    padding-top: 6px;
+    padding-bottom: 15px;
+
+    border: 2px #000000;
+    border-style: solid;
+    border-radius: 20px;
+}
+
+.emaildetail p{
+    font-family: 'Ubuntu';
+    font-size: 10pt;
+    padding-right: 2px;
+    margin-bottom: 0px;
+    margin-top: 3px;
+}
+
+.emaildetail h1{
+    font-family: 'Lobster', cursive;
+    font-size: 15pt;
+    margin-bottom: 5px;
+    margin-top:5px;
+}
+
+.texty{
+    float: left;
+    bottom:3px; 
+    left:3px;
+}
+
+.sendmess {
+    float: right;
+    position: absolute; 
+    bottom:3px; 
+    right:3px;
+}
