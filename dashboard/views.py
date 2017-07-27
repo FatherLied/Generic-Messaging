@@ -195,3 +195,13 @@ class JoinThreadsView(AuthenticatedView):
         thread_url = reverse('details',args=(thread.pk,))
         
         return JsonResponse({'subject':thread.subject,'thread_url':thread_url,'status':'success'})
+
+class LeaveThreadView(AuthenticatedView):
+    http_method_names = [
+        'post'
+    ]
+
+    def post(self, request):
+        # Get ID of thread
+        # thread.participants.remove(self.request.user)
+        pass
