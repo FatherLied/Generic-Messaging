@@ -1,51 +1,35 @@
 
 from django.views.generic.base import TemplateView
 from django.views import View
-from django.contrib.auth.models import User
 from django.shortcuts import render, reverse, redirect, get_object_or_404
+from django.contrib.auth import login, authenticate, logout
+from dashboard.forms import SignUpForm
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
-import time
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from messenger.models import MessageThread, Message, Profile, Archive, SiteProfile
+from django.contrib.auth.models import User
+from braces.views import LoginRequiredMixin
+from widget.forms import RegisterForm
+import time, os, base64
+from django.core import signing
 
-
-
-class WidgetView(LoginRequiredMixin, TemplateView):
-
+class WidgetView(TemplateView):
     template_name = 'widget/simpletemplate.html'
-
-    login_url = "/login/"
-    redirect_field_name = "Log-in"
-
-    raise_exception = True
-    redirect_unauthenticated_users = True
-
-    http_method_names = [
-        'get'
-    ]
-
-    def get(self, request, *args, **kwargs):
-        if not request.user.is_authenticated() or request.user.is_anonymous():
-            return redirect(self.login_url)
-
-        context = self.get_context_data()
-        return render(request, self.template_name, context)
 
     def get_context_data(self, **kwargs):
         context = super(WidgetView, self).get_context_data(**kwargs)
-
         return context
 
     def dispatch(self, request, *args, **kwargs):
         return super(WidgetView, self).dispatch(self.request, *args, **kwargs)
-
 
 class TestSiteView(TemplateView):
     template_name = 'widget/testsite.html'
 
     def get_context_data(self, **kwargs):
         context = super(TestSiteView, self).get_context_data(**kwargs)
-
         return context
-
 
 class SendMessageView(View): 
     def post(self, request):
@@ -111,7 +95,7 @@ class AddNewThreadView(View):
             return JsonResponse({'thread_id':thread.id, 'objects':context})
         thread = MessageThread.objects.create(subject=subject)
         thread.participants.add(user_anonymous)
-        return JsonResponse({'thread_id':thread.id})
+        return JsonResponse({'thread_id':thread.id,'objects':context})
 
 class ThreadDetailsView(View):
     def dispatch(self, request, pk):
@@ -127,13 +111,13 @@ class ThreadDetailsView(View):
             'next_url': reverse('details', args=(pk,))
         }
         return render(request, 'widget/details.html', context=context)
-=======
-       # return super(WidgetView,self).dispatch(self.request, *args, **kwargs)
-        if request.method.lower() in self.http_method_names:
-            handler = getattr(self, request.method.lower(), self.http_method_not_allowed)
-        else:
-            handler = self.http_method_not_allowed
-        return handler(request, *args, **kwargs)
+
+       # # return super(WidgetView,self).dispatch(self.request, *args, **kwargs)
+       #  if request.method.lower() in self.http_method_names:
+       #      handler = getattr(self, request.method.lower(), self.http_method_not_allowed)
+       #  else:
+       #      handler = self.http_method_not_allowed
+       #  return handler(request, *args, **kwargs)
 
 class SignUpClientSiteView(TemplateView):
     template_name = 'widget/client.html'

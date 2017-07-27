@@ -91,15 +91,7 @@ class Profile(models.Model):
 #     """ Create a profile for every new user """
 #     if created:
 #         Profile.objects.create(owner=instance)
-        return ('[{}]: {}'.format(self.pk, self.subject))
-
-class Profile(models.Model):
-    first_name = models.CharField(max_length=30, blank = False)
-    last_name = models.CharField(max_length=30, blank = False)
-    owner = models.OneToOneField(User, related_name='profile')
-    threads = models.ManyToManyField(MessageThread, 
-        related_name = 'profiles', through = 'ProfileThread')
-
+        # return ('[{}]: {}'.format(self.pk, self.subject))
 
     # site = models.ForeignKey(SiteProfile)
 
@@ -170,11 +162,3 @@ class Message(models.Model):
 #     """ Create a profile for every new user """
 #     if created:
 #         Profile.objects.create(owner=instance)
-
-
-class ProfileThread(models.Model):
-    user = models.ForeignKey(Profile, on_delete=models.CASCADE, 
-        related_name='thread_copies')
-    threads = models.ForeignKey(MessageThread, on_delete=models.CASCADE, 
-        related_name='copies')
-

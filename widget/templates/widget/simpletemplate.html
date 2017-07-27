@@ -1,6 +1,4 @@
-
-{% comment %}
-{% extends "dashboard/base.html" %}
+{% load staticfiles %}
 {% load static %}
 
 <!DOCTYPE html>
@@ -73,18 +71,10 @@
       {% endblock %}
       </div>
 
-
-{% load static%}
-<html>
-<head>
-    <title>This website</title>
-</head>
-<body>
-<h1>Random site</h1>
-<div style="position: absolute; top: 165px; left: 890px;">
-    <iframe src="{% url 'client' %}" width="134%" height="75%" scrolling="no"></iframe>
-</div>
-</body>
+      <script src= "{% static 'js/require.js'%}"></script>
+      <script>
+        require.config({
+          baseUrl: "{% static 'js/' %}",
 
           paths: {
             'jquery': "{% static 'js/jquery' %}"

@@ -30,7 +30,8 @@ ALLOWED_HOSTS = [
     '192.168.1.229',
     '192.168.1.56',
     '127.0.0.1',
-    'localhost'
+    'localhost',
+    'generic-messaging.com'
 ]
 
 
@@ -87,8 +88,14 @@ WSGI_APPLICATION = 'general.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'myproject',
+        'USER': 'myprojectuser',
+        'PASSWORD': 'password',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
@@ -130,6 +137,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
@@ -152,7 +160,7 @@ PROJECT_APP_PATH = os.path.dirname(os.path.abspath(__file__))
 PROJECT_APP = os.path.basename(PROJECT_APP_PATH)
 
 f = os.path.join(PROJECT_APP_PATH, "local_settings.py")
-print (f)
+# print (f)
 if os.path.exists(f):
     import sys
     import imp
@@ -163,4 +171,4 @@ if os.path.exists(f):
     exec(open(f, "rb").read())
 
 
-print(AUTH_PASSWORD_VALIDATORS)
+# print(AUTH_PASSWORD_VALIDATORS)
