@@ -14,7 +14,7 @@ require([
     var userId = $('[name=user_pk]').val();
     var x = 2000;
     var len = 0;
-
+    
     function ajaxCall(callback, errorCallback){
         $.ajax({
             url: '/messenger/retrieve/',

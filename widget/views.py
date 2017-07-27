@@ -1,9 +1,11 @@
 from django.views.generic.base import TemplateView
 from django.views import View
+from django.contrib.auth.models import User
 from django.shortcuts import render, reverse, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
-from widget.models import MessageThread, Message
+from messenger.models import MessageThread, Message, Profile, ProfileThread
 import time
+
 
 class WidgetView(TemplateView):
     template_name = 'widget/simpletemplate.html'
@@ -14,7 +16,8 @@ class WidgetView(TemplateView):
         return context
 
     def dispatch(self, request, *args, **kwargs):
-        return super(WidgetView,self).dispatch(self.request, *args, **kwargs)
+        return super(WidgetView, self).dispatch(self.request, *args, **kwargs)
+
 
 class TestSiteView(TemplateView):
     template_name = 'widget/testsite.html'
@@ -29,14 +32,19 @@ class SendMessageView(View):
     def post(self, request):
         content = request.POST.get('content')
         thread_id = request.POST.get('thread_id')
+        ip_address = request.POST.get('ip')
+        if request.user.is_anonymous():
+            user = User.objects.get(profile__ip_address=ip_address)
+        else:
+            user = request.user
         thread = MessageThread.objects.get(pk=thread_id)
         message = Message.objects.add_message(content=content, 
-            thread=thread, sender=request.user)
+            thread=thread, sender=user)
         date = message.when_created.strftime("%B %d, %Y, %-I:%M %p")
         return JsonResponse({'pk': message.pk,
             'threadId': message.thread_id, 
             'content': message.content, 
-            'when': date, 
+            'when': date,
             'sender': message.sender.username, 
             'sender_pk': message.sender.pk
             })
@@ -52,36 +60,51 @@ class FetchMessage(View):
         for message in messages:
             context['messages'].append({'pk': message.pk, 
                 'content': message.content, 
-                'when': message.when_created.strftime("%B %d, %Y, %-I:%M %p"), 
+                'when': message.when_created.strftime("%B %d, %Y, %-I:%M %p"),
                 'sender': message.sender.username, 
-                'sender_pk': message.sender.pk})
+                'sender_pk': message.sender.pk
+                })
         return JsonResponse({'objects': context})
 
 class AddNewThreadView(View):
     def post(self, request):
         subject = request.POST['subject']
-        exists = MessageThread.objects.filter(subject=subject)
-        if exists:
-            return HttpResponse(' ')
+        ip_address = request.POST['ip']
+        user_anonymous = None
+        if request.user.is_anonymous() and not User.objects.filter(username=ip_address).exists():
+            user_anonymous = User.objects.create_user(username=ip_address, password=ip_address)
+            user_anonymous.profile.ip_address = ip_address
+            user_anonymous.profile.save()
+        threads = MessageThread.objects.filter(subject=subject)
+
+        if threads:
+            thread = threads.first()
+            messages = Message.objects.filter(thread=thread)
+            context = {}
+            context['messages'] = []
+            for message in messages:
+                context['messages'].append({'pk': message.pk, 
+                    'content': message.content, 
+                    'when': message.when_created.strftime("%B %d, %Y, %-I:%M %p"),
+                    'sender': message.sender.username, 
+                    'sender_pk': message.sender.pk
+                    })
+            return JsonResponse({'thread_id':thread.id, 'objects':context})
         thread = MessageThread.objects.create(subject=subject)
-        thread.participants.add('request.user')
-        thread_url = reverse('simpletemplate',args=(thread.pk,))
-        return JsonResponse({'subject':thread.subject,'thread_url':thread_url})
+        thread.participants.add(user_anonymous)
+        return JsonResponse({'thread_id':thread.id})
 
-
-class JoinThreadsView(View):
-    def post(self, request):
-        subject = request.POST['subject']
-        print(subject)
-        thread = MessageThread.objects.get(subject=subject)
-        thread1 = MessageThread.objects.filter(subject=subject).exclude(participants=request.user)
-        if not thread:
-            return JsonResponse({'status':'error1','context':'The thread does not exists.'})
-        if not thread1:
-            return JsonResponse({'status':'error2','context':'You are already part of the thread'})
-        
-        # thread = MessageThread.objects.filter(subject=subject)
-        thread.participants.add(request.user)
-        thread_url = reverse('simpletemplate',args=(thread.pk,))
-        
-        return JsonResponse({'subject':thread.subject,'thread_url':thread_url,'status':'success'})
+class ThreadDetailsView(View):
+    def dispatch(self, request, pk):
+        thisthreads = get_object_or_404(MessageThread, pk=pk)
+        context = {
+            'threads':  MessageThread.objects.filter(
+                participants=request.user).order_by('-when_created'),
+            'users' : Profile.objects.all(),
+            'thread_id':pk,
+            'allthreads':MessageThread.objects.exclude(participants=request.user),
+            'messages': Message.objects.filter(
+                thread=thisthreads).order_by('when_created'),
+            'next_url': reverse('details', args=(pk,))
+        }
+        return render(request, 'widget/details.html', context=context)
