@@ -30,12 +30,9 @@ ALLOWED_HOSTS = [
     '192.168.1.229',
     '192.168.1.56',
     '127.0.0.1',
-<<<<<<< HEAD
     'localhost',
     'generic-messenging.net'
-=======
     '192.168.1.50'  
->>>>>>> 6cd28530e28dc5ea5296b05985f7022a40e2feff
 ]
 
 
