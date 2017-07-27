@@ -60,6 +60,37 @@ class MessageThread(models.Model):
     objects = ThreadManager()
 
     def __str__(self):
+        return ('{}'.format(self.subject))
+
+
+class Message(models.Model):
+    sender = models.ForeignKey(User, related_name='messages')
+    thread = models.ForeignKey(MessageThread, related_name='content')
+    content = models.TextField()
+    when_created = models.DateTimeField(auto_now_add=True)
+
+    objects = MessageManager()
+
+    def __str__(self):
+        return ('{}:{} '.format(self.thread, self.content))
+
+class Profile(models.Model):
+    first_name = models.CharField(max_length=30, blank=False)
+    last_name = models.CharField(max_length=30, blank=False)
+    owner = models.OneToOneField(User, related_name='profile')
+    ip_address = models.CharField(max_length=16, blank=True)
+    threads = models.ManyToManyField(
+        MessageThread, related_name='profiles',
+        through='ProfileThread')
+
+    def __str__(self):
+        return ('{} : {}  '.format(self.owner, self.threads.count()))
+
+# @receiver(post_save, sender=User)
+# def create_profile(sender, created, instance, **kwargs):
+#     """ Create a profile for every new user """
+#     if created:
+#         Profile.objects.create(owner=instance)
         return ('[{}]: {}'.format(self.pk, self.subject))
 
 class Profile(models.Model):
@@ -69,10 +100,19 @@ class Profile(models.Model):
     threads = models.ManyToManyField(MessageThread, 
         related_name = 'profiles', through = 'ProfileThread')
 
+
     # site = models.ForeignKey(SiteProfile)
+
+class ProfileThread(models.Model):
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE, 
+        related_name='thread_copies')
+    threads = models.ForeignKey(MessageThread, on_delete=models.CASCADE, 
+        related_name='copies')
+    is_removed = models.BooleanField()
 
     def __str__(self):
         return ('{} : {}  '.format(self.owner, self.threads.count()))
+
 
 class Archive(models.Model):
     
@@ -137,4 +177,4 @@ class ProfileThread(models.Model):
         related_name='thread_copies')
     threads = models.ForeignKey(MessageThread, on_delete=models.CASCADE, 
         related_name='copies')
-    is_removed = models.BooleanField()
+

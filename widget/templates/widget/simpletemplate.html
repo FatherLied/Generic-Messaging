@@ -3,14 +3,76 @@
 {% extends "dashboard/base.html" %}
 {% load static %}
 
-{% block pageheader%}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>
+        Generic Messaging
+        </title>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/weejet2.css' %}">
+        {% block extra_head %}
+        {% endblock %}
+    </head>
 
-{% endblock%}
+    <body>
+      
+        {% csrf_token %}
+        <input type="hidden" name="t_subject" id="create_subject">
+        <input type="hidden" name="t_subject" id="join_subject">
+      <div class="chatbox">
+      {% block details %}
+      <div class="page-header">
+          <h1><a href = "" >Oh, Chat App!</a></h1>
+        </div>
 
-{% block content %}
-<h1>Client's Website</h1>
-{% endblock %}
-{% endcomment %}
+        <input name="thread_id_ref" type="hidden" value="{{thread_id}}" />
+        <input name="user_pk" type="hidden" value="{{request.user.pk}}">
+        
+        <div class="innerbox">
+        <div class="messages">
+          {% for message in messages %}
+              {% include "dashboard/messages_panel/message.html" %}
+          {% endfor %}
+        </div>
+        </div>
+
+        <div class = "sendmess">
+          <form id="add_message" action="{% url 'send_message' %}">
+            {% csrf_token %}
+              <textarea autofocus name="content" class="texty" id="content" rows="1" placeholder="How may we help you today?"style="height: 26px; width: 212px;margin-right:3px"></textarea>
+              <input name="thread_id" type="hidden" value="{{thread_id}}" />
+              <input name="sender" id="sender" type="hidden" value="You" />
+              <input type="submit" class="mdl-button" id="send" value="Send" />
+              <input type="submit" class="mdl-button" id="dl" value="..." />
+          </form>
+        </div>
+
+        {% verbatim %}
+          <script id="message-template" type="text/template">
+            <div class="message {{classes}}" data-id="{{pk}}">
+                <div class="user">
+                    {{sender}}
+                </div>
+                : <br>
+                <div class="content">
+                    <div class="body">
+                        {{content}}
+                    </div>
+                    <div class="footer">
+                        {{when}}
+                    </div>
+                </div>
+            </div>
+          </script>
+        {% endverbatim %}s
+      {% endblock %}
+      </div>
+
 
 {% load static%}
 <html>
@@ -23,5 +85,16 @@
     <iframe src="{% url 'client' %}" width="134%" height="75%" scrolling="no"></iframe>
 </div>
 </body>
+
+          paths: {
+            'jquery': "{% static 'js/jquery' %}"
+          }
+        });
+      </script>
+      <script src= "{% static 'js/send.js'%}"></script>
+      {% block script %}
+      {% endblock %}
+
+  </body>
 
 </html>
