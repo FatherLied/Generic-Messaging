@@ -40,7 +40,11 @@ class SendMessageView(View):
             user = User.objects.get(profile__ip_address=ip_address)
         else:
             user = request.user
-        thread = MessageThread.objects.get(pk=thread_id)
+        try:
+            thread = MessageThread.objects.get(pk=thread_id)
+        except MessageThread.DoesNotExist:
+            thread = MessageThread.objects.create(subject=ip_address)
+            thread.participants.add(user)
         message = Message.objects.add_message(content=content, 
             thread=thread, sender=user)
         date = message.when_created.strftime("%B %d, %Y, %-I:%M %p")
@@ -57,6 +61,7 @@ class FetchMessage(View):
     def get(self, request, *args, **kwargs):
         latest_id = request.GET['latestId']
         thread_id = request.GET['threadId']
+        print (thread_id)
         messages = Message.objects.filter(id__gt=latest_id, thread__id=thread_id)
         context = {}
         context['messages'] = []
@@ -78,13 +83,14 @@ class AddNewThreadView(View):
             user_anonymous = User.objects.create_user(username=ip_address, password=ip_address)
             user_anonymous.profile.ip_address = ip_address
             user_anonymous.profile.save()
+        else:
+            user_anonymous = User.objects.get(username=ip_address)
         threads = MessageThread.objects.filter(subject=subject)
-
+        context = {}
+        context['messages'] = []
         if threads:
             thread = threads.first()
             messages = Message.objects.filter(thread=thread)
-            context = {}
-            context['messages'] = []
             for message in messages:
                 context['messages'].append({'pk': message.pk, 
                     'content': message.content, 
@@ -94,6 +100,8 @@ class AddNewThreadView(View):
                     })
             return JsonResponse({'thread_id':thread.id, 'objects':context})
         thread = MessageThread.objects.create(subject=subject)
+        print ('*' * 80)
+        print (user_anonymous)
         thread.participants.add(user_anonymous)
         return JsonResponse({'thread_id':thread.id,'objects':context})
 
