@@ -13,7 +13,9 @@ from braces.views import LoginRequiredMixin
 from widget.forms import RegisterForm
 import time, os, base64
 from django.core import signing
-# @method_decorator(login_required, name='dispatch')
+
+# from dashboard.views import AuthenticatedView
+
 class WidgetView(LoginRequiredMixin, TemplateView):
 
     template_name = 'widget/simpletemplate.html'
@@ -79,9 +81,28 @@ class SignUpClientSiteView(TemplateView):
             # return JsonResponse({'access_key':access_key, 'access_secret': access_secret})
             return redirect('/')
 
-class Widget_UrlView(View):
+class Widget_UrlView(TemplateView):
+    http_method_names = [
+        'get'
+    ]
 
-    def dispatch(self, request, *args, **kwargs):
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    def get(self, request, *args, **kwargs):
         access_key = request.GET.get('access_key')
         # print(access_key)
         return HttpResponse('')
+
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    def dispatch(self, request, *args, **kwargs):
+        # return super(WidgetView,self).dispatch(self.request, *args, **kwargs)
+        if request.method.lower() in self.http_method_names:
+            handler = getattr(self, request.method.lower(), self.http_method_not_allowed)
+        else:
+            handler = self.http_method_not_allowed
+        return handler(request, *args, **kwargs)
+
+    def http_method_not_allowed(self, request, *args, **kwargs):
+        super(AuthenticatedView, self).http_method_not_allowed(request)
+        raise Http404

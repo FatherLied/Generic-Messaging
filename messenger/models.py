@@ -7,6 +7,8 @@ from django.dispatch import receiver
 
 from datetime import datetime, timedelta
 
+from django.utils import timezone
+
 import uuid
 
 # from .utils import publish_to_csv
@@ -100,7 +102,7 @@ class Archive(models.Model):
         blank=True,
         null=True
     )
-    expiry = models.DateTimeField(default=datetime.now()+timedelta(minutes=5))
+    expiry = models.DateTimeField(default=timezone.now()+timedelta(minutes=5))
 
     def __str__(self):
         return 'Requestor: {} | Status: {} | Thread: {}'.format(
