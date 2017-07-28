@@ -1,1 +1,0 @@
-/home/repete53/Git Projects/Generic-Messaging/widget/static/js/message2.js
