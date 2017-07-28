@@ -83,17 +83,26 @@ class FetchMessage(View):
     def get(self, request, *args, **kwargs):
         latest_id = request.GET['latestId']
         thread_id = request.GET['threadId']
+        ip_address = request.GET['ip']
         print (thread_id)
         messages = Message.objects.filter(id__gt=latest_id, thread__id=thread_id)
         context = {}
         context['messages'] = []
         for message in messages:
-            context['messages'].append({'pk': message.pk, 
-                'content': message.content, 
-                'when': message.when_created.strftime("%B %d, %Y, %-I:%M %p"),
-                'sender': message.sender.username, 
-                'sender_pk': message.sender.pk
-                })
+            if message.sender.username == ip_address:
+                context['messages'].append({'pk': message.pk, 
+                    'content': message.content, 
+                    'when': message.when_created.strftime("%B %d, %Y, %-I:%M %p"),
+                    'sender': 'You', 
+                    'sender_pk': message.sender.pk
+                    })
+            else:
+                context['messages'].append({'pk': message.pk, 
+                    'content': message.content, 
+                    'when': message.when_created.strftime("%B %d, %Y, %-I:%M %p"),
+                    'sender': message.sender.username, 
+                    'sender_pk': message.sender.pk
+                    })
         return JsonResponse({'objects': context})
 
 class AddNewThreadView(View):
@@ -114,12 +123,20 @@ class AddNewThreadView(View):
             thread = threads.first()
             messages = Message.objects.filter(thread=thread)
             for message in messages:
-                context['messages'].append({'pk': message.pk, 
-                    'content': message.content, 
-                    'when': message.when_created.strftime("%B %d, %Y, %-I:%M %p"),
-                    'sender': message.sender.username, 
-                    'sender_pk': message.sender.pk
-                    })
+                if message.sender.username == ip_address:
+                    context['messages'].append({'pk': message.pk, 
+                        'content': message.content, 
+                        'when': message.when_created.strftime("%B %d, %Y, %-I:%M %p"),
+                        'sender': 'You', 
+                        'sender_pk': message.sender.pk
+                        })
+                else:
+                    context['messages'].append({'pk': message.pk, 
+                        'content': message.content, 
+                        'when': message.when_created.strftime("%B %d, %Y, %-I:%M %p"),
+                        'sender': message.sender.username, 
+                        'sender_pk': message.sender.pk
+                        })
             return JsonResponse({'thread_id':thread.id, 'objects':context})
         thread = MessageThread.objects.create(subject=subject)
         print ('*' * 80)

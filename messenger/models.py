@@ -144,16 +144,6 @@ class Archive(models.Model):
         with open(filename) as local_file:
             self.archive_file.save(filename, local_file)
 
-class Message(models.Model):
-    sender = models.ForeignKey(User, related_name='messages')
-    thread = models.ForeignKey(MessageThread, related_name='content')
-    content = models.TextField()
-    when_created = models.DateTimeField(auto_now_add=True)
-
-    objects = MessageManager()
-
-    def __str__(self):
-        return ('{}:{} '.format(self.thread, self.content))
 
 
 
