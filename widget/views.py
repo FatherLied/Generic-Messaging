@@ -15,6 +15,8 @@ import time, os, base64
 import string
 from django.core import signing
 
+# from dashboard.views import AuthenticatedView
+
 class WidgetView(TemplateView):
     template_name = 'widget/simpletemplate.html'
 
@@ -28,9 +30,8 @@ class WidgetView(TemplateView):
         site = SiteProfile.objects.filter(access_key=access_key)
         # print(site.access_key)
         if not site:
-            return HttpResponse('wrong access key')    
+            return HttpResponse('wrong access key')
         return super(WidgetView, self).dispatch(self.request, *args, **kwargs)
-        
 
 class TestSiteView(TemplateView):
     template_name = 'widget/testsite.html'
@@ -39,7 +40,7 @@ class TestSiteView(TemplateView):
         context = super(TestSiteView, self).get_context_data(**kwargs)
         return context
 
-class SendMessageView(View): 
+class SendMessageView(View):
     def post(self, request):
         content = request.POST.get('content')
         thread_id = request.POST.get('thread_id')
@@ -62,10 +63,10 @@ class SendMessageView(View):
         date = message.when_created.strftime("%B %d, %Y, %-I:%M %p")
         if user != request.user:
             return JsonResponse({'pk': message.pk,
-                'threadId': message.thread_id, 
-                'content': message.content, 
+                'threadId': message.thread_id,
+                'content': message.content,
                 'when': date,
-                'sender': 'You', 
+                'sender': 'You',
                 'sender_pk': message.sender.pk,
                 'hello': ip_address
                 })
@@ -74,7 +75,7 @@ class SendMessageView(View):
             'threadId': message.thread_id,
             'content': message.content,
             'when': date,
-            'sender': message.sender.username, 
+            'sender': message.sender.username,
             'sender_pk': message.sender.pk,
             'hello': ip_address
             })
@@ -90,17 +91,17 @@ class FetchMessage(View):
         context['messages'] = []
         for message in messages:
             if message.sender.username == ip_address:
-                context['messages'].append({'pk': message.pk, 
-                    'content': message.content, 
+                context['messages'].append({'pk': message.pk,
+                    'content': message.content,
                     'when': message.when_created.strftime("%B %d, %Y, %-I:%M %p"),
-                    'sender': 'You', 
+                    'sender': 'You',
                     'sender_pk': message.sender.pk
                     })
             else:
-                context['messages'].append({'pk': message.pk, 
-                    'content': message.content, 
+                context['messages'].append({'pk': message.pk,
+                    'content': message.content,
                     'when': message.when_created.strftime("%B %d, %Y, %-I:%M %p"),
-                    'sender': message.sender.username, 
+                    'sender': message.sender.username,
                     'sender_pk': message.sender.pk
                     })
         return JsonResponse({'objects': context})
@@ -124,17 +125,17 @@ class AddNewThreadView(View):
             messages = Message.objects.filter(thread=thread)
             for message in messages:
                 if message.sender.username == ip_address:
-                    context['messages'].append({'pk': message.pk, 
-                        'content': message.content, 
+                    context['messages'].append({'pk': message.pk,
+                        'content': message.content,
                         'when': message.when_created.strftime("%B %d, %Y, %-I:%M %p"),
-                        'sender': 'You', 
+                        'sender': 'You',
                         'sender_pk': message.sender.pk
                         })
                 else:
-                    context['messages'].append({'pk': message.pk, 
-                            'content': message.content, 
+                    context['messages'].append({'pk': message.pk,
+                            'content': message.content,
                             'when': message.when_created.strftime("%B %d, %Y, %-I:%M %p"),
-                            'sender': message.sender.username, 
+                            'sender': message.sender.username,
                             'sender_pk': message.sender.pk
                             })
 
@@ -158,20 +159,13 @@ class ThreadDetailsView(View):
         }
         return render(request, 'widget/details.html', context=context)
 
-       # # return super(WidgetView,self).dispatch(self.request, *args, **kwargs)
-       #  if request.method.lower() in self.http_method_names:
-       #      handler = getattr(self, request.method.lower(), self.http_method_not_allowed)
-       #  else:
-       #      handler = self.http_method_not_allowed
-       #  return handler(request, *args, **kwargs)
-
 class SignUpClientSiteView(TemplateView):
     template_name = 'widget/client.html'
     form = RegisterForm()
 
     def get_context_data(self, **kwargs):
         context = super(SignUpClientSiteView, self).get_context_data(**kwargs)
-        context['form'] = self.form       
+        context['form'] = self.form 
         return context
 
     def get(self, request, *args, **kwargs):
@@ -180,10 +174,9 @@ class SignUpClientSiteView(TemplateView):
 
     def post(self, request, *args, **kwargs):
         form = RegisterForm(self.request.POST)
-        if form.is_valid():            
+        if form.is_valid():
             company_name = form.cleaned_data['company_name']
             web_domain = form.cleaned_data['web_domain']
-            
             domain = SiteProfile.objects.filter(domain=web_domain)
             if domain:
                 return HttpResponse('That domain is already registered.')
@@ -195,10 +188,31 @@ class SignUpClientSiteView(TemplateView):
             # return JsonResponse({'access_key':access_key, 'access_secret': access_secret})
             return redirect('/')
 
-class Widget_UrlView(View):
+class Widget_UrlView(TemplateView):
+    template_name = "widget/simpletemplate.html"
+    http_method_names = [
+        'get'
+    ]
 
-    def dispatch(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         access_key = request.GET.get('access_key')
         print(access_key)
-        return HttpResponse('')
+        # return HttpResponse('Hallo')
+        context = self.get_context_data()
+        return self.render_to_response(context)
 
+    def get_context_data(self, **kwargs):
+        context = super(Widget_UrlView, self).get_context_data(**kwargs)
+        return context
+
+    def dispatch(self, request, *args, **kwargs):
+        # return super(WidgetView,self).dispatch(self.request, *args, **kwargs)
+        if request.method.lower() in self.http_method_names:
+            handler = getattr(self, request.method.lower(), self.http_method_not_allowed)
+        else:
+            handler = self.http_method_not_allowed
+        return handler(request, *args, **kwargs)
+
+    def http_method_not_allowed(self, request, *args, **kwargs):
+        super(AuthenticatedView, self).http_method_not_allowed(request)
+        raise Http404

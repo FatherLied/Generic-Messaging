@@ -3,9 +3,11 @@
 {% block wellog %}
     <div class="wellog">
       {% if user.is_authenticated %}
-        <p>Welcome, <a href="{% url 'profile' pk=request.user.pk %}">{{request.user}}</a> </p>
+        <div class = "welcome">
+            Welcome, <a href="{% url 'profile' pk=request.user.pk %}" >{{request.user}}</a>
+        </div>
         <a  href="{% url 'logout' %}" class = "logsignout">Logout</a>
-        <a href="{% url 'client_register'%}" class = "logsignout" >Site Registration </a>
+        <a href="{% url 'client_register'%}" class = "sitereghead" >Site Registration </a>
         <br><br><hr>
       {% endif %}
     </div>
@@ -14,8 +16,9 @@
 {% block content %}
   <div class = "row">
         <div class="listthreadsusers">
-            <h3>Joined Threads</h3>
+            
             <div class="threadlist">
+                <h3>Joined Threads</h3>
                 <div class="list-group" id="threads_joined">
                     {% for thread in threads %}
                         <a href="{% url 'details' pk=thread.pk %}" class="list-group-item" id="joined_thread">{{thread.subject}}</a>
@@ -35,23 +38,13 @@
                         <br><br>
                         <input type="submit" class="mdl-button" id="create" value="Create" />
                     </form>
-                    {% comment %}
-                    <form id="jointhreads" action="{% url 'jointhreads'%}">
-                        {% csrf_token %}
-                        <h3>Or Join One!</h3>
-                        Thread: <input type="text" name="t_subject" id="join_subject">
-                        <br><br>
-                        <input type="submit" class="mdl-button" id="join" value="Join" />
-                    </form>
-                    {% endcomment %}
                 </div>
             {% endblock%}
         </div>
 
         <div class="listallthreads">
-            <h3>Public Threads</h3><br>
+            <h3>Public Threads</h3>
             <ul>
-                
                     <form id="jointhreads" action="{% url 'jointhreads'%}">
                     {% csrf_token %}
                     {% for thread in allthreads %}

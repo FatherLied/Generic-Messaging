@@ -1,31 +1,83 @@
 .page-header {
     background-color: #b30000;
-    margin-top: 0;
-    padding: 20px 20px 20px 40px;
+    padding: 0px 20px 15px 20px;
     border: 4px #b30000;
     border-style: dashed none none;
+    margin-top: 0;
+    margin-bottom: 0px;
 }
 
-.page-header h1, .page-header h1 a, .page-header h1 a:visited, .page-header h1 a:active {
+.page-header h1 a{
     color: #ffffff;
-    font-size: 36pt;
+    font-size: 41pt;
+    text-decoration: none;
+    width:350px;
+    margin-top: 10px;
+    margin-right: 0px;
+    margin-bottom: auto;
+    margin-left: 10px;
+}
+
+.page-header a:hover{
+    color: #8c8c8c;
     text-decoration: none;
 }
 
-.page-header p{
+.page-header p{//Welcome, user
     font-family: 'Ubuntu';
     color: white;
-    font-size: 27pt;
+    font-size: 24pt;
     float: right;
-    margin-bottom: 0px;
+    margin: 0px auto 0px 80px;
+}
+
+.welcome{
+    font-family: 'Ubuntu';
+    color: white;
+    font-size: 24pt;
+    float:left;
+    margin: 0px auto 0px 20px;
+}
+
+.welcome a, p{
+    font-family: 'Ubuntu';
+    color: white;
+    font-size: 24pt;
+    text-decoration: none;
+}
+.welcome a:hover{
+    color: #8c8c8c;
+    text-decoration: none;
+}
+
+
+.sitereghead{
+    font-family: 'Ubuntu';
+    color: white;
+    font-size: 24pt;
+    float:right;
+    margin: 0px 310px 0px auto;
+}
+
+.logsignout{//Log out
+    font-family: 'Ubuntu';
+    color: white;
+    font-size: 24pt;
+    float:right;
+    margin: 0px 60px 0px 0px;
+}
+
+a.logsignout:hover{//Log out darken
+   color: #8c8c8c;
+   text-decoration: none;
+}
+
+.page-header hr{
+    margin: 10px 0px 5px 0px;
 }
 
 .container{
     width:350px;
-}
-
-.logsignout{
-    font-size: 20pt;
 }
 
 body{
@@ -34,7 +86,17 @@ body{
 
 h1, h2, h3, h4 {
     font-family: 'Lobster', cursive;
-    font-size: 35pt;
+    font-size: 25pt;
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+.listallthreads h3{
+    font-family: 'Lobster', cursive;
+    font-size: 25pt;
+    text-decoration: underline;
+    margin-bottom: 15px;
+    margin-top: 15px;
 }
 
 .listthreadsusers h3{
@@ -47,27 +109,37 @@ h1, h2, h3, h4 {
     text-decoration: underline;
 }
 
-.listallthreads h3{
-    font-size: 25pt;
-    text-decoration: underline;
+.listallthreads ul{
+    font-size: 13pt;
+    padding-left: 0px;
+    text-decoration: none;
 }
 
-.listallthreads ul{
-    font-size: 15pt;
+.listallthreads{
+    max-width: 30%;
+}
+
+.listallthreads a:hover{
+    text-decoration: none;
+    cursor: pointer;
 }
 
 .listthreadsusers{
     float: left;
-    margin-left: 120px;
-    margin-right: 70px;
+    margin-left: 100px;
+    margin-right: 50px;
     text-align: center;
+    max-width: 30%;
 }
 
 .threadlist{
-    padding: 20px 20px 20px 20px;
+    padding: 0px 20px 0px 20px;
 
     border: 3px #737373;
     border-style: dashed;
+    margin-top: 30px;
+    max-height: 300px;
+    overflow: auto;
 }
 
 .userlist{
@@ -77,11 +149,11 @@ h1, h2, h3, h4 {
     border-style: dashed;
 }
 
-
 .sendmess{
     padding-top: 10px;
     padding-left: 5px;
     padding-right: 5px;
+    margin-bottom: 15px;
 }
 
 textarea {
@@ -90,7 +162,11 @@ textarea {
 
 .createjointhread{
     text-align: center;
-    margin-right: 60px;
+    float: left;
+
+    margin-top: 30px;
+    margin-left: 70px;
+    margin-right: 70px;
     margin-bottom:0px;
     
     display: inline-block;
@@ -98,23 +174,58 @@ textarea {
 
     border: 3px #737373;
     border-style: dashed;
+    max-width: 30%;
 }
 
 .createjoinblock{
     padding: 5px 20px 10px 20px;
 }
 
-.listallthreads {
+.threadname{
+    width: 100%;
+    margin-right: 0px;
+}
+
+.threadname h1{
+    float:left;
+    width:82%;
+    padding-top:4px;
+    padding-bottom:7px;
+    padding-right: 7px;
+    padding-left: 7px;
+    margin-top:13px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 5px;
+
+    color: #f2f2f2;
+    background-color: #999999;
+    border-radius: 15px 15px 15px 15px;
+}
+
+.threadname a{
+    padding: 5px;
+    margin-top: 12px;
+    margin-right: 15px;
+    color: #666666;
+    display: inline-block;
+    font-size:25px;
+    text-decoration: none;
+    float:right;
+}
+
+.listallthreads{
     text-align: center;
     float: left;
 
     margin-top: 30px;
-    margin-right: 40px;
-    margin-left: 40px;
+    margin-right: 20px;
+    margin-left: 30px;
     margin-bottom: 70px;
 
     width: 350px;
-    height: 500px;
+    max-height: 300px;
+    overflow: auto;
 
     padding: 5px 10px 10px 10px;
 
@@ -151,9 +262,10 @@ textarea {
     height:780px;}
 
 .innersignup p{
-    font-size: 18px;
-    color: black;
+    font-size: 24px;
+    color: rgb(51,51,51);
     margin-bottom: 10px;
+    font-family: 'Ubuntu';
 }
 
 .innersignup h2{
@@ -170,6 +282,66 @@ textarea {
     display: inline-block;
     vertical-align: middle;
     line-height: normal;
+}
+
+.sitereg h2{
+    text-decoration: underline;
+    text-align:center;
+    margin:auto;
+    display:block;
+    margin-bottom: 30px;
+}
+
+.sitelist{
+    display: block;
+    margin:auto;
+    vertical-align: middle;
+    border: 3px #737373;
+    border-style: dashed;
+    max-width: 50%;
+    margin-bottom: 50px;
+}
+
+.sitelist p{
+    text-align: center;
+    font-family:'Lobster';
+    width:auto;
+    padding-left:20px;
+    padding-right: 20px;
+    padding-top: 10px;
+    padding-bottom: 0px;
+    color: #1a1a1a;
+    margin-left:auto;
+    margin-right:auto;
+    margin-top: 5px;
+}
+
+.sitelist hr{
+    display:block;
+    margin:auto;
+
+    width:70%;
+    border-color:#000000;
+    background-color: #000000;
+    size:2px;
+}
+
+.sitelist h1{
+    font-family:'Ubuntu';
+    text-align: center;
+    font-size:12pt;
+    width:auto;
+    color:#ffffff;
+    background-color: #1a1a1a;
+    border-radius: 5px 5px 5px 5px;
+    padding-top:10px;
+    padding-bottom:10px;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-left: 30px;
+    margin-right: 30px;
+    margin-bottom: 25px;
+    overflow-y: auto;
 }
 
 .loginform{
@@ -207,40 +379,7 @@ textarea {
     color: #000000;
 }
 
-.messages {
-    background-color: #d6d6d6;
-    padding: 20px;
-    height:400px;
-    width: 350px;
-    overflow: auto;
-}
-
-.message {
-    margin-bottom: 14px;
-    display: flex;
-    flex-direction: row;
-}
-
-.message .content {
-    float:left;
-    background-color: #9a99c5;
-    border-radius: 4px;
-    padding: 12px;
-    margin-top: 2px;
-}
-
-.message .footer {
-    font-size: 8px;
-    text-align: right;
-}
-
-.user{
-    border-radius: 2px;
-    padding-right:5px;
-    height: 25px;
-    text-decoration: underline;
-    float:left;
-}
-.user-message .content {
-    background-color: #c19e9e;
+a.list-group-item:hover{
+    font-weight: bold;
+    padding: 10px;
 }

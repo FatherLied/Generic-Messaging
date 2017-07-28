@@ -8,7 +8,7 @@ body{
     margin-bottom: 0px;
     padding-left: 20px;
     padding-top: 10px;
-    width:297px;
+    width:100%;
     border: #b30000;
 }
 
@@ -61,7 +61,8 @@ body{
     position: relative;
     bottom: 0px;
     width: 100%;
-    height:100%;
+    height: 400px;
+    overflow-y: scroll;
 }
 
 .messages{
@@ -70,6 +71,48 @@ body{
     width: 297px;
     height:310px;
     overflow: auto;
+}
+
+.loginer{
+    background-color: rgba(214, 214, 214, 0.7);
+    margin-bottom: 20px;
+    padding: 5px 0px 5px 0px;
+    width: 285px;
+    height:300px;
+}
+
+.emaildetail{
+    text-align: center;
+    float: center;
+
+    margin-left: 3px;
+    margin-right: 6px;
+    margin-top: auto;
+    margin-bottom: auto;
+    
+    padding-left: 5px;
+    padding-right: 0px;
+    padding-top: 6px;
+    padding-bottom: 15px;
+
+    border: 2px #000000;
+    border-style: solid;
+    border-radius: 20px;
+}
+
+.emaildetail p{
+    font-family: 'Ubuntu';
+    font-size: 10pt;
+    padding-right: 2px;
+    margin-bottom: 0px;
+    margin-top: 3px;
+}
+
+.emaildetail h1{
+    font-family: 'Lobster', cursive;
+    font-size: 15pt;
+    margin-bottom: 5px;
+    margin-top:5px;
 }
 
 .texty{
