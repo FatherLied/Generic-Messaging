@@ -22,7 +22,13 @@ class WidgetView(TemplateView):
         return context
 
     def dispatch(self, request, *args, **kwargs):
+        access_key = request.GET.get('access_key')
+        site = SiteProfile.objects.get(access_key=access_key)
+        print(site.access_key)
+        if not site:
+            return HttpResponse('')    
         return super(WidgetView, self).dispatch(self.request, *args, **kwargs)
+        
 
 class TestSiteView(TemplateView):
     template_name = 'widget/testsite.html'
@@ -153,6 +159,6 @@ class Widget_UrlView(View):
 
     def dispatch(self, request, *args, **kwargs):
         access_key = request.GET.get('access_key')
-        # print(access_key)
+        print(access_key)
         return HttpResponse('')
 
