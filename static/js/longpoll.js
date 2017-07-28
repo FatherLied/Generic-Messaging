@@ -6,30 +6,24 @@ require([
     if(!latestId){
         latestId = 0;
     }
-    var threadId = $('[name=thread_id]').val();
+    var threadId = $('[name=thread_id_ref]').val();
+    if(!threadId){
+        threadId = 0;
+    }
+    console.log(threadId);
     var userId = $('[name=user_pk]').val();
     var x = 2000;
     var len = 0;
-    $(document).ready(function(){
-        setTimeout(scrollBottom, 700);
-    })
 
-    function scrollBottom(){
-        var scroll = $('.messages')[0].scrollHeight - $('.messages').height();
-        $('.messages').scrollTop(scroll);
-    }
-    function ajaxCall(z, callback, errorCallback){
-        threadId = $('[name=thread_id').val();
+    function ajaxCall(callback, errorCallback){
         $.ajax({
-            url: '/widget/retrieve/',
+            url: '/messenger/retrieve/',
             type: 'GET',
             data: {
                 latestId: latestId,
                 threadId: threadId,
-                ip: z
             },
             success : function(data){
-
                 len = data.objects.messages.length;
                 if(len === 0){
                     console.log("no message");
@@ -46,7 +40,6 @@ require([
                             }
                             var render = Mustache.render(template.html(), data.objects.messages[x]);
                             $('.messages').append(render);
-                            scrollBottom();
                         }
                     }
                 }
@@ -64,25 +57,17 @@ require([
     }
 
     function longpoll() {
-        function test(callback){
-            $.getJSON('http://jsonip.com/?callback=?', callback);
-
-        }
-        test(function(r) {
-            userIp = r.ip;
-            ajaxCall(r.ip, function(data) {
+        ajaxCall(function(data) {
             if (data.objects.messages.length === 0){
-                x += 100;
-                if(x>3000){
-                    x = 3000;
+                x += 1000;
+                if(x>5000){
+                    x = 5000;
                 }
             } else{
                 x = 2000;
             }
             setTimeout(longpoll, x);
         });
-        })
-        
     }
 
     function fetch() {

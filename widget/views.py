@@ -23,7 +23,14 @@ class WidgetView(TemplateView):
         return context
 
     def dispatch(self, request, *args, **kwargs):
+        access_key = request.GET.get('access_key')
+        print(access_key)
+        site = SiteProfile.objects.filter(access_key=access_key)
+        # print(site.access_key)
+        if not site:
+            return HttpResponse('wrong access key')    
         return super(WidgetView, self).dispatch(self.request, *args, **kwargs)
+        
 
 class TestSiteView(TemplateView):
     template_name = 'widget/testsite.html'
@@ -37,16 +44,20 @@ class SendMessageView(View):
         content = request.POST.get('content')
         thread_id = request.POST.get('thread_id')
         ip_address = request.POST.get('ip')
+
         if request.user.is_anonymous():
             user = User.objects.get(profile__ip_address=ip_address)
+
         else:
             user = request.user
+
         try:
             thread = MessageThread.objects.get(pk=thread_id)
         except MessageThread.DoesNotExist:
             thread = MessageThread.objects.create(subject=ip_address)
             thread.participants.add(user)
-        message = Message.objects.add_message(content=content, 
+
+        message = Message.objects.add_message(content=content,
             thread=thread, sender=user)
         date = message.when_created.strftime("%B %d, %Y, %-I:%M %p")
         if user != request.user:
@@ -58,9 +69,10 @@ class SendMessageView(View):
                 'sender_pk': message.sender.pk,
                 'hello': ip_address
                 })
+
         return JsonResponse({'pk': message.pk,
-            'threadId': message.thread_id, 
-            'content': message.content, 
+            'threadId': message.thread_id,
+            'content': message.content,
             'when': date,
             'sender': message.sender.username, 
             'sender_pk': message.sender.pk,
@@ -125,6 +137,7 @@ class AddNewThreadView(View):
                             'sender': message.sender.username, 
                             'sender_pk': message.sender.pk
                             })
+
             return JsonResponse({'thread_id':thread.id, 'objects':context})
         thread = MessageThread.objects.create(subject=subject)
         thread.participants.add(user_anonymous)
@@ -186,6 +199,6 @@ class Widget_UrlView(View):
 
     def dispatch(self, request, *args, **kwargs):
         access_key = request.GET.get('access_key')
-        # print(access_key)
+        print(access_key)
         return HttpResponse('')
 
