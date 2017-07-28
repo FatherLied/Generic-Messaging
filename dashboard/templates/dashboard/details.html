@@ -6,12 +6,19 @@
 {% endblock %}
 
 {% block details %}
-	<h5>{{thread_subject}}</h5>
 
+	<div class = "threadname">
+		<h1>{{thread_subject}}</h1>
+		<a href="{% url 'leavethread' pk=thread_id %}">X</a>
+		{% comment %}
+			Max Thread Name Character Length: 23
+		{% endcomment %}
+	</div>
+	
 	<input name="thread_id_ref" type="hidden" value="{{thread_id}}" />
 	<input name="user_pk" type="hidden" value="{{request.user.pk}}">
 
-	<div class="messages">
+	<div class="messages" id = "messages">
 		{% for message in messages %}
         {% include "dashboard/messages_panel/message.html" %}
 		{% endfor %}
@@ -26,6 +33,8 @@
 			<input type="submit" class="mdl-button" id="send" value="Send" />
 		</form>
 	</div>
+
+	
 
 	{% verbatim %}
 		<script id="message-template" type="text/template">
@@ -43,6 +52,7 @@
 			        </div>
 			    </div>
 			</div>
+
 		</script>
 	{% endverbatim %}
 {% endblock %}

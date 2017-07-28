@@ -18,72 +18,91 @@
     </head>
 
     <body>
-      
-        {% csrf_token %}
-        <input type="hidden" name="t_subject" id="create_subject">
-        <input type="hidden" name="t_subject" id="join_subject">
-      <div class="chatbox">
-      {% block details %}
-      <div class="page-header">
-          <h1><a href = "" >Oh, Chat App!</a></h1>
-        </div>
+      <div class="chatbox">
+        <div class="page-header">
+          <h1><a href = "" >Oh, Chat App!</a></h1>
+        </div>
 
-        <input name="thread_id_ref" type="hidden" value="{{thread_id}}" />
-        <input name="user_pk" type="hidden" value="{{request.user.pk}}">
-        
-        <div class="innerbox">
-        <div class="messages">
-          {% for message in messages %}
-              {% include "dashboard/messages_panel/message.html" %}
-          {% endfor %}
-        </div>
-        </div>
+        <input name="thread_id_ref" type="hidden" value="{{thread_id}}" />
+        <input name="user_pk" type="hidden" value="{{request.user.pk}}">
+        
+        <div class="innerbox">
 
-        <div class = "sendmess">
-          <form id="add_message" action="{% url 'send_message' %}">
-            {% csrf_token %}
-              <textarea autofocus name="content" class="texty" id="content" rows="1" placeholder="How may we help you today?"style="height: 26px; width: 212px;margin-right:3px"></textarea>
-              <input name="thread_id" type="hidden" value="{{thread_id}}" />
-              <input name="sender" id="sender" type="hidden" value="You" />
-              <input type="submit" class="mdl-button" id="send" value="Send" />
-              <input type="submit" class="mdl-button" id="dl" value="..." />
-          </form>
-        </div>
+          <div class="messages">
+            {% for message in messages %}
+                {% include "dashboard/messages_panel/message.html" %}
+            {% endfor %}
+          </div>
 
-        {% verbatim %}
-          <script id="message-template" type="text/template">
-              <div class="message {{classes}}" data-id="{{pk}}">
-                  <div class="user">
-                    {{sender}}
-                  </div>
-                  : <br>
-                  <div class="content">
-                    <div class="body">
-                        {{content}}
-                    </div>
-                    <div class="footer">
-                        {{when}}
-                    </div>
-                  </div>
-              </div>
-          </script>
-        {% endverbatim %}
-      {% endblock %}
-      </div>
+          <div class="loginer" id = "loginer">
+            <div class = "emaildetail">
+              <p>To obtain a copy of this conversation, please enter the following details:</p>
+              <h1>Username</h1>
+              <textarea autofocus name="content" id="content" rows="1" style="width:212px;margin-right:3px"></textarea>
+              <h1>E-mail Address</h1>
+              <textarea autofocus name="content" id="content" rows="1" style="width:212px;margin-right:3px"></textarea>
+              <input type="submit" class="mdl-button" id="send" style="margin-top: 5px;" value="Send" />
+            </div>
+          </div>
 
-      <script src= "{% static 'js/require.js'%}"></script>
-      <script>
-        require.config({
-          baseUrl: "{% static 'js/' %}",
+        </div>
 
-          paths: {
-            'jquery': "{% static 'js/jquery' %}"
-          }
-        });
-      </script>
-      <script src= "{% static 'js/send.js'%}"></script>
-      <script src= "{% static 'js/longpoll_widget.js'%}"></script>
+        <div class = "sendmess">
+          <form id="send_message" action="{% url 'add_message' %}?next={{next_url}}">
+            {% csrf_token %}
+              <textarea autofocus name="content" class="texty" id="content" rows="1" placeholder="How may we help you today?"style="height: 26px; width: 212px;margin-right:3px"></textarea>
+              <input name="thread_id" type="hidden" value="{{thread_id}}" />
+              <input name="sender" id="sender" type="hidden" value="{{request.user}}" />
+              <input type="submit" class="mdl-button" id="send" value="Send" />
+              <input type="submit" class="mdl-button" onclick="hide()" id="dl" value="..." />
+          </form>
+        </div
 
-  </body>
+        {% verbatim %}
+          <script id="message-template" type="text/template">
+            <div class="message {{classes}}" data-id="{{pk}}">
+                <div class="user">
+                    {{sender}}
+                </div>
+                : <br>
+                <div class="content">
+                    <div class="body">
+                        {{content}}
+                    </div>
+                    <div class="footer">
+                        {{when}}
+                    </div>
+                </div>
+            </div>
+          </script>
+        {% endverbatim %}
 
+      </div>
+
+      <script src= "{% static 'js/require.js'%}"></script>
+      <script>
+        require.config({
+          baseUrl: "{% static 'js/' %}",
+
+          paths: {
+            'jquery': "{% static 'js/jquery' %}"
+          }
+        });
+      </script>
+      <script>
+        function hide() {
+            var x = document.getElementById('loginer');
+            if (x.style.display === 'none') {
+                x.style.display = 'block';
+            } else {
+                x.style.display = 'none';
+            }
+        }
+        console.log(window.frameElement);
+      </script>
+      <script src= "{% static 'js/message2.js'%}"></script>
+      {% block script %}
+      {% endblock %}
+
+  </body>
 </html>
