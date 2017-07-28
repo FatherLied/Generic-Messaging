@@ -54,35 +54,35 @@ require([
             }
         });
     }
-    // $('#add_message').on('keyup', function(e) {
-    //     if (e.which == 13 && ! e.shiftKey) {
-    //         e.preventDefault();
+    $('#add_message').on('keyup', function(e) {
+        if (e.which == 13 && ! e.shiftKey) {
+            e.preventDefault();
       
-    //         var $sm_textarea = $('#add_message');
-    //         var $sm_content = $('#content');
-    //         var $messages = $('.messages');
+            var $sm_textarea = $('#add_message');
+            var $sm_content = $('#content');
+            var $messages = $('.messages');
 
-    //         $.ajax({
-    //             url : $sm_textarea.attr('action'),
-    //             type : 'POST',
-    //             data : $sm_textarea.serialize(),
+            $.ajax({
+                url : $sm_textarea.attr('action'),
+                type : 'POST',
+                data : $sm_textarea.serialize(),
 
-    //             success : function(json){
-    //                 $sm_content.val('');
-    //                 console.log(userId);
-    //                 console.log(json);
-    //                 var template = $('#message-template');
-    //                 if(userId == json.sender_pk){
-    //                     json.classes = "user-message";
-    //                 }
-    //                 var render = Mustache.render(template.html(), json);
-    //                 console.log(render);
-    //                 $('.messages').append(render);
-    //                 $('#send').attr('disabled','disabled');
-    //             }
-    //         });
-    //     }
-    // });
+                success : function(json){
+                    $sm_content.val('');
+                    console.log(userId);
+                    console.log(json);
+                    var template = $('#message-template');
+                    if(userId == json.sender_pk){
+                        json.classes = "user-message";
+                    }
+                    var render = Mustache.render(template.html(), json);
+                    console.log(render);
+                    $('.messages').append(render);
+                    $('#send').attr('disabled','disabled');
+                }
+            });
+        }
+    });
 
     $('#add_message').on('submit', function(e){
         e.preventDefault();
@@ -90,7 +90,7 @@ require([
         var $sm_textarea = $('#add_message');
         var $sm_content = $('#content');
         var $messages = $('.messages');
-        console.log($sm_textarea.serialize());
+        // console.log($sm_textarea.serialize());
 
         $.ajax({
             url : $sm_textarea.attr('action'),
@@ -105,6 +105,10 @@ require([
                 console.log(render);
                 $('.messages').append(render);
                 $('#send').attr('disabled','disabled');
+                if(json.threadId != threadId){
+                    threadId = json.threadId;
+                    $('[name=thread_id]').attr('value', threadId);
+                }
             }
         });
     });
