@@ -67,7 +67,7 @@ require([
                 }
 
                 else{
-                    alert('Successfully created thread');
+                    // alert('Successfully created thread');
                     $ct_textfield.val('');
                     $ct_threads.append(Mustache.render(ct_template,json));
                     $('#create').attr('disabled','disabled');
