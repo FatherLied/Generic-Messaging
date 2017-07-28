@@ -11,7 +11,15 @@ require([
     var x = 2000;
     var len = 0;
     
-    function ajaxCall(callback, errorCallback){
+    $(document).ready(function(){
+        setTimeout(scrollBottom, 700);
+    })
+
+    function scrollBottom(){
+        var scroll = $('.messages')[0].scrollHeight - $('.messages').height();
+        $('.messages').scrollTop(scroll);
+    }
+    function ajaxCall(z, callback, errorCallback){
         threadId = $('[name=thread_id').val();
         $.ajax({
             url: '/widget/retrieve/',
@@ -19,6 +27,7 @@ require([
             data: {
                 latestId: latestId,
                 threadId: threadId,
+                ip: z
             },
             success : function(data){
 
@@ -38,6 +47,7 @@ require([
                             }
                             var render = Mustache.render(template.html(), data.objects.messages[x]);
                             $('.messages').append(render);
+                            scrollBottom();
                         }
                     }
                 }
@@ -55,7 +65,12 @@ require([
     }
 
     function longpoll() {
-        ajaxCall(function(data) {
+        function test(callback){
+            $.getJSON('http://jsonip.com/?callback=?', callback);
+        }
+        test(function(r) {
+            userIp = r.ip;
+            ajaxCall(r.ip, function(data) {
             if (data.objects.messages.length === 0){
                 x += 100;
                 if(x>3000){
@@ -66,6 +81,8 @@ require([
             }
             setTimeout(longpoll, x);
         });
+        })
+        
     }
 
     function fetch() {

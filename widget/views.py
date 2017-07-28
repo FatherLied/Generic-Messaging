@@ -72,16 +72,25 @@ class FetchMessage(View):
     def get(self, request, *args, **kwargs):
         latest_id = request.GET['latestId']
         thread_id = request.GET['threadId']
+        ip_address = request.GET['ip']
         messages = Message.objects.filter(id__gt=latest_id, thread__id=thread_id)
         context = {}
         context['messages'] = []
         for message in messages:
-            context['messages'].append({'pk': message.pk, 
-                'content': message.content, 
-                'when': message.when_created.strftime("%B %d, %Y, %-I:%M %p"),
-                'sender': message.sender.username, 
-                'sender_pk': message.sender.pk
-                })
+            if message.sender.username == ip_address:
+                context['messages'].append({'pk': message.pk, 
+                    'content': message.content, 
+                    'when': message.when_created.strftime("%B %d, %Y, %-I:%M %p"),
+                    'sender': 'You', 
+                    'sender_pk': message.sender.pk
+                    })
+            else:
+                context['messages'].append({'pk': message.pk, 
+                    'content': message.content, 
+                    'when': message.when_created.strftime("%B %d, %Y, %-I:%M %p"),
+                    'sender': message.sender.username, 
+                    'sender_pk': message.sender.pk
+                    })
         return JsonResponse({'objects': context})
 
 class AddNewThreadView(View):
@@ -89,12 +98,6 @@ class AddNewThreadView(View):
         subject = request.POST['subject']
         ip_address = request.POST['ip']
         user_anonymous = None
-        userip = str(ip_address)
-        user_ip = userip.replace('.', '')
-        # if request.user.is_anonymous() and not User.objects.filter(username='You('+user_ip+')').exists():
-        #     user_anonymous = User.objects.create_user(username='You('+user_ip+')', password=ip_address)
-        #     user_anonymous.profile.ip_address = ip_address
-        #     user_anonymous.profile.save()
         if request.user.is_anonymous() and not User.objects.filter(username=ip_address).exists():
             user_anonymous = User.objects.create_user(username=ip_address, password=ip_address)
             user_anonymous.profile.ip_address = ip_address
@@ -108,16 +111,22 @@ class AddNewThreadView(View):
             thread = threads.first()
             messages = Message.objects.filter(thread=thread)
             for message in messages:
-                context['messages'].append({'pk': message.pk, 
-                    'content': message.content, 
-                    'when': message.when_created.strftime("%B %d, %Y, %-I:%M %p"),
-                    'sender': message.sender.username, 
-                    'sender_pk': message.sender.pk
-                    })
+                if message.sender.username == ip_address:
+                    context['messages'].append({'pk': message.pk, 
+                        'content': message.content, 
+                        'when': message.when_created.strftime("%B %d, %Y, %-I:%M %p"),
+                        'sender': 'You', 
+                        'sender_pk': message.sender.pk
+                        })
+                else:
+                    context['messages'].append({'pk': message.pk, 
+                            'content': message.content, 
+                            'when': message.when_created.strftime("%B %d, %Y, %-I:%M %p"),
+                            'sender': message.sender.username, 
+                            'sender_pk': message.sender.pk
+                            })
             return JsonResponse({'thread_id':thread.id, 'objects':context})
         thread = MessageThread.objects.create(subject=subject)
-        print ('*' * 80)
-        print (user_anonymous)
         thread.participants.add(user_anonymous)
         return JsonResponse({'thread_id':thread.id,'objects':context})
 

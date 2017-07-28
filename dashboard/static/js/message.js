@@ -13,6 +13,15 @@ require([
 	    };
 	}
 
+    $(document).ready(function(){
+        setTimeout(scrollBottom, 700);
+    });
+
+    function scrollBottom(){
+        var scroll = $('.messages')[0].scrollHeight - $('.messages').height();
+        $('.messages').scrollTop(scroll);
+    }
+    
     $('#jointhreads').on('click',function(e){
         e.preventDefault()
 
