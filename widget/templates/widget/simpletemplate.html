@@ -52,22 +52,22 @@
 
         {% verbatim %}
           <script id="message-template" type="text/template">
-            <div class="message {{classes}}" data-id="{{pk}}">
-                <div class="user">
+              <div class="message {{classes}}" data-id="{{pk}}">
+                  <div class="user">
                     {{sender}}
-                </div>
-                : <br>
-                <div class="content">
+                  </div>
+                  : <br>
+                  <div class="content">
                     <div class="body">
                         {{content}}
                     </div>
                     <div class="footer">
                         {{when}}
                     </div>
-                </div>
-            </div>
+                  </div>
+              </div>
           </script>
-        {% endverbatim %}s
+        {% endverbatim %}
       {% endblock %}
       </div>
 

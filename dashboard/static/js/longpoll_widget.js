@@ -10,7 +10,14 @@ require([
     var userId = $('[name=user_pk]').val();
     var x = 2000;
     var len = 0;
-    
+    $(document).ready(function(){
+        setTimeout(scrollBottom, 700);
+    })
+
+    function scrollBottom(){
+        var scroll = $('.messages')[0].scrollHeight - $('.messages').height();
+        $('.messages').scrollTop(scroll);
+    }
     function ajaxCall(z, callback, errorCallback){
         threadId = $('[name=thread_id').val();
         $.ajax({
@@ -39,6 +46,7 @@ require([
                             }
                             var render = Mustache.render(template.html(), data.objects.messages[x]);
                             $('.messages').append(render);
+                            scrollBottom();
                         }
                     }
                 }
@@ -57,7 +65,8 @@ require([
 
     function longpoll() {
         function test(callback){
-        $.getJSON('http://jsonip.com/?callback=?', callback);
+            $.getJSON('http://jsonip.com/?callback=?', callback);
+
         }
         test(function(r) {
             userIp = r.ip;

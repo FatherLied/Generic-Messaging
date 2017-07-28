@@ -10,7 +10,16 @@ require([
     if(!threadId){
         threadId = 0;
     }
-    console.log(threadId);
+
+    $(document).ready(function(){
+        setTimeout(scrollBottom, 700);
+    });
+
+    function scrollBottom(){
+        var scroll = $('.messages')[0].scrollHeight - $('.messages').height();
+        $('.messages').scrollTop(scroll);
+    }
+
     var userId = $('[name=user_pk]').val();
     var x = 2000;
     var len = 0;
@@ -40,6 +49,7 @@ require([
                             }
                             var render = Mustache.render(template.html(), data.objects.messages[x]);
                             $('.messages').append(render);
+                            scrollBottom();
                         }
                     }
                 }

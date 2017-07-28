@@ -12,6 +12,7 @@ from django.contrib.auth.models import User
 from braces.views import LoginRequiredMixin
 from widget.forms import RegisterForm
 import time, os, base64
+import string
 from django.core import signing
 
 class WidgetView(TemplateView):
@@ -61,10 +62,10 @@ class SendMessageView(View):
         date = message.when_created.strftime("%B %d, %Y, %-I:%M %p")
         if user != request.user:
             return JsonResponse({'pk': message.pk,
-                'threadId': message.thread_id,
-                'content': message.content,
+                'threadId': message.thread_id, 
+                'content': message.content, 
                 'when': date,
-                'sender': 'You',
+                'sender': 'You', 
                 'sender_pk': message.sender.pk,
                 'hello': ip_address
                 })
@@ -73,7 +74,7 @@ class SendMessageView(View):
             'threadId': message.thread_id,
             'content': message.content,
             'when': date,
-            'sender': message.sender.username,
+            'sender': message.sender.username, 
             'sender_pk': message.sender.pk,
             'hello': ip_address
             })
@@ -84,7 +85,6 @@ class FetchMessage(View):
         latest_id = request.GET['latestId']
         thread_id = request.GET['threadId']
         ip_address = request.GET['ip']
-        print (thread_id)
         messages = Message.objects.filter(id__gt=latest_id, thread__id=thread_id)
         context = {}
         context['messages'] = []
@@ -132,15 +132,14 @@ class AddNewThreadView(View):
                         })
                 else:
                     context['messages'].append({'pk': message.pk, 
-                        'content': message.content, 
-                        'when': message.when_created.strftime("%B %d, %Y, %-I:%M %p"),
-                        'sender': message.sender.username, 
-                        'sender_pk': message.sender.pk
-                        })
+                            'content': message.content, 
+                            'when': message.when_created.strftime("%B %d, %Y, %-I:%M %p"),
+                            'sender': message.sender.username, 
+                            'sender_pk': message.sender.pk
+                            })
+
             return JsonResponse({'thread_id':thread.id, 'objects':context})
         thread = MessageThread.objects.create(subject=subject)
-        print ('*' * 80)
-        print (user_anonymous)
         thread.participants.add(user_anonymous)
         return JsonResponse({'thread_id':thread.id,'objects':context})
 

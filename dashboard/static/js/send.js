@@ -7,6 +7,10 @@ require([
     var threadId;
     var userIp;
 
+    $(document).ready(function(){
+        setTimeout(scrollBottom, 700);
+    });
+
     if(typeof(String.prototype.trim) === "undefined"){
         String.prototype.trim = function() {
             return String(this).replace(/^\s+|\s+$/g, '');
@@ -20,7 +24,10 @@ require([
         CreateThread(r.ip);
     })
 
-
+    function scrollBottom(){
+        var scroll = $('.messages')[0].scrollHeight - $('.messages').height();
+        $('.messages').scrollTop(scroll);
+    }
 
     function CreateThread(x){
         var $ct_threads = $('#threads_joined');
@@ -57,7 +64,7 @@ require([
     $('#add_message').on('keyup', function(e) {
         if (e.which == 13 && ! e.shiftKey) {
             e.preventDefault();
-      
+            
             var $sm_textarea = $('#add_message');
             var $sm_content = $('#content');
             var $messages = $('.messages');
@@ -78,6 +85,7 @@ require([
                     var render = Mustache.render(template.html(), json);
                     console.log(render);
                     $('.messages').append(render);
+                    scrollBottom();
                     $('#send').attr('disabled','disabled');
                 }
             });
@@ -86,7 +94,7 @@ require([
 
     $('#add_message').on('submit', function(e){
         e.preventDefault();
-      
+        
         var $sm_textarea = $('#add_message');
         var $sm_content = $('#content');
         var $messages = $('.messages');
@@ -103,7 +111,9 @@ require([
                 var template = $('#message-template');
                 var render = Mustache.render(template.html(), json);
                 console.log(render);
+                
                 $('.messages').append(render);
+                scrollBottom();
                 $('#send').attr('disabled','disabled');
                 if(json.threadId != threadId){
                     threadId = json.threadId;
@@ -130,4 +140,5 @@ require([
             }
         });
     });
+
 });
