@@ -12,6 +12,7 @@ from django.contrib.auth.models import User
 from braces.views import LoginRequiredMixin
 from widget.forms import RegisterForm
 import time, os, base64
+import string
 from django.core import signing
 
 class WidgetView(TemplateView):
@@ -48,12 +49,22 @@ class SendMessageView(View):
         message = Message.objects.add_message(content=content, 
             thread=thread, sender=user)
         date = message.when_created.strftime("%B %d, %Y, %-I:%M %p")
+        if user != request.user:
+            return JsonResponse({'pk': message.pk,
+                'threadId': message.thread_id, 
+                'content': message.content, 
+                'when': date,
+                'sender': 'You', 
+                'sender_pk': message.sender.pk,
+                'hello': ip_address
+                })
         return JsonResponse({'pk': message.pk,
             'threadId': message.thread_id, 
             'content': message.content, 
             'when': date,
             'sender': message.sender.username, 
-            'sender_pk': message.sender.pk
+            'sender_pk': message.sender.pk,
+            'hello': ip_address
             })
 
 class FetchMessage(View):
@@ -61,7 +72,6 @@ class FetchMessage(View):
     def get(self, request, *args, **kwargs):
         latest_id = request.GET['latestId']
         thread_id = request.GET['threadId']
-        print (thread_id)
         messages = Message.objects.filter(id__gt=latest_id, thread__id=thread_id)
         context = {}
         context['messages'] = []
@@ -79,6 +89,12 @@ class AddNewThreadView(View):
         subject = request.POST['subject']
         ip_address = request.POST['ip']
         user_anonymous = None
+        userip = str(ip_address)
+        user_ip = userip.replace('.', '')
+        # if request.user.is_anonymous() and not User.objects.filter(username='You('+user_ip+')').exists():
+        #     user_anonymous = User.objects.create_user(username='You('+user_ip+')', password=ip_address)
+        #     user_anonymous.profile.ip_address = ip_address
+        #     user_anonymous.profile.save()
         if request.user.is_anonymous() and not User.objects.filter(username=ip_address).exists():
             user_anonymous = User.objects.create_user(username=ip_address, password=ip_address)
             user_anonymous.profile.ip_address = ip_address
