@@ -3,3 +3,4 @@ celery==4.0.2
 coverage==4.4.1
 Django==1.11.3
 django-celery-beat==1.0.1
+django-braces==1.11.0

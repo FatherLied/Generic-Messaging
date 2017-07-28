@@ -173,6 +173,9 @@ class AddNewThreadView(AuthenticatedView):
         thread = MessageThread.objects.create(subject=subject)
         thread.participants.add(request.user)
         thread_url = reverse('details',args=(thread.pk,))
+        thread.save()
+
+        print(thread)
         return JsonResponse({'subject':thread.subject,'thread_url':thread_url})
 
 
