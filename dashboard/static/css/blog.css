@@ -18,6 +18,10 @@
     margin-left: 10px;
 }
 
+.page-header a{
+    color:white;
+}
+
 .page-header a:hover{
     color: #8c8c8c;
     text-decoration: none;
@@ -43,12 +47,28 @@
     text-decoration: none;
 }
 
-.logsignout{//Log out
+.welcome{
     font-family: 'Ubuntu';
     color: white;
     font-size: 24pt;
     float:left;
     margin: 0px auto 0px 20px;
+}
+
+.sitereghead{
+    font-family: 'Ubuntu';
+    color: white;
+    font-size: 24pt;
+    float:right;
+    margin: 0px 310px 0px auto;
+}
+
+.logsignout{//Log out
+    font-family: 'Ubuntu';
+    color: white;
+    font-size: 24pt;
+    float:right;
+    margin: 0px 60px 0px 0px;
 }
 
 a.logsignout:hover{//Log out darken
@@ -99,6 +119,10 @@ h1, h2, h3, h4 {
     text-decoration: none;
 }
 
+.listallthreads{
+    max-width: 30%;
+}
+
 .listallthreads a:hover{
     text-decoration: none;
     cursor: pointer;
@@ -106,9 +130,10 @@ h1, h2, h3, h4 {
 
 .listthreadsusers{
     float: left;
-    margin-left: 120px;
-    margin-right: 70px;
+    margin-left: 100px;
+    margin-right: 50px;
     text-align: center;
+    max-width: 30%;
 }
 
 .threadlist{
@@ -132,6 +157,7 @@ h1, h2, h3, h4 {
     padding-top: 10px;
     padding-left: 5px;
     padding-right: 5px;
+    margin-bottom: 15px;
 }
 
 .createjointhread{
@@ -139,8 +165,8 @@ h1, h2, h3, h4 {
     float: left;
 
     margin-top: 30px;
-    margin-left: 60px;
-    margin-right: 60px;
+    margin-left: 70px;
+    margin-right: 70px;
     margin-bottom:0px;
     
     display: inline-block;
@@ -148,19 +174,53 @@ h1, h2, h3, h4 {
 
     border: 3px #737373;
     border-style: dashed;
+    max-width: 30%;
 }
 
 .createjoinblock{
     padding: 5px 20px 10px 20px;
 }
 
-.listallthreads {
+.threadname{
+    width: 100%;
+    margin-right: 0px;
+}
+
+.threadname h1{
+    float:left;
+    width:82%;
+    padding-top:4px;
+    padding-bottom:7px;
+    padding-right: 7px;
+    padding-left: 7px;
+    margin-top:13px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 5px;
+
+    color: #f2f2f2;
+    background-color: #999999;
+    border-radius: 15px 15px 15px 15px;
+}
+
+.threadname a{
+    padding: 5px;
+    margin-top: 12px;
+    margin-right: 15px;
+    color: #666666;
+    display: inline-block;
+    font-size:25px;
+    text-decoration: none;
+    float:right;
+}
+
+.listallthreads{
     text-align: center;
     float: left;
 
     margin-top: 30px;
-    margin-right: 40px;
-    margin-left: 40px;
+    margin-right: 20px;
+    margin-left: 30px;
     margin-bottom: 70px;
 
     width: 350px;
@@ -223,8 +283,72 @@ h1, h2, h3, h4 {
     line-height: normal;
 }
 
+.sitereg h2{
+    text-decoration: underline;
+    text-align:center;
+    margin:auto;
+    display:block;
+    margin-bottom: 30px;
+}
+
+.sitelist{
+    display: block;
+    margin:auto;
+    vertical-align: middle;
+    border: 3px #737373;
+    border-style: dashed;
+    max-width: 50%;
+    margin-bottom: 50px;
+}
+
+.sitelist p{
+    text-align: center;
+    font-family:'Lobster';
+    width:auto;
+    padding-left:20px;
+    padding-right: 20px;
+    padding-top: 10px;
+    padding-bottom: 0px;
+    color: #1a1a1a;
+    margin-left:auto;
+    margin-right:auto;
+    margin-top: 5px;
+}
+
+.sitelist hr{
+    display:block;
+    margin:auto;
+
+    width:70%;
+    border-color:#000000;
+    background-color: #000000;
+    size:2px;
+}
+
+.sitelist h1{
+    font-family:'Ubuntu';
+    text-align: center;
+    font-size:12pt;
+    width:auto;
+    color:#ffffff;
+    background-color: #1a1a1a;
+    border-radius: 5px 5px 5px 5px;
+    padding-top:10px;
+    padding-bottom:10px;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-left: 30px;
+    margin-right: 30px;
+    margin-bottom: 25px;
+    overflow-y: auto;
+}
+
 .loginform{
     font-size: 16pt;
+}
+
+.loginform p{
+    color: rgb(51, 51, 51);
 }
 
 .loginform a{
@@ -262,4 +386,3 @@ a.list-group-item:hover{
     font-weight: bold;
     padding: 10px;
 }
-

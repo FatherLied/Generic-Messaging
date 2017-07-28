@@ -1,23 +1,28 @@
 {% extends 'dashboard/base2.html' %}
 
 {% block content %}
-    <h1 style="padding-left: 20px"> {{request.user.first_name}} {{request.user.last_name}} </h1>
-    <div class="row">
-        <div class="col-sm-8" style="padding-left: 40px">
-            <h1 style="padding-left: 20px">sites registered </h2>
-            {% if len == 0 %}
-                Nothing to show
-            {% endif %}
-            {% for site in sites %}
-            domain: {{ site.domain}}  <br><br>
-            access secret: {{ site.access_secret }} <br>
-            access key: {{site.access_key}} <br><br>
-            snippets: {{snippet1}} http://127.0.0.1:8000/widget/client_widget/?access_key={{site.access_key}} {{snippet2}}{{snippet3}}
-            {% endfor %}
-        </div>
-        <div class="col-sm-4"></div>
+    <div class = "profname">
+        <h1>{{request.user.first_name}} {{request.user.last_name}} </h1>
     </div>
-        
+    
+    <div class = "sitereg">
+        <h2>Sites Registered </h2>
+    </div>
 
+    <div class="sitelist">
+        {% if len == 0 %}
+            Nothing to show
+        {% endif %}
+        {% for site in sites %}
+            <p>Domain:<br></p>
+            <h1>{{ site.domain}}<br></h1><hr>
+            <p>Access Secret:<br></p>
+            <h1>{{ site.access_secret }}<br></h1><hr>
+            <p>Access Key:<br></p>
+            <h1>{{site.access_key}}<br></h1><hr>
+            <p>Snippets:<br></p>
+            <h1>{{snippet1}} http://127.0.0.1:8000/widget/client_widget/?access_key={{site.access_key}} {{snippet2}}{{snippet3}}<br></h1>
+        {% endfor %}
+    </div>
  
 {% endblock %}

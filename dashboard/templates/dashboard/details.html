@@ -6,8 +6,15 @@
 {% endblock %}
 
 {% block details %}
-	<h5>{{thread_subject}}</h5>
 
+	<div class = "threadname">
+		<h1>{{thread_subject}}</h1>
+		<a href="{% url 'leavethread' pk=thread_id %}">X</a>
+		{% comment %}
+			Max Thread Name Character Length: 23
+		{% endcomment %}
+	</div>
+	
 	<input name="thread_id_ref" type="hidden" value="{{thread_id}}" />
 	<input name="user_pk" type="hidden" value="{{request.user.pk}}">
 
@@ -27,9 +34,7 @@
 		</form>
 	</div>
 
-	<div>
-		<a href="{% url 'leavethread' pk=thread_id %}">Leave Thread</a>
-	</div>
+	
 
 	{% verbatim %}
 		<script id="message-template" type="text/template">
