@@ -59,7 +59,7 @@ class HomeView(AuthenticatedView):
         context['threads'] = MessageThread.objects.filter(
             participants=self.request.user).order_by('-when_created')
         context['users'] = Profile.objects.all()
-        context['allthreads'] = MessageThread.objects.exclude(
+        context['allthreads'] = MessageThread.objects.filter(status='PU').exclude(
             participants=self.request.user)
 
         return context
@@ -123,7 +123,7 @@ class ThreadDetailsView(AuthenticatedView):
             'users' : Profile.objects.all(),
             'thread_subject': this_thread.subject,
             'thread_id': pk,
-            'allthreads': MessageThread.objects.exclude(participants=self.request.user),
+            'allthreads': MessageThread.objects.filter(status='PU').exclude(participants=self.request.user),
             'messages': Message.objects.filter(
                 thread=this_thread).order_by('when_created'),
             'next_url': reverse('details', args=(pk,))

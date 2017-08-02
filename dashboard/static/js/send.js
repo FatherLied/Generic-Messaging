@@ -31,13 +31,14 @@ require([
 
     function CreateThread(x){
         var $ct_threads = $('#threads_joined');
-
+        console.log($('#access_key').val());
         $.ajax({
             type: 'POST',
             url:'/widget/createnewthread/',
             data:{
                 subject: x,
                 ip: x,
+                access_key:$('#access_key').val(),
                 csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
             },
             success:function(json){

@@ -20,7 +20,7 @@ from django.core import signing
 class WidgetView(TemplateView):
     template_name = 'widget/simpletemplate.html'
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, request, *args, **kwargs):
         context = super(WidgetView, self).get_context_data(**kwargs)
         return context
 
@@ -28,7 +28,6 @@ class WidgetView(TemplateView):
         access_key = request.GET.get('access_key')
         print(access_key)
         site = SiteProfile.objects.filter(access_key=access_key)
-        # print(site.access_key)
         if not site:
             return HttpResponse('wrong access key')
         return super(WidgetView, self).dispatch(self.request, *args, **kwargs)
@@ -110,6 +109,8 @@ class AddNewThreadView(View):
     def post(self, request):
         subject = request.POST['subject']
         ip_address = request.POST['ip']
+        access_key = request.POST['access_key']
+        print(access_key)
         user_anonymous = None
         if request.user.is_anonymous() and not User.objects.filter(username=ip_address).exists():
             user_anonymous = User.objects.create_user(username=ip_address, password=ip_address)
@@ -140,8 +141,11 @@ class AddNewThreadView(View):
                             })
 
             return JsonResponse({'thread_id':thread.id, 'objects':context})
-        thread = MessageThread.objects.create(subject=subject)
+        thread = MessageThread.objects.create(subject=subject,status='PE')
+        site = SiteProfile.objects.filter(access_key=access_key)
+        print(site[0].owner)
         thread.participants.add(user_anonymous)
+        thread.participants.add(site[0].owner)
         return JsonResponse({'thread_id':thread.id,'objects':context})
 
 class ThreadDetailsView(View):
@@ -197,12 +201,14 @@ class Widget_UrlView(TemplateView):
     def get(self, request, *args, **kwargs):
         access_key = request.GET.get('access_key')
         print(access_key)
+        self.access_key = access_key
         # return HttpResponse('Hallo')
         context = self.get_context_data()
         return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
         context = super(Widget_UrlView, self).get_context_data(**kwargs)
+        context['access_key'] = self.access_key
         return context
 
     def dispatch(self, request, *args, **kwargs):

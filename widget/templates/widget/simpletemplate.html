@@ -3,7 +3,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
+    <head>
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
         <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
@@ -16,7 +16,6 @@
         {% csrf_token %}
         <input type="hidden" name="t_subject" id="create_subject">
         <input type="hidden" name="t_subject" id="join_subject">
-
       <div class="chatbox">
 
       {% block details %}
@@ -24,10 +23,10 @@
         <div class="page-header">
           <h1><a>Oh, Chat App!</a></h1>
         </div>
-
-        <input name="thread_id_ref" type="hidden" value="{{thread_id}}" />
-        <input name="user_pk" type="hidden" value="{{request.user.pk}}">
-
+        <input name="thread_id_ref" type="hidden" value="{{thread_id}}" />
+        <input name="user_pk" type="hidden" value="{{request.user.pk}}">
+        <input id="access_key" type="hidden" name="access_key" value="{{access_key}}">
+        
         <div class="innerbox">
 
             <div class="messages">
@@ -66,10 +65,10 @@
               </div>
           </script>
         {% endverbatim %}
-      {% endblock %}
-      </div>
+    {% endblock %}
+    </div>
 
-      <script src= "{% static 'js/require.js'%}"></script>
+        <script src= "{% static 'js/require.js'%}"></script>
       <script>
         require.config({
           baseUrl: "{% static 'js/' %}",
