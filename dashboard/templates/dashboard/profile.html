@@ -1,10 +1,6 @@
 {% extends 'dashboard/base2.html' %}
 
 {% block content %}
-
-    <div class = "profname">
-        <h1>{{request.user.first_name}} {{request.user.last_name}} </h1>
-    </div>
     
     <div class = "sitereg">
         <h2>Sites Registered </h2>
@@ -12,7 +8,7 @@
 
     <div class="sitelist">
         {% if len == 0 %}
-            Nothing to show
+            <p>Nothing to Show</p>
         {% endif %}
         {% for site in sites %}
             <p>Domain:<br></p>

@@ -4,70 +4,68 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="utf-8">
-        <title>
-        Generic Messaging
-        </title>
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
         <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
         <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
         <link rel="stylesheet" href="{% static 'css/weejet2.css' %}">
-        {% block extra_head %}
-        {% endblock %}
+
     </head>
 
     <body>
-      
         {% csrf_token %}
         <input type="hidden" name="t_subject" id="create_subject">
         <input type="hidden" name="t_subject" id="join_subject">
+
       <div class="chatbox">
+
       {% block details %}
-      <div class="page-header">
-          <h1><a href = "" >Oh, Chat App!</a></h1>
+
+        <div class="page-header">
+          <h1><a>Oh, Chat App!</a></h1>
         </div>
 
         <input name="thread_id_ref" type="hidden" value="{{thread_id}}" />
         <input name="user_pk" type="hidden" value="{{request.user.pk}}">
-        
+
         <div class="innerbox">
-        <div class="messages">
-          {% for message in messages %}
-              {% include "dashboard/messages_panel/message.html" %}
-          {% endfor %}
-        </div>
-        </div>
+
+            <div class="messages">
+              {% for message in messages %}
+                  {% include "dashboard/messages_panel/message.html" %}
+              {% endfor %}
+            </div>
+
+        </div>
 
         <div class = "sendmess">
-          <form id="add_message" action="{% url 'send_message' %}">
+          <form id="add_message" action="{% url 'send_message' %}" style="float:left;bottom:3px;margin-left:5px">
             {% csrf_token %}
               <textarea autofocus name="content" class="texty" id="content" rows="1" placeholder="How may we help you today?"style="height: 26px; width: 212px;margin-right:3px"></textarea>
               <input name="thread_id" type="hidden" value="{{thread_id}}" />
-              <input name="sender" id="sender" type="hidden" value="You" />
-              <input type="submit" class="mdl-button" id="send" value="Send" />
-              <input type="submit" class="mdl-button" id="dl" value="..." />
+              <input name="sender" id="sender" type="hidden" value="{{request.user}}" />
+              <input type="submit" class="mdl-button" style = "float: right;position: absolute;bottom:20px;right:25px;"id="send" value="Send" />
           </form>
         </div>
 
         {% verbatim %}
-          <script id="message-template" type="text/template">
-              <div class="message {{classes}}" data-id="{{pk}}">
-                  <div class="user">
-                    {{sender}}
-                  </div>
-                  : <br>
-                  <div class="content">
-                    <div class="body">
-                        {{content}}
-                    </div>
-                    <div class="footer">
-                        {{when}}
-                    </div>
-                  </div>
-              </div>
-          </script>
-        {% endverbatim %}
+          <script id="message-template" type="text/template">
+              <div class="message {{classes}}" data-id="{{pk}}">
+                  <div class="user">
+                    {{sender}}
+                  </div>
+                  : <br>
+                  <div class="content">
+                    <div class="body">
+                        {{content}}
+                    </div>
+                    <div class="footer">
+                        {{when}}
+                    </div>
+                  </div>
+              </div>
+          </script>
+        {% endverbatim %}
       {% endblock %}
       </div>
 
