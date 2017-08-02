@@ -39,6 +39,9 @@ class SiteProfile(models.Model):
     access_secret = models.CharField(max_length=256)
     access_key = models.CharField(max_length=256)
 
+    def __str__(self):
+        return ('{}'.format(self.domain))
+
 class MessageThread(models.Model):
     PUBLIC = 'PU'
     PRIVATE = 'PR'
